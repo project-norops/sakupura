@@ -16,3 +16,4 @@
 - Integrated dynamic pricing into the portal at `/tools/dynamic-pricing`.
 - Updated the portal card and sitemap for the single-project service architecture.
 - Verified lint and production builds successfully.
+- Verified the production portal and `/tools/dynamic-pricing` route successfully on Vercel.

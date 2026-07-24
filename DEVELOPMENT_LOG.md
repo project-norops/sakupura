@@ -27,3 +27,4 @@
 - `npm run lint`: passed（警告なし）。
 - `npm run build`: passed（ポータルに`/tools/dynamic-pricing`を静的生成、単体互換アプリも成功）。
 - 本番依存監査でNext.js 16.2.11内のPostCSS／Sharpにhigh 3件を確認。安全な修正版Next.jsが未公開で、`npm audit fix --force`はNext.js 9への破壊的ダウングレードとなるため未適用。
+- Vercelデプロイ成功。本番トップと`/tools/dynamic-pricing`の200応答、内部リンク、Googleコード、sitemap掲載を確認。
