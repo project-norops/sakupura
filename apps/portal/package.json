@@ -9,6 +9,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@sakupla/dynamic-pricing": "file:../../packages/dynamic-pricing",
     "@sakupla/shared-ui": "file:../../packages/shared-ui",
     "next": "16.2.11",
     "react": "19.2.4",

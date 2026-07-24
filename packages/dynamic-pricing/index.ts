@@ -1,0 +1,1 @@
+export { DynamicPricingPage } from "./DynamicPricingPage";

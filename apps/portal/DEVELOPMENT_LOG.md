@@ -11,3 +11,8 @@
 - Refactored Google verification, GA4, AdSense, metadata, robots, and sitemap integration.
 - Added production URL environment handling, shared UI Tailwind scanning, and ESLint flat config.
 - Verified `npm run lint` and `npm run build` successfully.
+
+2026-07-25 05:43:07
+- Integrated dynamic pricing into the portal at `/tools/dynamic-pricing`.
+- Updated the portal card and sitemap for the single-project service architecture.
+- Verified lint and production builds successfully.

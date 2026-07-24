@@ -18,3 +18,12 @@
 - `npm run build`: passed（両アプリ、静的生成成功）。
 - Vercelのリポジトリ直下Project向けに、ポータルのbuild commandとoutput directoryを`vercel.json`で固定。
 - 本番の308転送先に合わせ、SEO canonical／sitemap／robotsの基準URLを`https://www.norops.jp`へ統一。
+
+## 2026-07-25 05:43:07
+
+- 本番構成を「サクプラ単一Vercel Project＋`/tools/*`ミニサービス」に統一。
+- 動的プライシングを`@sakupla/dynamic-pricing`パッケージへ分離し、`/tools/dynamic-pricing`から公開。
+- ポータルカード、sitemap、デプロイ手順、npmワークスペース依存を単一プロジェクト構成へ更新。
+- `npm run lint`: passed（警告なし）。
+- `npm run build`: passed（ポータルに`/tools/dynamic-pricing`を静的生成、単体互換アプリも成功）。
+- 本番依存監査でNext.js 16.2.11内のPostCSS／Sharpにhigh 3件を確認。安全な修正版Next.jsが未公開で、`npm audit fix --force`はNext.js 9への破壊的ダウングレードとなるため未適用。

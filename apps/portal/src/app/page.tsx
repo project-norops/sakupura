@@ -13,17 +13,12 @@ function AppCardContent({ app }: { app: AppDefinition }) {
           </h2>
         </div>
         <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-100 text-sky-700 dark:bg-sky-900 dark:text-sky-200">
-          {app.href ? "→" : "–"}
+          →
         </span>
       </div>
       <p className="mt-4 text-slate-600 dark:text-slate-400">
         {app.description}
       </p>
-      {!app.href ? (
-        <p className="mt-4 text-sm font-medium text-amber-700 dark:text-amber-300">
-          公開URLをVercel環境変数に設定してください。
-        </p>
-      ) : null}
     </>
   );
 }
@@ -65,24 +60,15 @@ export default function HomePage() {
         </div>
 
         <section className="mt-10 grid gap-6 md:grid-cols-2">
-          {apps.map((app) => {
-            const className =
-              "group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition dark:border-slate-800 dark:bg-slate-900";
-
-            return app.href ? (
-              <a
-                key={app.id}
-                href={app.href}
-                className={`${className} hover:-translate-y-1 hover:border-sky-300 hover:bg-sky-50 dark:hover:border-sky-500 dark:hover:bg-slate-950`}
-              >
-                <AppCardContent app={app} />
-              </a>
-            ) : (
-              <article key={app.id} className={`${className} opacity-80`}>
-                <AppCardContent app={app} />
-              </article>
-            );
-          })}
+          {apps.map((app) => (
+            <a
+              key={app.id}
+              href={app.href}
+              className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-sky-300 hover:bg-sky-50 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-sky-500 dark:hover:bg-slate-950"
+            >
+              <AppCardContent app={app} />
+            </a>
+          ))}
         </section>
       </section>
     </main>

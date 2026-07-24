@@ -1,61 +1,47 @@
-# Vercel deployment guide
+# サクプラ デプロイガイド
 
-This repository is an npm workspaces monorepo. Create one Vercel project for
-each deployable application and connect both projects to the same GitHub
-repository and `main` production branch.
+サクプラは1つのNext.js／Vercel Projectとして運用します。ミニサービスごとに
+Vercel Projectやドメインを作成せず、`https://www.norops.jp/tools/...` 配下の
+ルートとして公開します。
 
-The root `vercel.json` keeps the existing repository-root Vercel project
-deploying the portal correctly. New projects should still use the Root
-Directory settings below.
+## Vercel Project
 
-## Portal project
-
-- Root Directory: `apps/portal`
-- Framework Preset: Next.js
-- Include source files outside the Root Directory: enabled
+- Git repository: `project-norops/sakupura`
+- Production branch: `main`
+- Root Directory: repository root
+- Framework: Next.js
 - Production domain: `https://www.norops.jp`
 
-Environment variables:
+ルートの `vercel.json` が `apps/portal` をビルドし、
+`apps/portal/.next` を本番成果物として公開します。
+
+## 環境変数
 
 ```text
 NEXT_PUBLIC_SITE_URL=https://www.norops.jp
-NEXT_PUBLIC_DYNAMIC_PRICING_URL=https://<dynamic-pricing-production-domain>
 NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=<optional override>
 NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=<optional override>
 NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID=<optional override>
 ```
 
-`NEXT_PUBLIC_DYNAMIC_PRICING_URL` is intentionally required in production. If
-it is missing, the portal renders the application card as unavailable instead
-of sending visitors to a localhost URL.
+Googleの現在値は `packages/shared-ui/GoogleServices.ts` に既定値があります。
+値の更新や環境別の分離が必要な場合だけVercel環境変数で上書きします。
 
-## Dynamic pricing project
+## ミニサービス追加規約
 
-- Root Directory: `apps/001-dynamic-pricing`
-- Framework Preset: Next.js
-- Include source files outside the Root Directory: enabled
+1. 再利用可能な実装を `packages/<service-name>` に置く。
+2. `apps/portal/src/app/tools/<service-name>/page.tsx` から公開する。
+3. `apps/portal/src/data/apps.ts` にポータルカードを追加する。
+4. `apps/portal/src/app/sitemap.ts` に公開URLを追加する。
+5. `npm run lint` と `npm run build` を通してから `main` へPushする。
 
-Environment variables:
+単体開発用Next.jsアプリを残す場合でも、本番公開先はポータル内の
+`/tools/<service-name>` とします。
 
-```text
-NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=<optional override>
-NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=<optional override>
-NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID=<optional override>
-```
+## デプロイ後の確認
 
-The Google values currently used by the site remain as code defaults in
-`packages/shared-ui/GoogleServices.ts`. Configure the variables in Vercel when
-rotating IDs or separating analytics properties by application.
-
-## Verification after deployment
-
-1. Confirm the deployment source paths begin with the expected `apps/...`
-   Root Directory, not a legacy `100apps-*` directory.
-2. View the production HTML and confirm `google-site-verification` is present.
-3. Confirm requests to `googletagmanager.com/gtag/js` and
-   `pagead2.googlesyndication.com` appear in the browser network panel.
-4. Open `/robots.txt` and `/sitemap.xml` on the portal domain.
-5. Only after both projects deploy successfully, archive or remove the legacy
-   standalone directories.
-
-Vercel reference: https://vercel.com/docs/monorepos
+1. 対象サービスの `/tools/...` URLが200を返す。
+2. トップページのカードから同じURLへ遷移できる。
+3. `google-site-verification` がHTMLに含まれる。
+4. GA4／AdSenseスクリプトが読み込まれる。
+5. `/robots.txt` と `/sitemap.xml` が正しい。
