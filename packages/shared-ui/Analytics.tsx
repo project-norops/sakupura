@@ -1,24 +1,28 @@
 import Script from "next/script";
+import { googleServices } from "./GoogleServices";
 
 export function Analytics() {
+  const { adsenseClientId, analyticsId } = googleServices;
+
   return (
     <>
       <Script
-        id="gsc-verification"
+        id="google-analytics-loader"
         strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `document.querySelector('head')?.insertAdjacentHTML('beforeend', '<meta name="google-site-verification" content="IkvKfVE37tDNIdqL_6UrzIWs77u-ic-4JYyuQBIWXXQ" />');`,
-        }}
+        src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(analyticsId)}`}
       />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', ${JSON.stringify(analyticsId)});`}
+      </Script>
       <Script
         id="adsense"
         strategy="afterInteractive"
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5371237012424410"
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(adsenseClientId)}`}
         crossOrigin="anonymous"
       />
-      <Script id="ga4" strategy="afterInteractive">
-        {`window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-V1SGVB9THY');`}
-      </Script>
     </>
   );
 }

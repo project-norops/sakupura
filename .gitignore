@@ -7,7 +7,10 @@
 
 # npm log files
 npm-debug.log*
-package-lock.json
+
+# Legacy standalone apps are retained temporarily and do not own the monorepo lockfile.
+/100apps-portal/package-lock.json
+/100apps-template/package-lock.json
 
 # IDE files
 .vscode/

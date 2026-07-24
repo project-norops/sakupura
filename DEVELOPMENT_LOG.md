@@ -7,3 +7,12 @@
 
 ## 📝 変更履歴
 - YYYY-MM-DD: 初期セットアップ完了
+
+## 2026-07-25 05:25:14
+
+- 現行モノリポを `apps/portal`、`apps/001-dynamic-pricing`、`packages/shared-ui` に整理。
+- Search Console認証をNext.js metadataへ移し、GA4ローダーとAdSenseを共通レイアウトへ統合。
+- ポータルのrobots／sitemap、Tailwind共有UI走査、ESLint、Vercel向け環境変数と手順書を整備。
+- 動的プライシングの重複App Routerを解消し、入力復元・検証・BOOTH固定手数料・コピー失敗処理を修正。
+- `npm run lint`: passed（両アプリ、警告なし）。
+- `npm run build`: passed（両アプリ、静的生成成功）。

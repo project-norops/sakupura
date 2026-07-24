@@ -1,16 +1,13 @@
-﻿export const runtime = "edge";
+import type { MetadataRoute } from "next";
+import { siteUrl } from "@/lib/site";
 
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url>\n    <loc>https://norops.jp/</loc>\n  </url>\n  <url>\n    <loc>https://norops.jp/robots.txt</loc>\n  </url>\n</urlset>`;
-
-export function GET() {
-  return new Response(sitemap, {
-    headers: {
-      "Content-Type": "application/xml;charset=UTF-8",
+export default function sitemap(): MetadataRoute.Sitemap {
+  return [
+    {
+      url: siteUrl,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 1,
     },
-  });
-}
-
-// Default export for route handler compatibility
-export default function handler() {
-  return GET();
+  ];
 }
