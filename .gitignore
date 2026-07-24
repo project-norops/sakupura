@@ -1,0 +1,14 @@
+# Node modules
+/node_modules
+
+# Next.js output
+/.next
+/out
+
+# npm log files
+npm-debug.log*
+package-lock.json
+
+# IDE files
+.vscode/
+.DS_Store

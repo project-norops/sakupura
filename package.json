@@ -1,0 +1,27 @@
+{
+  "name": "100apps-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "npm@11.16.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:portal": "npm --workspace apps/portal run dev",
+    "build:portal": "npm --workspace apps/portal run build",
+    "dev:dynamic-pricing": "npm --workspace apps/001-dynamic-pricing run dev",
+    "build:dynamic-pricing": "npm --workspace apps/001-dynamic-pricing run build",
+    "lint:portal": "npm --workspace apps/portal run lint",
+    "lint:dynamic-pricing": "npm --workspace apps/001-dynamic-pricing run lint",
+    "dev": "npx concurrently \"npm run dev:portal\" \"npm run dev:dynamic-pricing\"",
+    "lint": "npm run lint:portal && npm run lint:dynamic-pricing",
+    "build": "npm run build:portal && npm run build:dynamic-pricing"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0",
+    "typescript": "^5.5.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0"
+  }
+}
