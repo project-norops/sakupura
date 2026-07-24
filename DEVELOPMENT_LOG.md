@@ -17,3 +17,4 @@
 - `npm run lint`: passed（両アプリ、警告なし）。
 - `npm run build`: passed（両アプリ、静的生成成功）。
 - Vercelのリポジトリ直下Project向けに、ポータルのbuild commandとoutput directoryを`vercel.json`で固定。
+- 本番の308転送先に合わせ、SEO canonical／sitemap／robotsの基準URLを`https://www.norops.jp`へ統一。

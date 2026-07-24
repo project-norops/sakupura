@@ -13,12 +13,12 @@ Directory settings below.
 - Root Directory: `apps/portal`
 - Framework Preset: Next.js
 - Include source files outside the Root Directory: enabled
-- Production domain: `https://norops.jp`
+- Production domain: `https://www.norops.jp`
 
 Environment variables:
 
 ```text
-NEXT_PUBLIC_SITE_URL=https://norops.jp
+NEXT_PUBLIC_SITE_URL=https://www.norops.jp
 NEXT_PUBLIC_DYNAMIC_PRICING_URL=https://<dynamic-pricing-production-domain>
 NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=<optional override>
 NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=<optional override>
