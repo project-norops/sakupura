@@ -4,6 +4,10 @@ This repository is an npm workspaces monorepo. Create one Vercel project for
 each deployable application and connect both projects to the same GitHub
 repository and `main` production branch.
 
+The root `vercel.json` keeps the existing repository-root Vercel project
+deploying the portal correctly. New projects should still use the Root
+Directory settings below.
+
 ## Portal project
 
 - Root Directory: `apps/portal`
