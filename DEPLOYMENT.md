@@ -82,13 +82,22 @@ GitHub Actionsの`Scheduled tool release`は15分ごとに公開予定を確認�
 npm run release:post -- --slug example-tool
 ```
 
-実投稿にはX Developer AppのUser Access TokenをGitHub Repository Secret
-`X_USER_ACCESS_TOKEN`へ登録します。GitHub Actionsの
+実投稿にはX Developer Appを「Read and write」権限で設定し、OAuth 1.0aの認証情報を
+次のGitHub Repository Secretへ登録します。値はコードや台帳へ記載しません。
+
+```text
+X_API_KEY
+X_API_KEY_SECRET
+X_ACCESS_TOKEN
+X_ACCESS_TOKEN_SECRET
+```
+
+権限を変更した場合は、その後にAccess TokenとSecretを再生成してください。GitHub Actionsの
 `Announce released tool on X`を手動実行し、公開済みサービスのslugを指定します。
 投稿できるのは`published`かつ`announceOnX: true`で`announcedAt: null`のサービスだけです。
 成功後はworkflowが`announcedAt`を台帳へ記録するため、同じサービスの再投稿を停止できます。
 通常のpushでは投稿しません。予約公開を有効化した場合だけ、本番確認成功後の自動告知も
-同じSecretを使用します。
+同じ4つのSecretを使用します。App-only Bearer Tokenではユーザーとして投稿できないため使用しません。
 
 新しい単体Next.jsアプリやVercel Projectは作成しません。既存の単体互換アプリも、
 本番公開先はポータル内の`/tools/<service-name>`とします。

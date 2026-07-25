@@ -83,7 +83,10 @@ jobs:
         if: steps.verify.outcome == 'success'
         env:
           DUE_TOOLS_JSON: ${{ steps.due.outputs.json }}
-          X_USER_ACCESS_TOKEN: ${{ secrets.X_USER_ACCESS_TOKEN }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_KEY_SECRET: ${{ secrets.X_API_KEY_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
         shell: bash
         run: |
           mapfile -t announce_slugs < <(node -e 'for (const x of JSON.parse(process.env.DUE_TOOLS_JSON)) if (x.announceOnX) console.log(x.slug)')

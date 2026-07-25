@@ -30,7 +30,10 @@ jobs:
         run: npm run release:x -- --slug "$TOOL_SLUG" --publish
         env:
           TOOL_SLUG: ${{ inputs.slug }}
-          X_USER_ACCESS_TOKEN: ${{ secrets.X_USER_ACCESS_TOKEN }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_KEY_SECRET: ${{ secrets.X_API_KEY_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
       - name: Record successful announcement
         run: |
           git config user.name "github-actions[bot]"

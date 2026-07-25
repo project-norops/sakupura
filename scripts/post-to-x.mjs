@@ -2,6 +2,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildReleasePost, findTool } from "./release-post.mjs";
+import {
+  createOAuthAuthorizationHeader,
+  readXCredentials,
+} from "./x-oauth1.mjs";
 
 const rootDir = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -38,14 +42,17 @@ if (!tool.announceOnX)
   throw new Error("announceOnXがtrueのサービスだけXへ告知できます。");
 if (tool.announcedAt)
   throw new Error(`このサービスは${tool.announcedAt}に告知済みです。`);
-const accessToken = process.env.X_USER_ACCESS_TOKEN?.trim();
-if (!accessToken)
-  throw new Error("GitHub Secret X_USER_ACCESS_TOKENが設定されていません。");
+const credentials = readXCredentials();
+const endpoint = "https://api.x.com/2/tweets";
 
-const response = await fetch("https://api.x.com/2/tweets", {
+const response = await fetch(endpoint, {
   method: "POST",
   headers: {
-    Authorization: `Bearer ${accessToken}`,
+    Authorization: createOAuthAuthorizationHeader({
+      method: "POST",
+      url: endpoint,
+      ...credentials,
+    }),
     "Content-Type": "application/json",
   },
   body: JSON.stringify({ text }),
