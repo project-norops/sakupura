@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { DynamicPricingPage } from "@sakupla/dynamic-pricing";
 import { ToolGuide } from "@sakupla/shared-ui";
-import { getToolBySlug } from "@/data/apps";
+import { notFound } from "next/navigation";
+import { getToolBySlug, isToolPublished } from "@/data/apps";
 
 const tool = getToolBySlug("dynamic-pricing");
 
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
+  if (!isToolPublished(tool)) notFound();
+
   return (
     <>
       <DynamicPricingPage />

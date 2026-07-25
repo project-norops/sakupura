@@ -30,6 +30,22 @@ apps/portal/src/app/tools/<slug>/
 
 各サービスは機能だけでなく、台帳内に対象者、固有機能、使い方、注意点、FAQ、リリース告知文を持つ。`ToolGuide`がその内容を共通レイアウトで表示し、`npm run check:content`が公開品質を検査する。
 
+## 公開状態
+
+各サービスは台帳に`status`、`publishAt`、`announceOnX`、`announcedAt`を持つ。
+
+| status      | 意味                 | ポータル・sitemap・URL |
+| ----------- | -------------------- | ---------------------- |
+| `draft`     | 開発中               | 非公開                 |
+| `scheduled` | 公開日時を予約済み   | 非公開                 |
+| `published` | 公開処理と確認が完了 | 公開                   |
+| `archived`  | 公開終了             | 非公開                 |
+
+- `scheduled`と`published`では、タイムゾーン付きISO形式の`publishAt`を必須とする。
+- 予約時刻を過ぎただけでは公開しない。将来のスケジューラーがCI合格と本番確認を終えた後に`published`へ変更する。
+- `announceOnX`は告知対象かを示し、投稿成功後にだけ`announcedAt`を記録する。
+- ポータルカードとsitemapは`published`だけを表示し、それ以外のツールURLは404を返す。
+
 ## 配信と外部サービス
 
 - GitHubの`main`へのpushをVercel本番デプロイへ接続する。
@@ -37,7 +53,7 @@ apps/portal/src/app/tools/<slug>/
 - canonical、robots、sitemapは`https://www.norops.jp`を基準にする。
 - GA4、Search Console、AdSenseの値は`packages/shared-ui/GoogleServices.ts`だけで管理し、各サービスへ直書きしない。
 - DNS、Vercelドメイン、Google管理画面はリポジトリ外の構成である。コードの存在だけで完了とせず、本番URLから確認する。
-- X告知は台帳から文面を生成する。実投稿はGitHub Actionsの手動workflowと`X_USER_ACCESS_TOKEN` Secretを使い、通常のpushだけで勝手に投稿しない。
+- X告知は台帳から文面を生成する。実投稿はGitHub Actionsの手動workflowと`X_USER_ACCESS_TOKEN` Secretを使い、通常のpushだけで勝手に投稿しない。投稿成功時は`announcedAt`を自動記録し、二重投稿を停止する。
 
 ## 現在の例外
 

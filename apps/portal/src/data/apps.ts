@@ -12,12 +12,22 @@ export type AppDefinition = {
   componentName: string;
   content: ToolGuideContent;
   releasePost: string;
+  status: "draft" | "scheduled" | "published" | "archived";
+  publishAt: string | null;
+  announceOnX: boolean;
+  announcedAt: string | null;
 };
 
-const apps: AppDefinition[] = toolManifest;
+const allApps = toolManifest as AppDefinition[];
+
+export function isToolPublished(tool: AppDefinition) {
+  return tool.status === "published";
+}
+
+const apps = allApps.filter(isToolPublished);
 
 export function getToolBySlug(slug: string) {
-  const tool = apps.find((app) => app.slug === slug);
+  const tool = allApps.find((app) => app.slug === slug);
   if (!tool) throw new Error(`Unknown tool slug: ${slug}`);
   return tool;
 }

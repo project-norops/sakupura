@@ -247,6 +247,10 @@ manifest.push({
     ],
   },
   releasePost: `TODO: ${title}の対象者、解決できる課題、主要機能を含むX告知文を作成してください。`,
+  status: "draft",
+  publishAt: null,
+  announceOnX: false,
+  announcedAt: null,
 });
 writeFile(manifestPath, JSON.stringify(manifest, null, 2));
 

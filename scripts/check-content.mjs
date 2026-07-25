@@ -19,6 +19,20 @@ const textLength = (value) =>
   typeof value === "string" ? Array.from(value.replace(/\s/g, "")).length : 0;
 const hasPlaceholder = (value) =>
   typeof value === "string" && /TODO|TBD|Lorem ipsum|この領域に/i.test(value);
+const releaseStatuses = new Set([
+  "draft",
+  "scheduled",
+  "published",
+  "archived",
+]);
+
+function isTimestamp(value) {
+  return (
+    typeof value === "string" &&
+    /(?:Z|[+-]\d{2}:\d{2})$/.test(value) &&
+    !Number.isNaN(Date.parse(value))
+  );
+}
 
 function requireText(value, minimum, label) {
   if (textLength(value) < minimum)
@@ -41,6 +55,45 @@ const summaries = new Set();
 for (const tool of manifest) {
   const label = tool.slug ?? tool.id ?? "unknown";
   const content = tool.content ?? {};
+
+  if (!releaseStatuses.has(tool.status)) {
+    errors.push(
+      `${label}.status: draft / scheduled / published / archivedのいずれかが必要です。`,
+    );
+  }
+  if (tool.publishAt !== null && !isTimestamp(tool.publishAt)) {
+    errors.push(
+      `${label}.publishAt: nullまたはタイムゾーン付きISO日時が必要です。`,
+    );
+  }
+  if (
+    ["scheduled", "published"].includes(tool.status) &&
+    !isTimestamp(tool.publishAt)
+  ) {
+    errors.push(`${label}.publishAt: ${tool.status}では日時が必須です。`);
+  }
+  if (typeof tool.announceOnX !== "boolean") {
+    errors.push(`${label}.announceOnX: trueまたはfalseが必要です。`);
+  }
+  if (tool.announcedAt !== null && !isTimestamp(tool.announcedAt)) {
+    errors.push(
+      `${label}.announcedAt: nullまたはタイムゾーン付きISO日時が必要です。`,
+    );
+  }
+  if (tool.announcedAt && !tool.announceOnX) {
+    errors.push(`${label}: announcedAt設定時はannounceOnXをtrueにします。`);
+  }
+  if (tool.announcedAt && !["published", "archived"].includes(tool.status)) {
+    errors.push(`${label}: 未公開サービスにannouncedAtは設定できません。`);
+  }
+  if (
+    isTimestamp(tool.publishAt) &&
+    isTimestamp(tool.announcedAt) &&
+    Date.parse(tool.announcedAt) < Date.parse(tool.publishAt)
+  ) {
+    errors.push(`${label}: announcedAtはpublishAt以降にしてください。`);
+  }
+
   requireText(content.summary, 140, `${label}.summary`);
   requireText(content.audience, 70, `${label}.audience`);
 

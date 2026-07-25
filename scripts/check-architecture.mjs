@@ -137,7 +137,11 @@ for (const tool of manifest) {
       tool.badge &&
       tool.componentName &&
       tool.content &&
-      tool.releasePost,
+      tool.releasePost &&
+      tool.status &&
+      "publishAt" in tool &&
+      typeof tool.announceOnX === "boolean" &&
+      "announcedAt" in tool,
     ),
     `${label}: 表示情報が揃っている`,
   );
@@ -183,6 +187,11 @@ for (const tool of manifest) {
       routeSource.includes("ToolGuide") && routeSource.includes("tool.content"),
       `${label}: routeが固有ガイドを表示`,
     );
+    assert(
+      routeSource.includes("isToolPublished") &&
+        routeSource.includes("notFound"),
+      `${label}: 未公開routeは404を返す`,
+    );
   }
   assert(
     portalPackage.dependencies?.[expectedPackageName] ===
@@ -203,7 +212,13 @@ const sitemapSource = readText("apps", "portal", "src", "app", "sitemap.ts");
 assert(
   sitemapSource.includes('from "@/data/apps"') &&
     sitemapSource.includes("apps.map"),
-  "sitemapはサービス台帳から生成",
+  "sitemapは公開済みサービス台帳から生成",
+);
+const appDataSource = readText("apps", "portal", "src", "data", "apps.ts");
+assert(
+  appDataSource.includes('tool.status === "published"') &&
+    appDataSource.includes("filter(isToolPublished)"),
+  "カードとsitemapはpublishedだけを公開",
 );
 const tailwindSource = readText("apps", "portal", "tailwind.config.ts");
 assert(
@@ -252,6 +267,20 @@ assert(
   announceWorkflow.includes("workflow_dispatch") &&
     !announceWorkflow.includes("branches:"),
   "X投稿は手動workflowだけで実行",
+);
+assert(
+  announceWorkflow.includes("contents: write") &&
+    announceWorkflow.includes("Record successful announcement") &&
+    announceWorkflow.includes("git push"),
+  "X投稿成功後に告知状態を台帳へ記録",
+);
+const createToolSource = readText("scripts", "create-tool.mjs");
+assert(
+  createToolSource.includes('status: "draft"') &&
+    createToolSource.includes("publishAt: null") &&
+    createToolSource.includes("announceOnX: false") &&
+    createToolSource.includes("announcedAt: null"),
+  "新規ツールは安全な非公開状態で生成",
 );
 
 const googleValuePatterns = [/G-[A-Z0-9]{6,}/g, /ca-pub-\d{10,}/g];

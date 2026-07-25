@@ -64,3 +64,15 @@
 - `npm run create:tool -- --dry-run`: passed。
 - X告知文生成・投稿ドライラン: passed（実投稿なし）。
 - `npm run check`: passed（構成検査47項目、コンテンツ品質検査、両アプリlint、両アプリ本番ビルド成功）。
+
+## 2026-07-25 13:49:08
+
+- サービス台帳へ`status`、`publishAt`、`announceOnX`、`announcedAt`を共通項目として追加。
+- 公開状態を`draft`、`scheduled`、`published`、`archived`に固定し、新規ツールは安全な`draft`で生成するよう変更。
+- ポータルカードとsitemapは`published`だけを対象にし、未公開・予約中・終了済みのツールrouteは404を返すよう変更。
+- 予約時刻だけでは公開せず、将来のスケジューラーがCIと本番確認後に`published`へ遷移させる契約を文書化。
+- 公開日時と告知日時の形式、状態との整合性、告知順序を`check:content`で検査。
+- X投稿を`published`かつ`announceOnX: true`かつ未告知のサービスに限定し、成功時に`announcedAt`を台帳へ自動記録するworkflowへ更新。
+- Copilotのリポジトリ共通指示、ツール固有指示、ポータルルール、デプロイ手順へ公開状態の扱いを追加。
+- 新規ツール生成ドライラン、X告知文生成・投稿ドライラン: passed（実投稿なし）。
+- `npm run check`: passed（構成検査51項目、コンテンツ品質検査、両アプリlint、両アプリ本番ビルド成功）。

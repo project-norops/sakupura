@@ -38,6 +38,22 @@ npm run create:tool -- --slug example-tool --title "表示名" --description "�
 このコマンドが`packages/<service-name>`、`/tools/<service-name>`、サービス台帳、
 ポータル依存を同時に作成します。手作業で同じ情報を複数箇所へ追加しません。
 
+新規サービスは必ず`draft`で生成されます。台帳の公開制御項目は次のとおりです。
+
+```json
+{
+  "status": "draft",
+  "publishAt": null,
+  "announceOnX": false,
+  "announcedAt": null
+}
+```
+
+予約時は`status`を`scheduled`にして`publishAt`へタイムゾーン付きISO日時を設定します。
+現在は予約情報を保持する段階であり、時刻到来だけでは公開されません。公開確認後に
+`published`へ変更すると、ポータルカード、sitemap、ツールURLが公開されます。
+`draft`、`scheduled`、`archived`のツールURLは404になります。
+
 実装後は`npm run check`で構成検査、lint、本番ビルドをまとめて実行してから
 `main`へPushします。
 
@@ -52,7 +68,9 @@ npm run release:post -- --slug example-tool
 実投稿にはX Developer AppのUser Access TokenをGitHub Repository Secret
 `X_USER_ACCESS_TOKEN`へ登録します。GitHub Actionsの
 `Announce released tool on X`を手動実行し、公開済みサービスのslugを指定します。
-通常のpushでは投稿しないため、未公開情報や重複投稿を防げます。
+投稿できるのは`published`かつ`announceOnX: true`で`announcedAt: null`のサービスだけです。
+成功後はworkflowが`announcedAt`を台帳へ記録するため、同じサービスの再投稿を停止できます。
+通常のpushでは投稿しません。
 
 新しい単体Next.jsアプリやVercel Projectは作成しません。既存の単体互換アプリも、
 本番公開先はポータル内の`/tools/<service-name>`とします。
