@@ -40,10 +40,12 @@ export function BookmarkButton() {
           setCopied(false);
           setOpen(true);
         }}
-        className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-white px-5 py-2.5 text-sm font-semibold text-sky-700 shadow-sm transition hover:border-sky-400 hover:bg-sky-50 dark:border-sky-800 dark:bg-slate-900 dark:text-sky-200 dark:hover:bg-slate-800"
+        className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-blue-600 px-3.5 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:px-4"
+        aria-label="このページをブックマークに追加"
       >
-        <span aria-hidden="true">★</span>
-        ブックマークに追加
+        <span aria-hidden="true">☆</span>
+        <span className="sm:hidden">保存</span>
+        <span className="hidden sm:inline">このページを保存</span>
       </button>
 
       {open ? (
@@ -53,25 +55,25 @@ export function BookmarkButton() {
           aria-modal="true"
           aria-labelledby="bookmark-title"
         >
-          <div className="w-full max-w-lg rounded-3xl bg-white p-6 text-slate-900 shadow-2xl dark:bg-slate-900 dark:text-slate-50">
+          <div className="w-full max-w-lg rounded-3xl bg-white p-6 text-slate-900 shadow-2xl sm:p-8">
             <h2 id="bookmark-title" className="text-xl font-semibold">
               このページを保存
             </h2>
-            <p className="mt-4 text-sm leading-7 text-slate-600 dark:text-slate-300">
+            <p className="mt-4 text-sm leading-7 text-slate-600">
               {bookmarkInstructions()}
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <button
                 type="button"
                 onClick={copyUrl}
-                className="rounded-full bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-700"
+                className="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
               >
                 {copied ? "URLをコピーしました" : "URLをコピー"}
               </button>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-full bg-slate-200 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-300 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600"
+                className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200"
               >
                 閉じる
               </button>

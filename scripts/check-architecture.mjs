@@ -81,7 +81,8 @@ assert(
   "テストランナーが統合され、--passWithNoTests なしで必須化",
 );
 assert(
-  rootPackage.scripts?.["check"] === "npm run check:architecture && npm run check:content && npm run test:packages && npm run lint && npm run build",
+  rootPackage.scripts?.["check"] ===
+    "npm run check:architecture && npm run check:content && npm run test:packages && npm run lint && npm run build",
   "npm run check にテスト実行が含まれている",
 );
 
@@ -195,6 +196,12 @@ for (const tool of manifest) {
     assert(
       routeSource.includes("ToolGuide") && routeSource.includes("tool.content"),
       `${label}: routeが固有ガイドを表示`,
+    );
+    assert(
+      routeSource.includes("ToolStructuredData") &&
+        routeSource.includes("canonical") &&
+        routeSource.includes("openGraph"),
+      `${label}: routeがSEOメタデータと構造化データを表示`,
     );
     assert(
       routeSource.includes("isToolPublished") &&

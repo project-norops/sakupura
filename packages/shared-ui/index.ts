@@ -4,6 +4,8 @@ export { Footer } from "./Footer";
 export { Analytics } from "./Analytics";
 export { DisclaimerModal } from "./DisclaimerModal";
 export { BookmarkButton } from "./BookmarkButton";
+export { ShareButton } from "./ShareButton";
 export { ToolGuide } from "./ToolGuide";
 export type { ToolGuideContent, ToolGuideProps } from "./ToolGuide";
+export { ToolStructuredData } from "./ToolStructuredData";
 export { googleServices } from "./GoogleServices";
