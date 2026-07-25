@@ -309,7 +309,7 @@ export function SocialTextFormatterPage() {
           {"SNS運用"}
         </p>
         <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-950 dark:text-slate-50 sm:text-4xl">
-          {"SNS文章整形・文字数チェッカー"}
+          {"SNS文字数カウンター・文章整形ツール"}
         </h1>
         <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">
           {
@@ -363,6 +363,8 @@ export function SocialTextFormatterPage() {
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={handleInsertSample}
+                data-analytics-event="sample_load"
+                data-analytics-tool-id="social-text-formatter"
                 className="rounded-lg bg-sky-100 px-4 py-2 text-sm font-medium text-sky-900 hover:bg-sky-200 dark:bg-sky-950 dark:text-sky-100 dark:hover:bg-sky-900"
               >
                 整形デモを試す
@@ -482,6 +484,9 @@ export function SocialTextFormatterPage() {
         <button
           onClick={handleFormat}
           disabled={!text}
+          data-analytics-event="tool_run"
+          data-analytics-tool-id="social-text-formatter"
+          data-analytics-platform={platform}
           className="mt-8 w-full rounded-xl bg-sky-600 px-6 py-4 text-lg font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 dark:disabled:bg-slate-700 dark:disabled:text-slate-400"
         >
           文章を整形する
@@ -525,12 +530,14 @@ export function SocialTextFormatterPage() {
                   content={text}
                   onCopy={() => handleCopy(text, "original")}
                   copied={copiedType === "original"}
+                  resultType="original"
                 />
                 <PreviewBox
                   title="整形後"
                   content={formattingResult.text}
                   onCopy={() => handleCopy(formattingResult.text, "formatted")}
                   copied={copiedType === "formatted"}
+                  resultType="formatted"
                 />
               </div>
 
@@ -538,6 +545,9 @@ export function SocialTextFormatterPage() {
                 <button
                   onClick={handleOpenPost}
                   disabled={isResultOverLimit}
+                  data-analytics-event="tool_post_open"
+                  data-analytics-tool-id="social-text-formatter"
+                  data-analytics-platform={platform}
                   className="w-full rounded-lg bg-sky-600 px-5 py-3 font-semibold text-white hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 dark:disabled:bg-slate-700 dark:disabled:text-slate-400"
                 >
                   {platform === "twitter"
@@ -771,11 +781,13 @@ function PreviewBox({
   content,
   onCopy,
   copied,
+  resultType,
 }: {
   title: string;
   content: string;
   onCopy: () => void;
   copied: boolean;
+  resultType: "original" | "formatted";
 }) {
   return (
     <div className="rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-600 dark:bg-slate-950">
@@ -785,6 +797,9 @@ function PreviewBox({
         </h4>
         <button
           onClick={onCopy}
+          data-analytics-event="tool_result_copy"
+          data-analytics-tool-id="social-text-formatter"
+          data-analytics-result-type={resultType}
           className={`rounded px-3 py-1 text-sm font-medium transition-colors ${
             copied
               ? "bg-green-600 text-white"

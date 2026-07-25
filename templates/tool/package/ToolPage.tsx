@@ -10,7 +10,15 @@ export function __COMPONENT_NAME__() {
         </h1>
         <p className="mt-4 leading-7 text-slate-600">{__DESCRIPTION_JSON__}</p>
         <div className="mt-8 rounded-2xl bg-slate-50 p-6 text-slate-700">
-          この領域にツール本体を実装してください。
+          <p>この領域にツール本体を実装してください。</p>
+          <button
+            type="button"
+            data-analytics-event="tool_run"
+            data-analytics-tool-id="__SLUG__"
+            className="mt-4 rounded-full bg-blue-600 px-5 py-3 text-sm font-bold text-white hover:bg-blue-700"
+          >
+            実行する
+          </button>
         </div>
       </section>
     </main>

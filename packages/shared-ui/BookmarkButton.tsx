@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackAnalyticsEvent } from "./AnalyticsEvents";
 
 function bookmarkInstructions() {
   if (typeof navigator === "undefined")
@@ -27,6 +28,11 @@ export function BookmarkButton() {
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
+      trackAnalyticsEvent("bookmark_url_copy", {
+        method: "clipboard",
+        content_type: "web_page",
+        item_id: window.location.pathname,
+      });
     } catch {
       setCopied(false);
     }
@@ -39,6 +45,11 @@ export function BookmarkButton() {
         onClick={() => {
           setCopied(false);
           setOpen(true);
+          trackAnalyticsEvent("bookmark_prompt_open", {
+            method: "site_header",
+            content_type: "web_page",
+            item_id: window.location.pathname,
+          });
         }}
         className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-blue-600 px-3.5 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:px-4"
         aria-label="このページをブックマークに追加"

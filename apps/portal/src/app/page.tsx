@@ -6,6 +6,9 @@ function AppCard({ app, index }: { app: AppDefinition; index: number }) {
   return (
     <Link
       href={app.href}
+      data-analytics-event="select_content"
+      data-analytics-content-type="tool"
+      data-analytics-item-id={app.slug}
       className="group relative flex min-h-64 flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_12px_40px_-28px_rgba(15,23,42,0.45)] transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_24px_56px_-30px_rgba(37,99,235,0.45)] sm:p-7"
     >
       <div className="flex items-center justify-between gap-4">
@@ -71,6 +74,9 @@ export default function HomePage() {
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
                 href="#tools"
+                data-analytics-event="select_content"
+                data-analytics-content-type="navigation"
+                data-analytics-item-id="home_hero_tools"
                 className="inline-flex min-h-12 items-center rounded-full bg-slate-950 px-6 py-3 text-sm font-bold text-white transition hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
               >
                 無料ツールを見る

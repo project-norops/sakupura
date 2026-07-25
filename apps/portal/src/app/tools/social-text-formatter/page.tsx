@@ -8,18 +8,18 @@ import { siteUrl } from "@/lib/site";
 const tool = getToolBySlug("social-text-formatter");
 
 export const metadata: Metadata = {
-  title: "SNS文章整形・文字数チェッカー",
+  title: "SNS文字数カウンター・文章整形ツール",
   description:
     "X、Instagram、LinkedIn向けの文章を、改行・空白・文字数・ハッシュタグを確認しながらブラウザ上で整形できます。",
   alternates: { canonical: "/tools/social-text-formatter" },
   openGraph: {
-    title: "SNS文章整形・文字数チェッカー",
+    title: "SNS文字数カウンター・文章整形ツール",
     description: tool.description,
     url: "/tools/social-text-formatter",
   },
   twitter: {
     card: "summary",
-    title: "SNS文章整形・文字数チェッカー",
+    title: "SNS文字数カウンター・文章整形ツール",
     description: tool.description,
   },
 };

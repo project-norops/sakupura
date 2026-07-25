@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "動的プライシング・収益シミュレーター | サクプラ",
+  title: "販売価格・利益シミュレーター | サクプラ",
   description:
     "目標手取り額、原価、決済手数料、販売数から推奨販売価格と利益を計算します。",
   verification: {

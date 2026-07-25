@@ -1,11 +1,13 @@
 import Script from "next/script";
 import { googleServices } from "./GoogleServices";
+import { AnalyticsEvents } from "./AnalyticsEvents";
 
 export function Analytics() {
   const { adsenseClientId, analyticsId } = googleServices;
 
   return (
     <>
+      <AnalyticsEvents />
       <Script
         id="google-analytics-loader"
         strategy="afterInteractive"

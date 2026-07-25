@@ -2,6 +2,7 @@ export { AppLayout } from "./AppLayout";
 export { Header } from "./Header";
 export { Footer } from "./Footer";
 export { Analytics } from "./Analytics";
+export { AnalyticsEvents, trackAnalyticsEvent } from "./AnalyticsEvents";
 export { DisclaimerModal } from "./DisclaimerModal";
 export { BookmarkButton } from "./BookmarkButton";
 export { ShareButton } from "./ShareButton";

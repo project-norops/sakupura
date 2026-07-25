@@ -254,12 +254,14 @@ for (const requiredPath of [
   ["apps", "portal", "src", "app", "privacy", "page.tsx"],
   ["apps", "portal", "src", "app", "disclaimer", "page.tsx"],
   ["packages", "shared-ui", "GoogleServices.ts"],
+  ["packages", "shared-ui", "AnalyticsEvents.tsx"],
   ["packages", "shared-ui", "BookmarkButton.tsx"],
   ["packages", "shared-ui", "ToolGuide.tsx"],
   [".github", "copilot-instructions.md"],
   [".github", "instructions", "tools.instructions.md"],
   [".github", "workflows", "announce-tool.yml"],
   ["ARCHITECTURE.md"],
+  ["ANALYTICS.md"],
   ["DEPLOYMENT.md"],
 ]) {
   assert(
@@ -272,6 +274,28 @@ const footerSource = readText("packages", "shared-ui", "Footer.tsx");
 assert(
   footerSource.includes("/privacy") && footerSource.includes("/disclaimer"),
   "共通footerに法務ページへのリンクが存在",
+);
+const analyticsSource = readText(
+  "packages",
+  "shared-ui",
+  "AnalyticsEvents.tsx",
+);
+const analyticsLoaderSource = readText(
+  "packages",
+  "shared-ui",
+  "Analytics.tsx",
+);
+assert(
+  analyticsSource.includes("data-analytics-event") &&
+    analyticsSource.includes('window.gtag("event"') &&
+    analyticsLoaderSource.includes("AnalyticsEvents"),
+  "GA4操作イベントは共通処理から送信",
+);
+assert(
+  readText("templates", "tool", "package", "ToolPage.tsx").includes(
+    'data-analytics-event="tool_run"',
+  ),
+  "新規ツールtemplateに主処理のGA4計測を用意",
 );
 const qualityWorkflow = readText(".github", "workflows", "quality.yml");
 assert(

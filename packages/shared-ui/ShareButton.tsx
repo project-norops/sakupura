@@ -1,10 +1,17 @@
 "use client";
 
+import { trackAnalyticsEvent } from "./AnalyticsEvents";
+
 export function ShareButton() {
   const shareOnX = () => {
     const url = new URL("https://x.com/intent/post");
     url.searchParams.set("url", window.location.href);
     url.searchParams.set("text", document.title);
+    trackAnalyticsEvent("share", {
+      method: "X",
+      content_type: "web_page",
+      item_id: window.location.pathname,
+    });
     window.open(url, "_blank", "noopener,noreferrer");
   };
 

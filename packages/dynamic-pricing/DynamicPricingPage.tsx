@@ -238,7 +238,7 @@ function DynamicPricingCalculator() {
               marginBottom: "8px",
             }}
           >
-            動的プライシング・収益シミュレーター
+            販売価格・利益シミュレーター
           </h1>
           <p style={{ color: "#64748b", fontSize: "0.95rem" }}>
             目標手取り額・原価・各種手数料から「本当に手元に残る利益」と「最適な販売価格」をリアルタイムに自動計算します。
@@ -579,6 +579,10 @@ function DynamicPricingCalculator() {
             <div style={{ marginTop: "24px" }}>
               <button
                 onClick={handleCopyShareUrl}
+                data-analytics-event="share"
+                data-analytics-method="copy_link"
+                data-analytics-content-type="tool_result"
+                data-analytics-item-id="dynamic-pricing"
                 style={{
                   width: "100%",
                   padding: "12px",

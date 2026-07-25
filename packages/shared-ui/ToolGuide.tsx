@@ -129,6 +129,9 @@ export function ToolGuide({ title, content }: ToolGuideProps) {
         </div>
         <Link
           href="/#tools"
+          data-analytics-event="select_content"
+          data-analytics-content-type="related_tools"
+          data-analytics-item-id="tool_list"
           className="inline-flex shrink-0 rounded-full bg-white px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-blue-50"
         >
           ツール一覧へ →
