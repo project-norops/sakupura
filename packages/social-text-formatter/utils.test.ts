@@ -22,7 +22,9 @@ import {
   normalizeFullwidthSpaces,
   addBlankLineBeforeHashtags,
   moveHashtagsToEnd,
+  removeDuplicateHashtags,
   applyFormatting,
+  applyFormattingWithReport,
   PLATFORM_LIMITS,
 } from "./utils";
 import twitterText from "twitter-text";
@@ -308,6 +310,50 @@ describe("Text Formatting Utilities - Complete Test Suite", () => {
   });
 
   describe("Text formatting functions", () => {
+    test("should remove duplicate hashtags without touching URL fragments", () => {
+      expect(
+        removeDuplicateHashtags(
+          "https://example.com#section #Tag 本文 #tag #別タグ",
+        ),
+      ).toBe("https://example.com#section #Tag 本文 #別タグ");
+    });
+
+    test("should return a change report for applied formatting", () => {
+      const result = applyFormattingWithReport("　本文   \n\n\n#タグ #タグ　", {
+        removeTrailingSpaces: true,
+        trimEnds: true,
+        reduceBlankLines: true,
+        normalizeFullwidthSpaces: true,
+        removeDuplicateHashtags: true,
+      });
+
+      expect(result.text).toBe("本文\n\n#タグ");
+      expect(result.totalChanges).toBeGreaterThan(0);
+      expect(result.changes.map((change) => change.key)).toEqual(
+        expect.arrayContaining([
+          "removeTrailingSpaces",
+          "trimEnds",
+          "reduceBlankLines",
+          "removeDuplicateHashtags",
+        ]),
+      );
+    });
+
+    test("should count every removed duplicate hashtag occurrence", () => {
+      const result = applyFormattingWithReport("#tag #TAG #Tag", {
+        removeDuplicateHashtags: true,
+      });
+
+      expect(result.text).toBe("#tag");
+      expect(result.changes).toEqual([
+        expect.objectContaining({
+          key: "removeDuplicateHashtags",
+          count: 2,
+        }),
+      ]);
+      expect(result.totalChanges).toBe(2);
+    });
+
     test("should remove trailing spaces", () => {
       expect(removeTrailingSpaces("hello  \nworld  ")).toBe("hello\nworld");
     });

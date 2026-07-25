@@ -152,6 +152,19 @@ export function findDuplicateHashtags(text: string): string[] {
   return Array.from(duplicates);
 }
 
+function countDuplicateHashtagOccurrences(text: string): number {
+  const seen = new Set<string>();
+  let duplicateCount = 0;
+
+  for (const { hashtag } of getHashtagEntities(text)) {
+    const normalized = hashtag.toLowerCase();
+    if (seen.has(normalized)) duplicateCount += 1;
+    else seen.add(normalized);
+  }
+
+  return duplicateCount;
+}
+
 /**
  * Extract URLs
  */
@@ -313,6 +326,48 @@ export interface FormattingOptions {
   normalizeFullwidthSpaces?: boolean;
   addBlankBeforeHashtags?: boolean;
   moveHashtagsToEnd?: boolean;
+  removeDuplicateHashtags?: boolean;
+}
+
+export interface FormattingChange {
+  key: keyof FormattingOptions;
+  label: string;
+  count: number;
+}
+
+export interface FormattingResult {
+  text: string;
+  changes: FormattingChange[];
+  totalChanges: number;
+}
+
+/**
+ * Remove duplicate hashtags while preserving the first occurrence and URL fragments.
+ */
+export function removeDuplicateHashtags(text: string): string {
+  const entities = getHashtagEntities(text);
+  const seen = new Set<string>();
+  const duplicateEntities = entities.filter(({ hashtag }) => {
+    const normalized = hashtag.toLowerCase();
+    if (seen.has(normalized)) return true;
+    seen.add(normalized);
+    return false;
+  });
+
+  let result = text;
+  for (const { indices } of [...duplicateEntities].reverse()) {
+    const [start, entityEnd] = indices;
+    let end = entityEnd;
+    while (end < result.length && /[ \t]/.test(result[end])) end += 1;
+    result = result.slice(0, start) + result.slice(end);
+  }
+
+  return result
+    .split("\n")
+    .map((line) => line.replace(/[ \t]+$/, ""))
+    .join("\n")
+    .replace(/\n\n\n+/g, "\n\n")
+    .trim();
 }
 
 export function applyFormatting(
@@ -349,24 +404,114 @@ export function applyFormatting(
     result = moveHashtagsToEnd(result);
   }
 
+  if (options.removeDuplicateHashtags) {
+    result = removeDuplicateHashtags(result);
+  }
+
   return result;
+}
+
+/**
+ * Apply formatting and report how many locations each selected rule changed.
+ */
+export function applyFormattingWithReport(
+  text: string,
+  options: FormattingOptions = {},
+): FormattingResult {
+  let result = text;
+  const changes: FormattingChange[] = [];
+
+  const applyStep = (
+    key: keyof FormattingOptions,
+    label: string,
+    count: number,
+    formatter: (value: string) => string,
+  ) => {
+    if (!options[key]) return;
+    const next = formatter(result);
+    if (next !== result) {
+      changes.push({ key, label, count: Math.max(count, 1) });
+      result = next;
+    }
+  };
+
+  applyStep(
+    "normalizeLineBreaks",
+    "改行コードの統一",
+    (result.match(/\r\n|\r/g) ?? []).length,
+    normalizeLineBreaks,
+  );
+  applyStep(
+    "removeTrailingSpaces",
+    "行末の空白",
+    result.split("\n").filter((line) => /[ \t\u3000]+$/.test(line)).length,
+    removeTrailingSpaces,
+  );
+  applyStep(
+    "trimEnds",
+    "文頭・文末の空白",
+    Number(/^\s/.test(result)) + Number(/\s$/.test(result)),
+    trimText,
+  );
+  applyStep(
+    "reduceBlankLines",
+    "連続空行",
+    (result.match(/\n\n\n+/g) ?? []).length,
+    reduceConsecutiveBlankLines,
+  );
+  applyStep(
+    "normalizeFullwidthSpaces",
+    "連続する全角スペース",
+    (result.match(/\u3000{2,}/g) ?? []).length,
+    normalizeFullwidthSpaces,
+  );
+  applyStep(
+    "addBlankBeforeHashtags",
+    "ハッシュタグ前の改行",
+    getHashtagEntities(result).filter(
+      ({ indices: [start] }) => start > 0 && result[start - 1] !== "\n",
+    ).length,
+    addBlankLineBeforeHashtags,
+  );
+  applyStep(
+    "moveHashtagsToEnd",
+    "ハッシュタグの移動",
+    getHashtagEntities(result).length,
+    moveHashtagsToEnd,
+  );
+  applyStep(
+    "removeDuplicateHashtags",
+    "重複ハッシュタグの削除",
+    countDuplicateHashtagOccurrences(result),
+    removeDuplicateHashtags,
+  );
+
+  return {
+    text: result,
+    changes,
+    totalChanges: changes.reduce((total, change) => total + change.count, 0),
+  };
 }
 
 /**
  * Get sample text for demonstration
  */
 export function getSampleText(): string {
-  return `こんにちは！
-
-SNS投稿のための便利なツールです。
-
-このツールを使うと：
-- 改行や空白を自動整理
-- 文字数を正確に計測
-- ハッシュタグを管理
-- X、Instagram、LinkedInの規格に対応
-
-さあ、試してみましょう！
-
-#SNS #テキスト整形 #便利ツール`;
+  return [
+    "　新しいミニサービスを公開しました！   ",
+    "",
+    "サクプラでは、毎日の小さな面倒を減らすブラウザツールを開発しています。　　今回の新作は、SNS投稿前の文章を見直しやすくする文章整形・文字数チェッカーです。   ",
+    "",
+    "#サクプラ 投稿文の途中にあるハッシュタグや、余分な空白・改行をまとめて確認できます。X、Instagram、LinkedInを切り替えながら、それぞれの上限に近づいていないかもチェックできます📱✨   ",
+    "",
+    "",
+    "",
+    "主なポイント：　　文章は端末内で処理されます。AIや外部サーバーへ本文を送信しません。よく使うハッシュタググループもブラウザに保存できます。   ",
+    "",
+    "詳しい料金や機能はこちら：https://example.com/service#price   ",
+    "",
+    "使ってみた感想や、追加してほしい機能があればぜひ教えてください！ #便利ツール #SNS運用 #サクプラ   ",
+    "",
+    "　よろしくお願いします。　",
+  ].join("\n");
 }

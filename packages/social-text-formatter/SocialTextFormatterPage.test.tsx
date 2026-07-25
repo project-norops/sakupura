@@ -48,26 +48,67 @@ describe("SocialTextFormatterPage", () => {
     expect(
       screen.getByText((_, element) => element?.textContent === "10 / 280"),
     ).toBeInTheDocument();
+    expect(screen.getByText("日本語なら約135文字")).toBeInTheDocument();
+    expect(
+      screen.getByText(/日本語だけの場合は最大約140文字です。/),
+    ).toBeInTheDocument();
 
     await user.click(screen.getByRole("tab", { name: "Instagram" }));
     expect(
       screen.getByText((_, element) => element?.textContent === "5 / 2200"),
     ).toBeInTheDocument();
+    expect(screen.getByText("入力文字数（目安）")).toBeInTheDocument();
+    expect(
+      screen.getByText(/絵文字や結合文字の扱いは投稿環境により異なる/),
+    ).toBeInTheDocument();
   });
 
-  test("applies formatting and restores the exact original text", async () => {
+  test("formats only after the primary action and keeps the original unchanged", async () => {
     const user = userEvent.setup();
     render(<SocialTextFormatterPage />);
 
     const original = "本文  \n\n\n#タグ";
     await user.type(getEditor(), original);
-    await user.click(
-      screen.getByRole("button", { name: "整形結果を入力欄へ反映" }),
-    );
-    expect(getEditor()).toHaveValue("本文\n\n#タグ");
+    expect(
+      screen.queryByRole("heading", { name: "3. 整形結果を確認" }),
+    ).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "原文へ戻す" }));
+    await user.click(screen.getByRole("button", { name: "文章を整形する" }));
     expect(getEditor()).toHaveValue(original);
+    expect(
+      screen.getByRole("heading", { name: "3. 整形結果を確認" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/種類・合計.*箇所を整形しました/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        (_, element) => element?.textContent === "本文\n\n#タグ",
+      ),
+    ).toBeInTheDocument();
+  });
+
+  test("loads a deliberately messy demo with visible formatting options", async () => {
+    const user = userEvent.setup();
+    render(<SocialTextFormatterPage />);
+
+    await user.click(screen.getByRole("button", { name: "整形デモを試す" }));
+    expect(getEditor().value.length).toBeGreaterThan(300);
+    expect(
+      screen.getByRole("checkbox", { name: "連続全角スペースを整理" }),
+    ).toBeChecked();
+    expect(
+      screen.getByRole("checkbox", { name: "ハッシュタグを文末にまとめる" }),
+    ).toBeChecked();
+    expect(
+      screen.getByRole("checkbox", { name: "重複ハッシュタグを削除" }),
+    ).toBeChecked();
+
+    await user.click(screen.getByRole("button", { name: "文章を整形する" }));
+    expect(
+      screen.getByText(/種類・合計.*箇所を整形しました/),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/重複ハッシュタグの削除/)).toBeInTheDocument();
   });
 
   test("creates, edits, inserts, and deletes a hashtag group", async () => {
@@ -123,7 +164,8 @@ describe("SocialTextFormatterPage", () => {
     render(<SocialTextFormatterPage />);
 
     await user.type(getEditor(), "コピー対象");
-    await user.click(screen.getByRole("button", { name: "原文をコピー" }));
+    await user.click(screen.getByRole("button", { name: "文章を整形する" }));
+    await user.click(screen.getByRole("button", { name: "整形前をコピー" }));
 
     const fallback = await screen.findByRole("textbox", {
       name: "コピー用テキスト",
@@ -140,10 +182,70 @@ describe("SocialTextFormatterPage", () => {
     await user.click(
       screen.getByRole("checkbox", { name: "ハッシュタグを文末にまとめる" }),
     );
+    await user.click(screen.getByRole("button", { name: "文章を整形する" }));
+
+    expect(getEditor()).toHaveValue(input);
+    expect(
+      screen.getByText(
+        (_, element) =>
+          element?.textContent === "https://example.com#section\n\n#tag",
+      ),
+    ).toBeInTheDocument();
+  });
+
+  test("opens the official X intent with the formatted text", async () => {
+    const user = userEvent.setup();
+    const openSpy = jest.spyOn(window, "open").mockImplementation(() => null);
+    render(<SocialTextFormatterPage />);
+
+    await user.type(getEditor(), "こんにちは");
+    await user.click(screen.getByRole("button", { name: "文章を整形する" }));
+    await user.click(screen.getByRole("button", { name: "Xで投稿画面を開く" }));
+
+    expect(openSpy).toHaveBeenCalledWith(
+      `https://x.com/intent/tweet?text=${encodeURIComponent("こんにちは")}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+    openSpy.mockRestore();
+  });
+
+  test("disables posting when the formatted text exceeds the selected limit", async () => {
+    const user = userEvent.setup();
+    render(<SocialTextFormatterPage />);
+
+    await user.type(getEditor(), "あ".repeat(141));
+    await user.click(screen.getByRole("button", { name: "文章を整形する" }));
+
+    expect(
+      screen.getByRole("button", { name: "Xで投稿画面を開く" }),
+    ).toBeDisabled();
+    expect(screen.getByText(/上限を2超えています/)).toBeInTheDocument();
+  });
+
+  test("copies formatted text and opens Instagram", async () => {
+    const user = userEvent.setup();
+    const writeText = jest.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText },
+    });
+    const openSpy = jest.spyOn(window, "open").mockImplementation(() => null);
+    render(<SocialTextFormatterPage />);
+
+    await user.click(screen.getByRole("tab", { name: "Instagram" }));
+    await user.type(getEditor(), "投稿文");
+    await user.click(screen.getByRole("button", { name: "文章を整形する" }));
     await user.click(
-      screen.getByRole("button", { name: "整形結果を入力欄へ反映" }),
+      screen.getByRole("button", { name: "Instagram用にコピーして開く" }),
     );
 
-    expect(getEditor()).toHaveValue("https://example.com#section\n\n#tag");
+    expect(openSpy).toHaveBeenCalledWith(
+      "https://www.instagram.com/",
+      "_blank",
+      "noopener,noreferrer",
+    );
+    expect(writeText).toHaveBeenCalledWith("投稿文");
+    openSpy.mockRestore();
   });
 });

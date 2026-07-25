@@ -4,8 +4,9 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import {
   calculateStats,
   calculateTwitterCharCount,
-  applyFormatting,
+  applyFormattingWithReport,
   FormattingOptions,
+  FormattingResult,
   findDuplicateHashtags,
   getSampleText,
   PLATFORM_LIMITS,
@@ -30,6 +31,13 @@ const DEFAULT_FORMATTING: FormattingOptions = {
   trimEnds: true,
   reduceBlankLines: true,
   normalizeLineBreaks: true,
+};
+
+const DEMO_FORMATTING: FormattingOptions = {
+  ...DEFAULT_FORMATTING,
+  normalizeFullwidthSpaces: true,
+  moveHashtagsToEnd: true,
+  removeDuplicateHashtags: true,
 };
 
 function getLocalStorage<T>(key: string, defaultValue: T): T {
@@ -67,7 +75,8 @@ function getPlatformLimit(platform: Platform): number {
 
 export function SocialTextFormatterPage() {
   const [text, setText] = useState("");
-  const [originalText, setOriginalText] = useState("");
+  const [formattingResult, setFormattingResult] =
+    useState<FormattingResult | null>(null);
   const [platform, setPlatform] = useState<Platform>("twitter");
   const [formatting, setFormatting] =
     useState<FormattingOptions>(DEFAULT_FORMATTING);
@@ -82,6 +91,7 @@ export function SocialTextFormatterPage() {
   const [showClipboardFallback, setShowClipboardFallback] = useState(false);
   const [fallbackText, setFallbackText] = useState("");
   const fallbackRef = useRef<HTMLTextAreaElement>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
 
   // Load from LocalStorage on mount
   useEffect(() => {
@@ -125,10 +135,6 @@ export function SocialTextFormatterPage() {
 
   const stats = useMemo(() => calculateStats(text), [text]);
   const twitterInfo = useMemo(() => calculateTwitterCharCount(text), [text]);
-  const formattedText = useMemo(
-    () => applyFormatting(text, formatting),
-    [text, formatting],
-  );
   const duplicateHashtags = useMemo(() => findDuplicateHashtags(text), [text]);
 
   const platformLimit = getPlatformLimit(platform);
@@ -138,6 +144,15 @@ export function SocialTextFormatterPage() {
     platform === "twitter"
       ? twitterInfo.isOverLimit
       : displayCharCount > platformLimit;
+  const remainingCount = platformLimit - displayCharCount;
+  const resultPlatformCount = formattingResult
+    ? platform === "twitter"
+      ? calculateTwitterCharCount(formattingResult.text).count
+      : calculateStats(formattingResult.text).charCount
+    : 0;
+  const isResultOverLimit = formattingResult
+    ? resultPlatformCount > platformLimit
+    : false;
 
   const handleCopy = useCallback(async (textToCopy: string, type: string) => {
     try {
@@ -158,24 +173,38 @@ export function SocialTextFormatterPage() {
 
   const handleInsertSample = useCallback(() => {
     setText(getSampleText());
+    setFormatting(DEMO_FORMATTING);
+    setFormattingResult(null);
   }, []);
 
   const handleClear = useCallback(() => {
     if (window.confirm("すべてのテキストを消去します。よろしいですか？")) {
       setText("");
+      setFormattingResult(null);
     }
   }, []);
 
-  const handleApplyFormatted = useCallback(() => {
-    setOriginalText(text);
-    setText(formattedText);
-  }, [formattedText, text]);
+  const handleFormat = useCallback(() => {
+    if (!text) return;
+    setFormattingResult(applyFormattingWithReport(text, formatting));
+    setTimeout(
+      () => resultRef.current?.scrollIntoView?.({ behavior: "smooth" }),
+      0,
+    );
+  }, [formatting, text]);
 
-  const handleRevertToOriginal = useCallback(() => {
-    if (originalText && text !== originalText) {
-      setText(originalText);
-    }
-  }, [originalText, text]);
+  const handleTextChange = useCallback((value: string) => {
+    setText(value);
+    setFormattingResult(null);
+  }, []);
+
+  const updateFormatting = useCallback(
+    (key: keyof FormattingOptions, checked: boolean) => {
+      setFormatting((current) => ({ ...current, [key]: checked }));
+      setFormattingResult(null);
+    },
+    [],
+  );
 
   const handleAddHashtagGroup = useCallback(() => {
     if (!newGroupName.trim() || !newGroupTags.trim()) return;
@@ -205,6 +234,7 @@ export function SocialTextFormatterPage() {
   const handleInsertGroup = useCallback((group: HashtagGroup) => {
     const textToAdd = group.hashtags.join(" ");
     setText((prev) => `${prev}\n${textToAdd}`);
+    setFormattingResult(null);
   }, []);
 
   const handleDeleteGroup = useCallback((id: string) => {
@@ -252,6 +282,25 @@ export function SocialTextFormatterPage() {
   const handleCloseFallback = useCallback(() => {
     setShowClipboardFallback(false);
   }, []);
+
+  const handleOpenPost = useCallback(async () => {
+    if (!formattingResult) return;
+
+    if (platform === "twitter") {
+      const intentUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(
+        formattingResult.text,
+      )}`;
+      window.open(intentUrl, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    const destination =
+      platform === "instagram"
+        ? "https://www.instagram.com/"
+        : "https://www.linkedin.com/feed/?shareActive=true";
+    window.open(destination, "_blank", "noopener,noreferrer");
+    await handleCopy(formattingResult.text, "post");
+  }, [formattingResult, handleCopy, platform]);
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
@@ -307,40 +356,31 @@ export function SocialTextFormatterPage() {
 
         {/* Input Area */}
         <div className="mt-8 space-y-4">
-          <div className="flex gap-2 flex-wrap">
-            <button
-              onClick={handleInsertSample}
-              className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
-            >
-              サンプル挿入
-            </button>
-            <button
-              onClick={handleClear}
-              className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
-            >
-              全消去
-            </button>
-            <button
-              onClick={handleApplyFormatted}
-              className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
-            >
-              整形結果を入力欄へ反映
-            </button>
-            <button
-              onClick={handleRevertToOriginal}
-              disabled={!originalText || text === originalText}
-              className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-300 disabled:opacity-50 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
-              aria-label="原文へ戻す"
-            >
-              原文へ戻す
-            </button>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold text-slate-950 dark:text-slate-50">
+              1. 原文を入力
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={handleInsertSample}
+                className="rounded-lg bg-sky-100 px-4 py-2 text-sm font-medium text-sky-900 hover:bg-sky-200 dark:bg-sky-950 dark:text-sky-100 dark:hover:bg-sky-900"
+              >
+                整形デモを試す
+              </button>
+              <button
+                onClick={handleClear}
+                className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
+              >
+                入力内容を消去
+              </button>
+            </div>
           </div>
 
           <textarea
             value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="SNS投稿用のテキストを入力してください..."
-            className="w-full min-h-64 rounded-lg border border-slate-300 bg-white p-4 font-mono text-sm dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100"
+            onChange={(event) => handleTextChange(event.target.value)}
+            placeholder="SNS投稿用の文章を入力、または貼り付けてください..."
+            className="min-h-64 w-full rounded-lg border border-slate-300 bg-white p-4 font-mono text-sm dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100"
             aria-label="入力テキスト"
           />
         </div>
@@ -348,10 +388,30 @@ export function SocialTextFormatterPage() {
         {/* Statistics */}
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           <StatBox
-            label="文字数"
+            label={platform === "twitter" ? "X換算" : "入力文字数（目安）"}
             value={displayCharCount}
             limit={platformLimit}
             isOver={isOverLimit}
+            helper={
+              platform === "twitter"
+                ? "日本語・絵文字は基本2、URLは原則23"
+                : "日本語・全角文字も1文字として表示"
+            }
+          />
+          <StatBox
+            label="実際の文字数"
+            value={stats.charCount}
+            helper="見た目上の文字単位"
+          />
+          <StatBox
+            label={platform === "twitter" ? "残り" : "残り（目安）"}
+            value={remainingCount}
+            isOver={remainingCount < 0}
+            helper={
+              platform === "twitter" && remainingCount >= 0
+                ? `日本語なら約${Math.floor(remainingCount / 2)}文字`
+                : undefined
+            }
           />
           <StatBox
             label="文字数（空白除）"
@@ -365,7 +425,12 @@ export function SocialTextFormatterPage() {
           <StatBox label="@メンション" value={stats.mentionCount} />
         </div>
 
-        {/* Duplicate Hashtag Warning */}
+        <p className="mt-3 text-xs leading-5 text-slate-600 dark:text-slate-400">
+          {platform === "twitter"
+            ? "X公式の重み付き文字数で計算しています。日本語だけの場合は最大約140文字です。"
+            : "絵文字や結合文字の扱いは投稿環境により異なる場合があります。投稿前に実際のSNS画面でもご確認ください。"}
+        </p>
+
         {duplicateHashtags.length > 0 && (
           <div className="mt-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950">
             <p className="text-sm font-medium text-amber-900 dark:text-amber-100">
@@ -377,152 +442,124 @@ export function SocialTextFormatterPage() {
 
         {/* Formatting Options */}
         <div className="mt-8 space-y-4">
-          <h3 className="font-semibold text-slate-950 dark:text-slate-50">
-            整形オプション
-          </h3>
-          <div className="space-y-2">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={formatting.removeTrailingSpaces ?? false}
-                onChange={(e) =>
-                  setFormatting({
-                    ...formatting,
-                    removeTrailingSpaces: e.target.checked,
-                  })
-                }
-                className="rounded"
-                aria-label="行末の空白を削除"
-              />
-              <span className="text-sm text-slate-700 dark:text-slate-300">
-                行末の空白を削除
-              </span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={formatting.trimEnds ?? false}
-                onChange={(e) =>
-                  setFormatting({ ...formatting, trimEnds: e.target.checked })
-                }
-                className="rounded"
-                aria-label="文頭・文末の空白を削除"
-              />
-              <span className="text-sm text-slate-700 dark:text-slate-300">
-                文頭・文末の空白を削除
-              </span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={formatting.reduceBlankLines ?? false}
-                onChange={(e) =>
-                  setFormatting({
-                    ...formatting,
-                    reduceBlankLines: e.target.checked,
-                  })
-                }
-                className="rounded"
-                aria-label="連続空行を整理（3行以上→2行）"
-              />
-              <span className="text-sm text-slate-700 dark:text-slate-300">
-                連続空行を整理（3行以上→2行）
-              </span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={formatting.normalizeLineBreaks ?? false}
-                onChange={(e) =>
-                  setFormatting({
-                    ...formatting,
-                    normalizeLineBreaks: e.target.checked,
-                  })
-                }
-                className="rounded"
-                aria-label="改行コードを統一"
-              />
-              <span className="text-sm text-slate-700 dark:text-slate-300">
-                改行コードを統一
-              </span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={formatting.normalizeFullwidthSpaces ?? false}
-                onChange={(e) =>
-                  setFormatting({
-                    ...formatting,
-                    normalizeFullwidthSpaces: e.target.checked,
-                  })
-                }
-                className="rounded"
-                aria-label="連続全角スペースを整理"
-              />
-              <span className="text-sm text-slate-700 dark:text-slate-300">
-                連続全角スペースを整理
-              </span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={formatting.addBlankBeforeHashtags ?? false}
-                onChange={(e) =>
-                  setFormatting({
-                    ...formatting,
-                    addBlankBeforeHashtags: e.target.checked,
-                  })
-                }
-                className="rounded"
-                aria-label="ハッシュタグの前に空行を追加"
-              />
-              <span className="text-sm text-slate-700 dark:text-slate-300">
-                ハッシュタグの前に空行を追加
-              </span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={formatting.moveHashtagsToEnd ?? false}
-                onChange={(e) =>
-                  setFormatting({
-                    ...formatting,
-                    moveHashtagsToEnd: e.target.checked,
-                  })
-                }
-                className="rounded"
-                aria-label="ハッシュタグを文末にまとめる"
-              />
-              <span className="text-sm text-slate-700 dark:text-slate-300">
-                ハッシュタグを文末にまとめる
-              </span>
-            </label>
+          <h2 className="text-lg font-semibold text-slate-950 dark:text-slate-50">
+            2. 整形内容を選択
+          </h2>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {(
+              [
+                ["removeTrailingSpaces", "行末の空白を削除"],
+                ["trimEnds", "文頭・文末の空白を削除"],
+                ["reduceBlankLines", "連続空行を整理（3行以上→2行）"],
+                ["normalizeLineBreaks", "改行コードを統一"],
+                ["normalizeFullwidthSpaces", "連続全角スペースを整理"],
+                ["addBlankBeforeHashtags", "ハッシュタグの前に改行を追加"],
+                ["moveHashtagsToEnd", "ハッシュタグを文末にまとめる"],
+                ["removeDuplicateHashtags", "重複ハッシュタグを削除"],
+              ] as Array<[keyof FormattingOptions, string]>
+            ).map(([key, label]) => (
+              <label
+                key={key}
+                className="flex items-center gap-2 rounded-lg border border-slate-200 p-3 dark:border-slate-700"
+              >
+                <input
+                  type="checkbox"
+                  checked={formatting[key] ?? false}
+                  onChange={(event) =>
+                    updateFormatting(key, event.target.checked)
+                  }
+                  className="rounded"
+                  aria-label={label}
+                />
+                <span className="text-sm text-slate-700 dark:text-slate-300">
+                  {label}
+                </span>
+              </label>
+            ))}
           </div>
         </div>
 
-        {/* Preview */}
-        <div className="mt-8 space-y-4">
-          <h3 className="font-semibold text-slate-950 dark:text-slate-50">
-            プレビュー
-          </h3>
-          <p className="text-xs text-slate-600 dark:text-slate-400">
-            ※
-            プレビューは投稿前の参考目安です。実際のSNS画面での表示は異なる場合があります。投稿前に必ず対象SNSの実画面でも確認してください。
-          </p>
-          <div className="grid gap-4 lg:grid-cols-2">
-            <PreviewBox
-              title="原文"
-              content={text}
-              onCopy={() => handleCopy(text, "original")}
-              copied={copiedType === "original"}
-            />
-            <PreviewBox
-              title="整形後"
-              content={formattedText}
-              onCopy={() => handleCopy(formattedText, "formatted")}
-              copied={copiedType === "formatted"}
-            />
-          </div>
+        <button
+          onClick={handleFormat}
+          disabled={!text}
+          className="mt-8 w-full rounded-xl bg-sky-600 px-6 py-4 text-lg font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 dark:disabled:bg-slate-700 dark:disabled:text-slate-400"
+        >
+          文章を整形する
+        </button>
+
+        {/* Result */}
+        <div ref={resultRef} className="mt-8 scroll-mt-6" aria-live="polite">
+          {formattingResult ? (
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold text-slate-950 dark:text-slate-50">
+                3. 整形結果を確認
+              </h2>
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-900 dark:bg-emerald-950/40">
+                {formattingResult.changes.length > 0 ? (
+                  <>
+                    <p className="font-semibold text-emerald-950 dark:text-emerald-100">
+                      {formattingResult.changes.length}種類・合計
+                      {formattingResult.totalChanges}箇所を整形しました
+                    </p>
+                    <ul className="mt-2 list-disc pl-5 text-sm text-emerald-900 dark:text-emerald-200">
+                      {formattingResult.changes.map((change) => (
+                        <li key={change.key}>
+                          {change.label}：{change.count}箇所
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <p className="font-semibold text-emerald-950 dark:text-emerald-100">
+                    整形が必要な箇所は見つかりませんでした
+                  </p>
+                )}
+              </div>
+
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                原文は変更していません。投稿前に整形後の文章を確認してください。
+              </p>
+              <div className="grid gap-4 lg:grid-cols-2">
+                <PreviewBox
+                  title="整形前"
+                  content={text}
+                  onCopy={() => handleCopy(text, "original")}
+                  copied={copiedType === "original"}
+                />
+                <PreviewBox
+                  title="整形後"
+                  content={formattingResult.text}
+                  onCopy={() => handleCopy(formattingResult.text, "formatted")}
+                  copied={copiedType === "formatted"}
+                />
+              </div>
+
+              <div className="rounded-xl border border-sky-200 bg-sky-50 p-4 dark:border-sky-900 dark:bg-sky-950/40">
+                <button
+                  onClick={handleOpenPost}
+                  disabled={isResultOverLimit}
+                  className="w-full rounded-lg bg-sky-600 px-5 py-3 font-semibold text-white hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 dark:disabled:bg-slate-700 dark:disabled:text-slate-400"
+                >
+                  {platform === "twitter"
+                    ? "Xで投稿画面を開く"
+                    : platform === "instagram"
+                      ? "Instagram用にコピーして開く"
+                      : "LinkedIn用にコピーして開く"}
+                </button>
+                <p className="mt-2 text-xs leading-5 text-sky-900 dark:text-sky-200">
+                  {isResultOverLimit
+                    ? `整形後の文章が上限を${resultPlatformCount - platformLimit}超えています。文字数を調整してから投稿してください。`
+                    : platform === "twitter"
+                      ? "整形後の文章を入れたXの投稿画面を開きます。内容を確認してから投稿してください。"
+                      : "整形後の文章をクリップボードへコピーして投稿画面を開きます。投稿画面に貼り付けて、内容を確認してから投稿してください。"}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
+              「文章を整形する」を押すと、ここに整形前後と変更内容を表示します。
+            </div>
+          )}
         </div>
 
         {/* Clipboard Fallback */}
@@ -686,11 +723,13 @@ function StatBox({
   value,
   limit,
   isOver,
+  helper,
 }: {
   label: string;
   value: number;
   limit?: number;
   isOver?: boolean;
+  helper?: string;
 }) {
   return (
     <div
@@ -718,6 +757,11 @@ function StatBox({
           </span>
         )}
       </p>
+      {helper && (
+        <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+          {helper}
+        </p>
+      )}
     </div>
   );
 }
