@@ -76,3 +76,37 @@
 - Copilotのリポジトリ共通指示、ツール固有指示、ポータルルール、デプロイ手順へ公開状態の扱いを追加。
 - 新規ツール生成ドライラン、X告知文生成・投稿ドライラン: passed（実投稿なし）。
 - `npm run check`: passed（構成検査51項目、コンテンツ品質検査、両アプリlint、両アプリ本番ビルド成功）。
+
+## 2026-07-25 14:48:27
+
+- SNS文章整形・文字数チェッカー（2本目のミニサービス）を実装。
+- `npm run create:tool -- --slug social-text-formatter --title "SNS文章整形・文字数チェッカー" --description "..." --badge "SNS運用"`で骨組み生成。
+- **純粋関数層の実装**：
+  - `utils.ts`に文字数計算（日本語・絵文字・結合文字対応）、Xの重み付き文字数、ハッシュタグ/URL/メンション抽出を実装。
+  - 整形関数群（行末空白削除、連続空行整理、改行コード統一、全角スペース整理、ハッシュタググループ移動）を実装。
+  - `utils.test.ts`に自動テスト25個を実装。テスト対象：基本文字数、日本語・絵文字・改行、Twitter重み付き、URL処理、整形関数、統計計算など。
+- **UIコンポーネント層の実装**：
+  - `SocialTextFormatterPage.tsx`に完全なUIを実装。
+  - プラットフォーム切り替え（X/Instagram/LinkedIn）、テキスト入力、統計表示パネル、整形オプション（チェックボックス7個）、プレビュー3パネル、コピー機能。
+  - ハッシュタググループ管理（新規作成・挿入・削除）を実装。LocalStorage ↔ 自動保存・復元で下書きとグループ設定を永続化。
+  - LocalStorage破損時の安全処理、Clipboard API非対応時のフォールバック、全消去の確認付きUIを実装。
+- **tools.json へのコンテンツ完成**：
+  - summary、audience、features 3個、steps 3段階、notes 2個、faq 5個を記入。
+  - X告知文を作成（announceOnX は false で投稿しない）。
+  - status を draft に固定、publishAt/announcedAt は null。
+- **品質検査**：
+  - `npm run check:architecture`: passed（66項目）。
+  - `npm run check:content`: passed（2ツール）。
+  - `npm run lint`: passed（警告なし）。
+  - `npm run build`: passed（ポータルで `/tools/social-text-formatter` が静的生成されることを確認）。
+- **UIテスト（手動ブラウザ確認待ち）**：
+  - 入力→整形→プレビュー→コピーの基本フロー。
+  - LocalStorage自動保存・復元。
+  - ハッシュタググループ登録・挿入・削除。
+  - プラットフォーム切り替え時の文字数表示切り替え。
+  - モバイル幅での表示（横スクロール発生なし確認待ち）。
+- `/tools/social-text-formatter` は draft のため、ポータルカード・sitemap・直接URLでは非公開。Vercel デプロイ後に 404 を返すことを確認予定。
+- **残課題**：
+  - Vercel デプロイ後、本番での `/tools/social-text-formatter` 直接アクセスが 404 を返すことを確認。
+  - ブラウザ実機での入力・整形・コピーフローの最終テスト。
+  - LocalStorage 容量上限に近い大量グループの動作確認（将来最適化対象）。

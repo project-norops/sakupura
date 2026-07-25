@@ -11,6 +11,7 @@
   "dependencies": {
     "@sakupla/dynamic-pricing": "file:../../packages/dynamic-pricing",
     "@sakupla/shared-ui": "file:../../packages/shared-ui",
+    "@sakupla/social-text-formatter": "file:../../packages/social-text-formatter",
     "next": "16.2.11",
     "react": "19.2.4",
     "react-dom": "19.2.4"
