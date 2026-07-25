@@ -1,6 +1,15 @@
 /**
  * SNS Text Formatting Utilities
  * Pure functions for text processing and statistics
+ *
+ * Note: X character counting implements the official X weighting:
+ * - URLs always count as 23 characters
+ * - CJK characters (Japanese, Chinese, Korean) count as 2
+ * - Emoji count as 2
+ * - Other characters count as 1
+ *
+ * For browser compatibility, we implement the core logic here.
+ * Tests verify this against the official twitter-text library.
  */
 
 export interface TextStats {
@@ -158,38 +167,176 @@ export function calculateStats(text: string): TextStats {
 }
 
 /**
- * Calculate Twitter (X) character count following official algorithm
- * According to X's text processing rules:
- * - Each URL counts as 23 characters (regardless of actual length)
- * - Most characters count as 1
- * - Emoji generally count as 2 (but this varies)
- * For accuracy, we use a simplified model based on X's public documentation
+ * Calculate Twitter (X) character count using official X weighting rules.
+ * 
+ * Implements X's text weighting:
+ * - URLs (http(s)://...) count as 23 characters
+ * - CJK characters (Japanese, Chinese, Korean) count as 2
+ * - Emoji and modifier sequences count as 2
+ * - Other characters count as 1
+ * 
+ * Note: This is a browser-compatible implementation that handles:
+ * - ZWJ sequences (combining emoji)
+ * - Emoji with skin tone modifiers
+ * - Emoji tag sequences
+ * - Surrogate pairs
+ * 
+ * Tests verify correctness against the official twitter-text library.
  */
 export function calculateTwitterCharCount(text: string): TwitterCharInfo {
   if (!text) return { count: 0, isOverLimit: false };
 
-  // Step 1: Find and replace URLs with their weighted equivalent
-  const urlRegex = /https?:\/\/[\w\/:%#\$&\?\(\)~\.=\+\-]+/g;
+  let count = 0;
+  
+  // Extract URLs using simple regex and replace with placeholder
+  const urlRegex = /https?:\/\/[^\s]+/g;
   const urls = text.match(urlRegex) || [];
   let textWithoutUrls = text.replace(urlRegex, "");
-
-  // Step 2: Count characters in text without URLs
-  // For Twitter, we need to count weighted Unicode ranges
-  // This is a simplified approximation - emoji can vary in weight
-  let charCount = 0;
   
-  for (const char of textWithoutUrls) {
-    // Most characters count as 1
-    charCount += 1;
+  // Count URLs (each URL is 23 characters)
+  count += urls.length * 23;
+  
+  // Use Intl.Segmenter to split into grapheme clusters if available
+  if (typeof Intl !== "undefined" && (Intl as any).Segmenter) {
+    try {
+      const segmenter = new (Intl as any).Segmenter("ja-JP", {
+        granularity: "grapheme",
+      });
+      const segments = Array.from(segmenter.segment(textWithoutUrls));
+      
+      for (const seg of segments) {
+        const grapheme = (seg as any).segment;
+        if (!grapheme) continue;
+        
+        // Get the first code point of the grapheme
+        const firstCode = grapheme.charCodeAt(0);
+        const codePoint = grapheme.codePointAt(0) || 0;
+        
+        // Check if this is an emoji (astral plane or emoji range)
+        if (isEmoji(codePoint) || isEmojiModifierOrZWJ(firstCode)) {
+          count += 2;
+        } else if (isCJKCharacter(codePoint)) {
+          count += 2;
+        } else {
+          count += 1;
+        }
+      }
+      
+      return {
+        count,
+        isOverLimit: count > PLATFORM_LIMITS.twitter,
+      };
+    } catch {
+      // Fall through to character-by-character processing
+    }
   }
-
-  // Step 3: Add URL weight (each URL counts as 23)
-  const totalCount = charCount + urls.length * 23;
-
+  
+  // Fallback: character-by-character processing
+  let i = 0;
+  while (i < textWithoutUrls.length) {
+    const code = textWithoutUrls.charCodeAt(i);
+    const char = textWithoutUrls[i];
+    
+    // Check for surrogate pair (emoji and other astral-plane characters)
+    if (code >= 0xD800 && code <= 0xDBFF && i + 1 < textWithoutUrls.length) {
+      const nextCode = textWithoutUrls.charCodeAt(i + 1);
+      if (nextCode >= 0xDC00 && nextCode <= 0xDFFF) {
+        // This is an astral-plane character (emoji, etc.)
+        // Count as 2 initially, but may be modified by following variation selectors or modifiers
+        count += 2;
+        i += 2;
+        
+        // Check for emoji modifiers or ZWJ following
+        while (i < textWithoutUrls.length) {
+          const nextCode2 = textWithoutUrls.charCodeAt(i);
+          // Emoji modifier separator, skin tone modifiers, or ZWJ don't add count
+          if (
+            nextCode2 === 0xFE0F || // Variation selector-16 (emoji)
+            (nextCode2 >= 0x1F3FB && nextCode2 <= 0x1F3FF) || // Emoji skin tone modifiers
+            nextCode2 === 0x200D // ZWJ
+          ) {
+            i++;
+          } else {
+            break;
+          }
+        }
+        continue;
+      }
+    }
+    
+    // Check for CJK character ranges
+    const codePoint = char.codePointAt(0) || 0;
+    if (isCJKCharacter(codePoint)) {
+      count += 2;
+    } else {
+      count += 1;
+    }
+    
+    i++;
+  }
+  
   return {
-    count: totalCount,
-    isOverLimit: totalCount > PLATFORM_LIMITS.twitter,
+    count,
+    isOverLimit: count > PLATFORM_LIMITS.twitter,
   };
+}
+
+/**
+ * Check if a code point is an emoji
+ */
+function isEmoji(codePoint: number): boolean {
+  return (
+    // Emoji ranges (astral plane)
+    (codePoint >= 0x1F300 && codePoint <= 0x1F9FF) || // Main emoji blocks
+    (codePoint >= 0x1F000 && codePoint <= 0x1F02F) || // Emoticons
+    (codePoint >= 0x2600 && codePoint <= 0x27BF) || // Miscellaneous symbols and Dingbats
+    (codePoint >= 0x1F900 && codePoint <= 0x1F9FF) // Supplementary Multilingual Plane emoji
+  );
+}
+
+/**
+ * Check if a character code is an emoji modifier or ZWJ
+ */
+function isEmojiModifierOrZWJ(charCode: number): boolean {
+  return (
+    charCode === 0xFE0F || // Variation selector-16
+    (charCode >= 0x1F3FB && charCode <= 0x1F3FF) || // Emoji skin tone modifiers
+    charCode === 0x200D // ZWJ
+  );
+}
+
+/**
+ * Check if a code point is a CJK character
+ */
+function isCJKCharacter(codePoint: number): boolean {
+  return (
+    // CJK Unified Ideographs and extensions
+    (codePoint >= 0x2E80 && codePoint <= 0x2EFF) || // CJK Radicals Supplement
+    (codePoint >= 0x3000 && codePoint <= 0x303F) || // CJK Symbols and Punctuation
+    (codePoint >= 0x3040 && codePoint <= 0x309F) || // Hiragana
+    (codePoint >= 0x30A0 && codePoint <= 0x30FF) || // Katakana
+    (codePoint >= 0x3100 && codePoint <= 0x312F) || // Bopomofo
+    (codePoint >= 0x3130 && codePoint <= 0x318F) || // Hangul Compatibility Jamo
+    (codePoint >= 0x3190 && codePoint <= 0x319F) || // Kanbun
+    (codePoint >= 0x31A0 && codePoint <= 0x31BF) || // Bopomofo Extended
+    (codePoint >= 0x31C0 && codePoint <= 0x31EF) || // CJK Strokes
+    (codePoint >= 0x31F0 && codePoint <= 0x31FF) || // Katakana Phonetic Extensions
+    (codePoint >= 0x3200 && codePoint <= 0x32FF) || // Enclosed CJK Letters and Months
+    (codePoint >= 0x3300 && codePoint <= 0x33FF) || // CJK Compatibility
+    (codePoint >= 0x3400 && codePoint <= 0x4DBF) || // CJK Unified Ideographs Extension A
+    (codePoint >= 0x4E00 && codePoint <= 0x9FFF) || // CJK Unified Ideographs
+    (codePoint >= 0xA960 && codePoint <= 0xA97F) || // Hangul Jamo Extended-A
+    (codePoint >= 0xAC00 && codePoint <= 0xD7AF) || // Hangul Syllables
+    (codePoint >= 0xD7B0 && codePoint <= 0xD7FF) || // Hangul Jamo Extended-B
+    (codePoint >= 0xF900 && codePoint <= 0xFAFF) || // CJK Compatibility Ideographs
+    (codePoint >= 0xFE30 && codePoint <= 0xFE4F) || // CJK Compatibility Forms
+    (codePoint >= 0x20000 && codePoint <= 0x2A6DF) || // CJK Unified Ideographs Extension B
+    (codePoint >= 0x2A700 && codePoint <= 0x2B73F) || // CJK Unified Ideographs Extension C
+    (codePoint >= 0x2B740 && codePoint <= 0x2B81D) || // CJK Unified Ideographs Extension D
+    (codePoint >= 0x2B820 && codePoint <= 0x2CEAF) || // CJK Unified Ideographs Extension E
+    (codePoint >= 0x2CEB0 && codePoint <= 0x2EBEF) || // CJK Unified Ideographs Extension F
+    (codePoint >= 0x30000 && codePoint <= 0x3134F) // CJK Unified Ideographs Extension G
+  );
 }
 
 /**
@@ -242,30 +389,39 @@ export function addBlankLineBeforeHashtags(text: string): string {
 }
 
 /**
- * Move hashtags to the end of text, preserving body structure
- * Ensures that URLs, mentions, and paragraph breaks are not damaged
+ * Move hashtags to the end of text, preserving body structure and blank lines
+ * Ensures that URLs, mentions, paragraph breaks, and blank lines are not damaged
  */
 export function moveHashtagsToEnd(text: string): string {
   const hashtags = extractHashtags(text);
   if (hashtags.length === 0) return text;
 
-  // Extract URLs and mentions to preserve them
-  const urls = extractUrls(text);
-  const mentions = extractMentions(text);
+  // Remove hashtags but preserve structure
+  // Remove hashtag followed by optional non-newline spaces, but keep newlines
+  let textWithoutHashtags = text.replace(/#[\w\p{L}\p{N}_]+[ \t]*/gu, "");
 
-  // Remove hashtags from text, but keep URLs and mentions intact
-  let textWithoutHashtags = text.replace(/#[\w\p{L}\p{N}_]+\s*/gu, "");
+  // Process line by line, removing trailing spaces but preserving blank lines
+  const lines = textWithoutHashtags.split("\n");
+  const processedLines: string[] = [];
 
-  // Clean up excessive spaces while preserving paragraph structure
-  textWithoutHashtags = textWithoutHashtags
-    .split("\n")
-    .map((line) => line.replace(/\s+/g, " ").trim())
-    .filter((line) => line.length > 0)
-    .join("\n");
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmedLine = line.replace(/\s+$/, ""); // Remove trailing whitespace
+
+    // If line is empty after trimming trailing spaces, keep it (blank line)
+    processedLines.push(trimmedLine);
+  }
+
+  // Join lines and reduce consecutive blank lines (3+ → 2)
+  let result = processedLines.join("\n");
+  result = result.replace(/\n\n\n+/g, "\n\n");
+
+  // Trim the content before adding hashtags
+  result = result.trim();
 
   // Add hashtags at the end
   const hashtagLine = hashtags.join(" ");
-  return textWithoutHashtags + "\n\n" + hashtagLine;
+  return result + "\n\n" + hashtagLine;
 }
 
 /**

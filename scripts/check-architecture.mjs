@@ -75,6 +75,15 @@ assert(
     "node scripts/generate-release-post.mjs",
   "X告知文生成コマンドが存在",
 );
+assert(
+  rootPackage.scripts?.["test"] === "jest" &&
+    rootPackage.scripts?.["test:packages"] === "jest packages",
+  "テストランナーが統合され、--passWithNoTests なしで必須化",
+);
+assert(
+  rootPackage.scripts?.["check"] === "npm run check:architecture && npm run check:content && npm run test:packages && npm run lint && npm run build",
+  "npm run check にテスト実行が含まれている",
+);
 
 const vercel = readJson("vercel.json");
 assert(vercel.framework === "nextjs", "Vercel frameworkはNext.js");
@@ -259,8 +268,8 @@ assert(
 );
 const qualityWorkflow = readText(".github", "workflows", "quality.yml");
 assert(
-  qualityWorkflow.includes("npm run check:content"),
-  "CIがコンテンツ品質を検査",
+  qualityWorkflow.includes("npm run check"),
+  "CIがnpm run checkで全品質検査を実行",
 );
 const announceWorkflow = readText(".github", "workflows", "announce-tool.yml");
 assert(

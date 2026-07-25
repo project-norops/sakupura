@@ -60,6 +60,7 @@ function getPlatformLimit(platform: Platform): number {
 
 export function SocialTextFormatterPage() {
   const [text, setText] = useState("");
+  const [originalText, setOriginalText] = useState("");
   const [platform, setPlatform] = useState<Platform>("twitter");
   const [formatting, setFormatting] = useState<FormattingOptions>({
     removeTrailingSpaces: true,
@@ -72,6 +73,9 @@ export function SocialTextFormatterPage() {
   const [showNewGroupForm, setShowNewGroupForm] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
   const [newGroupTags, setNewGroupTags] = useState("");
+  const [editingGroupId, setEditingGroupId] = useState<string | null>(null);
+  const [editGroupName, setEditGroupName] = useState("");
+  const [editGroupTags, setEditGroupTags] = useState("");
   const [showClipboardFallback, setShowClipboardFallback] = useState(false);
   const [fallbackType, setFallbackType] = useState<string | null>(null);
   const fallbackRef = useRef<HTMLTextAreaElement>(null);
@@ -162,13 +166,15 @@ export function SocialTextFormatterPage() {
   }, []);
 
   const handleApplyFormatted = useCallback(() => {
+    setOriginalText(text);
     setText(formattedText);
-  }, [formattedText]);
+  }, [formattedText, text]);
 
   const handleRevertToOriginal = useCallback(() => {
-    // User can manually revert by re-entering original text or using undo
-    // For now, we provide a way to see the diff in the preview
-  }, []);
+    if (originalText && text !== originalText) {
+      setText(originalText);
+    }
+  }, [originalText, text]);
 
   const handleAddHashtagGroup = useCallback(() => {
     if (!newGroupName.trim() || !newGroupTags.trim()) return;
@@ -205,6 +211,46 @@ export function SocialTextFormatterPage() {
 
   const handleDeleteGroup = useCallback((id: string) => {
     setHashtagGroups((prev) => prev.filter((g) => g.id !== id));
+  }, []);
+
+  const handleEditGroup = useCallback(
+    (group: HashtagGroup) => {
+      setEditingGroupId(group.id);
+      setEditGroupName(group.name);
+      setEditGroupTags(group.hashtags.join("\n"));
+    },
+    []
+  );
+
+  const handleSaveEditGroup = useCallback(() => {
+    if (!editingGroupId || !editGroupName.trim() || !editGroupTags.trim()) return;
+
+    const tags = editGroupTags
+      .split("\n")
+      .map((tag) => {
+        const trimmed = tag.trim();
+        return trimmed.startsWith("#") ? trimmed : `#${trimmed}`;
+      })
+      .filter((tag) => tag !== "#");
+
+    if (tags.length === 0) return;
+
+    setHashtagGroups((prev) =>
+      prev.map((g) =>
+        g.id === editingGroupId
+          ? { ...g, name: editGroupName, hashtags: tags }
+          : g
+      )
+    );
+    setEditingGroupId(null);
+    setEditGroupName("");
+    setEditGroupTags("");
+  }, [editingGroupId, editGroupName, editGroupTags]);
+
+  const handleCancelEditGroup = useCallback(() => {
+    setEditingGroupId(null);
+    setEditGroupName("");
+    setEditGroupTags("");
   }, []);
 
   const handleCloseFallback = useCallback(() => {
@@ -270,6 +316,14 @@ export function SocialTextFormatterPage() {
               className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
             >
               整形結果を入力欄へ反映
+            </button>
+            <button
+              onClick={handleRevertToOriginal}
+              disabled={!originalText || text === originalText}
+              className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-300 disabled:opacity-50 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
+              aria-label="原文へ戻す"
+            >
+              原文へ戻す
             </button>
           </div>
 
@@ -497,6 +551,43 @@ export function SocialTextFormatterPage() {
             </div>
           )}
 
+          {editingGroupId && (
+            <div className="space-y-3 rounded-lg border border-blue-300 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950">
+              <h4 className="font-medium text-blue-900 dark:text-blue-100">
+                グループを編集
+              </h4>
+              <input
+                type="text"
+                placeholder="グループ名"
+                value={editGroupName}
+                onChange={(e) => setEditGroupName(e.target.value)}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
+                aria-label="編集グループ名"
+              />
+              <textarea
+                placeholder="ハッシュタグを1行1つ入力（#は自動補完）"
+                value={editGroupTags}
+                onChange={(e) => setEditGroupTags(e.target.value)}
+                className="w-full min-h-24 rounded-lg border border-slate-300 px-3 py-2 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
+                aria-label="編集ハッシュタグ"
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={handleSaveEditGroup}
+                  className="flex-1 rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+                >
+                  保存
+                </button>
+                <button
+                  onClick={handleCancelEditGroup}
+                  className="flex-1 rounded-lg bg-slate-300 px-4 py-2 font-medium text-slate-900 hover:bg-slate-400 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
+                >
+                  キャンセル
+                </button>
+              </div>
+            </div>
+          )}
+
           {hashtagGroups.length === 0 ? (
             <p className="text-sm text-slate-600 dark:text-slate-400">
               ハッシュタググループはまだ登録されていません
@@ -528,12 +619,19 @@ export function SocialTextFormatterPage() {
                       挿入
                     </button>
                     <button
-                      onClick={() => handleDeleteGroup(group.id)}
-                      className="rounded px-3 py-1 text-sm font-medium text-red-600 hover:bg-red-100 dark:hover:bg-red-950"
-                      aria-label={`${group.name}を削除`}
+                     onClick={() => handleEditGroup(group)}
+                     className="rounded px-3 py-1 text-sm font-medium text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-950"
+                     aria-label={`${group.name}を編集`}
                     >
-                      削除
+                     編集
                     </button>
+                   <button
+                     onClick={() => handleDeleteGroup(group.id)}
+                     className="rounded px-3 py-1 text-sm font-medium text-red-600 hover:bg-red-100 dark:hover:bg-red-950"
+                     aria-label={`${group.name}を削除`}
+                   >
+                     削除
+                   </button>
                   </div>
                 </div>
               ))}

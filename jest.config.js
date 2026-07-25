@@ -10,13 +10,16 @@ module.exports = {
     "!packages/**/index.ts",
   ],
   coveragePathIgnorePatterns: ["/node_modules/"],
-  globals: {
-    "ts-jest": {
-      tsconfig: {
-        jsx: "react",
-        esModuleInterop: true,
-        allowSyntheticDefaultImports: true,
+  transform: {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: {
+          jsx: "react",
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true,
+        },
       },
-    },
+    ],
   },
 };

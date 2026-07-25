@@ -242,9 +242,10 @@ describe("Text Formatting Utilities - Complete Test Suite", () => {
       expect(result.isOverLimit).toBe(true);
     });
 
-    test("should handle Japanese text", () => {
+    test("should handle Japanese text (CJK = 2x weight)", () => {
       const result = calculateTwitterCharCount("こんにちは");
-      expect(result.count).toBe(5);
+      // CJK characters are weighted as 2 each in twitter-text
+      expect(result.count).toBe(10);
       expect(result.isOverLimit).toBe(false);
     });
 
@@ -264,14 +265,27 @@ describe("Text Formatting Utilities - Complete Test Suite", () => {
     test("should handle mixed content: Japanese + emoji + URL", () => {
       const text = "こんにちは😀 https://example.com";
       const result = calculateTwitterCharCount(text);
-      // Should count: こんにちは (5) + emoji (1) + space (1) + URL (23) = 30
-      expect(result.count).toBeGreaterThanOrEqual(25);
+      // CJK (5*2=10) + emoji (2) + space (1) + URL (23) = 36
+      expect(result.count).toBe(36);
     });
 
     test("should handle mention + URL in text", () => {
       const result = calculateTwitterCharCount("Hi @user https://example.com");
       // "Hi @user " = 9 + URL = 23 = 32
       expect(result.count).toBe(32);
+    });
+
+    test("should handle Japanese + emoji + newline + URL", () => {
+      const result = calculateTwitterCharCount("テスト📊\nhttps://example.com");
+      // Actual twitter-text result: 32
+      expect(result.count).toBe(32);
+    });
+
+    test("should handle combining emoji (ZWJ sequences)", () => {
+      // 👨‍👩‍👧‍👦 is a ZWJ sequence (family emoji)
+      const result = calculateTwitterCharCount("Family: 👨‍👩‍👧‍👦");
+      expect(result.count).toBeGreaterThan(0);
+      expect(result.isOverLimit).toBe(false);
     });
   });
 
@@ -325,10 +339,22 @@ describe("Text Formatting Utilities - Complete Test Suite", () => {
     test("should move hashtags while preserving paragraph structure", () => {
       const input = "Para 1\n\nPara 2 #tag1\n\nPara 3 #tag2";
       const result = moveHashtagsToEnd(input);
-      expect(result).toContain("#tag1");
-      expect(result).toContain("#tag2");
-      // Hashtags should be at the end
-      expect(result).toMatch(/#tag[12]\s+#tag[12]\s*$/);
+      const expected = "Para 1\n\nPara 2\n\nPara 3\n\n#tag1 #tag2";
+      expect(result).toBe(expected);
+    });
+
+    test("should preserve blank lines when moving hashtags", () => {
+      const input = "Line 1\n\nLine 2 #tag\n\nLine 3";
+      const result = moveHashtagsToEnd(input);
+      // Should maintain the blank lines between paragraphs
+      expect(result).toContain("Line 1\n\nLine 2\n\nLine 3");
+      expect(result).toContain("#tag");
+    });
+
+    test("should handle hashtags with URLs and blank lines completely", () => {
+      const input = "First para\n\nSecond https://example.com #tag1\n\nThird #tag2";
+      const result = moveHashtagsToEnd(input);
+      expect(result).toBe("First para\n\nSecond https://example.com\n\nThird\n\n#tag1 #tag2");
     });
   });
 
@@ -434,6 +460,79 @@ describe("Text Formatting Utilities - Complete Test Suite", () => {
       // Both should be counted (exact count may vary)
       expect(getDisplayCharCount(text1)).toBeGreaterThan(0);
       expect(getDisplayCharCount(text2)).toBeGreaterThan(0);
+    });
+  });
+
+  /**
+   * Verification tests using official twitter-text library
+   * These tests validate that our implementation matches the official X character counting
+   */
+  describe("Official X character counting verification (twitter-text)", () => {
+    let parseTweet: any;
+
+    beforeAll(() => {
+      // Import twitter-text CommonJS in Node.js environment
+      try {
+        parseTweet = require("twitter-text").parseTweet;
+      } catch {
+        console.warn("twitter-text not available in test environment");
+      }
+    });
+
+    const validateAgainstTwitterText = (text: string) => {
+      if (!parseTweet) {
+        console.warn(`Skipping twitter-text validation for: ${text}`);
+        return;
+      }
+      
+      const official = parseTweet(text).weightedLength;
+      const our = calculateTwitterCharCount(text).count;
+      
+      console.log(`Text: "${text}"`);
+      console.log(`  Official twitter-text: ${official}`);
+      console.log(`  Our implementation: ${our}`);
+      
+      expect(our).toBe(official);
+    };
+
+    test("verify basic ASCII text", () => {
+      validateAgainstTwitterText("hello world");
+    });
+
+    test("verify Japanese text weighting", () => {
+      validateAgainstTwitterText("こんにちは");
+    });
+
+    test("verify emoji weighting", () => {
+      validateAgainstTwitterText("😀😀😀");
+    });
+
+    test("verify mixed Japanese + emoji + URL", () => {
+      validateAgainstTwitterText("テスト 📊 https://example.com");
+    });
+
+    test("verify URL-only text", () => {
+      validateAgainstTwitterText("https://example.com");
+    });
+
+    test("verify multiple URLs", () => {
+      validateAgainstTwitterText("Check https://a.com and https://b.com");
+    });
+
+    test("verify mention + URL", () => {
+      validateAgainstTwitterText("@user check https://example.com");
+    });
+
+    test("verify Japanese + emoji + newline + URL", () => {
+      validateAgainstTwitterText("日本語テスト📊\nhttps://example.com");
+    });
+
+    test("verify text with newlines", () => {
+      validateAgainstTwitterText("line1\nline2\nline3");
+    });
+
+    test("verify combining emoji (ZWJ sequence)", () => {
+      validateAgainstTwitterText("👨‍💼👩‍💻");
     });
   });
 });

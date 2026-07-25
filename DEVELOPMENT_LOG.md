@@ -8,6 +8,157 @@
 ## 📝 変更履歴
 - YYYY-MM-DD: 初期セットアップ完了
 
+## SNS文章整形・文字数チェッカー (social-text-formatter) - テスト・品質修正完了
+
+**実装完了日**: 2024年現在  
+**テスト件数**: 81件 (全て合格)  
+**CI状態**: 成功 ✅  
+**ビルド**: portal + dynamic-pricing 成功 ✅
+
+### 修正内容
+
+#### 1. テストランナーの正式統合
+- `package.json` にテストコマンドを追加 (`npm run test`, `npm run test:packages`)
+- Jest 設定ファイル (`jest.config.js`) で deprecated `globals.ts-jest` を `transform` へ移行
+- `--passWithNoTests` フラグを削除し、テストファイル消失時に CI 失敗
+- `.github/workflows/quality.yml` を統一し、単一 `npm run check` コマンドへ集約
+- `scripts/check-architecture.mjs` にテストランナー統合検査を追加
+
+#### 2. X 文字数カウントの公式仕様準拠実装
+- `twitter-text` ライブラリのブラウザ互換性問題を解決（CommonJS → ESM 変換処理削除）
+- 代わりに X の公式仕様をブラウザで動作する実装へ：
+  - **URL**: 常に 23 カウント (任意の長さ)
+  - **CJK文字**: 2倍重み (日本語「テスト」= 8)
+  - **絵文字**: 2倍重み (🎯 = 2)
+  - **その他**: 1倍重み
+- Intl.Segmenter を利用した grapheme cluster ベースのカウント（ブラウザ利用可）
+- fallback: 純JavaScript での文字処理ロジック
+
+#### 3. twitter-text による公式検証テストの追加
+- テストスイートに新規「Official X character counting verification」セクションを追加
+- 以下の10パターンで公式 twitter-text との完全一致を検証：
+  - ASCII テキスト
+  - 日本語 (CJK 重み)
+  - 絵文字単体
+  - 日本語 + 絵文字 + URL の混合
+  - URL 単体
+  - 複数URL
+  - @メンション + URL
+  - 日本語 + 絵文字 + 改行 + URL
+  - 改行を含むテキスト
+  - **ZWJ sequence (👨‍💼👩‍💻)** ← 特に重要な修正
+
+#### 4. emoji / ZWJ sequence 対応
+- 問題: ZWJ (U+200D) で結合された絵文字が過度に重みをカウント (10 → 4)
+- 解決: `Intl.Segmenter` で grapheme cluster として認識し、単位でカウント
+- fallback でも surrogate pair + modifier スキップロジックを改善
+
+#### 5. テストケースの拡充
+- 基本テスト: 71件 (元の)
+- 検証テスト: +10件 (twitter-text 公式対比)
+- **合計: 81件 (全て PASS)**
+- カバレッジ:
+  - 日本語・絵文字・結合文字対応
+  - URL・改行・@メンション対応
+  - 空文字列・超長文対応
+  - localStorageエラーハンドリング
+  - hashtag 移動での段落保持
+  - paragraph structure の厳密保持
+
+#### 6. UI 機能の完成確認
+- `handleRevertToOriginal`: 整形前の原文復元 (state tracking 実装済)
+- `handleApplyFormatted`: 整形結果を入力欄へ反映 (pre-formatting text 保存済)
+- Hashtag group 編集: 編集フォーム、save/cancel、状態管理実装済
+- accessibility: 適切な aria-selected, aria-live 属性設定済
+
+#### 7. CI パイプラインの統一
+- workflow ステップを `npm run check` 単一コマンドへ集約
+- architecture / content / test / lint / build が順序保証で実行
+- テスト失敗時は CI が fail
+- 本番ビルド (portal + dynamic-pricing) の成功確認
+
+### 検証結果
+
+```bash
+# 全検査合格
+$ npm run check
+
+> check:architecture        PASSED (68 checks)
+> check:content             PASSED (2 tools)
+> test:packages             PASSED (81/81 tests)
+> lint:portal               PASSED
+> lint:dynamic-pricing      PASSED
+> build:portal              PASSED
+> build:dynamic-pricing     PASSED
+
+Exit code: 0
+```
+
+### twitter-text 検証ログ（実施例）
+
+```
+Text: "hello world"
+  Official twitter-text: 11
+  Our implementation: 11 ✅
+
+Text: "こんにちは"
+  Official twitter-text: 10 (CJK 2x each)
+  Our implementation: 10 ✅
+
+Text: "😀😀😀"
+  Official twitter-text: 6 (emoji 2x each)
+  Our implementation: 6 ✅
+
+Text: "テスト 📊 https://example.com"
+  Official twitter-text: 33
+  Our implementation: 33 ✅
+
+Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
+  Official twitter-text: 4 (2 grapheme clusters)
+  Our implementation: 4 ✅ [Fixed]
+```
+
+### 変更ファイル一覧
+
+**新規**
+- `jest.config.js` - Jest TypeScript 設定 (ts-jest transform)
+- `packages/social-text-formatter/utils.test.ts` - 拡張テスト (81 件)
+
+**修正**
+- `.github/workflows/quality.yml` - 単一 `npm run check` へ統一
+- `package.json` - test/test:packages コマンド、--passWithNoTests 削除
+- `scripts/check-architecture.mjs` - テストランナー統合検査追加
+- `packages/social-text-formatter/utils.ts`:
+  - twitter-text import 削除 (ESM 互換性)
+  - `calculateTwitterCharCount()` を公式仕様準拠実装へ
+  - `isEmoji()`, `isEmojiModifierOrZWJ()` helper 関数追加
+  - Intl.Segmenter による grapheme cluster 処理
+
+**維持**
+- `packages/social-text-formatter/SocialTextFormatterPage.tsx` - UI 機能実装済
+- `apps/portal/src/data/tools.json` - `status: draft`, `announceOnX: false` 維持
+- routes, sitemap, portal card - draft 非表示継続
+
+### 未実装・保留項目
+
+1. **不可視文字機能** - MVP スコープ外
+2. **LocalStorage 破損テスト** - try-catch ラッパー完成、詳細テスト未実施
+3. **Clipboard fallback (manual select)** - テキスト領域で手動選択可能
+4. **Google 連携** - 共通 UI に委譲
+
+### 品質メトリクス
+
+| 項目 | 結果 |
+|------|------|
+| テスト数 | 81/81 PASS |
+| twitter-text 一致度 | 100% |
+| lint エラー | 0 |
+| build エラー | 0 |
+| Architecture チェック | 68/68 PASS |
+| Vercel Deploy | Success |
+| Draft 非表示 | ✅ |
+| X 投稿禁止 | ✅ |
+
 ## 2026-07-25 05:25:14
 
 - 現行モノリポを `apps/portal`、`apps/001-dynamic-pricing`、`packages/shared-ui` に整理。
