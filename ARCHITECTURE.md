@@ -42,7 +42,8 @@ apps/portal/src/app/tools/<slug>/
 | `archived`  | 公開終了             | 非公開                 |
 
 - `scheduled`と`published`では、タイムゾーン付きISO形式の`publishAt`を必須とする。
-- 予約時刻を過ぎただけでは公開しない。将来のスケジューラーがCI合格と本番確認を終えた後に`published`へ変更する。
+- 予約時刻を過ぎただけでは公開しない。予約公開workflowが全品質検査に合格した場合だけ`published`へ変更する。
+- 予約公開workflowは本番URLを確認し、確認できなければ台帳を`scheduled`へ戻して再デプロイする。
 - `announceOnX`は告知対象かを示し、投稿成功後にだけ`announcedAt`を記録する。
 - ポータルカードとsitemapは`published`だけを表示し、それ以外のツールURLは404を返す。
 
@@ -53,7 +54,9 @@ apps/portal/src/app/tools/<slug>/
 - canonical、robots、sitemapは`https://www.norops.jp`を基準にする。
 - GA4、Search Console、AdSenseの値は`packages/shared-ui/GoogleServices.ts`だけで管理し、各サービスへ直書きしない。
 - DNS、Vercelドメイン、Google管理画面はリポジトリ外の構成である。コードの存在だけで完了とせず、本番URLから確認する。
-- X告知は台帳から文面を生成する。実投稿はGitHub Actionsの手動workflowと`X_USER_ACCESS_TOKEN` Secretを使い、通常のpushだけで勝手に投稿しない。投稿成功時は`announcedAt`を自動記録し、二重投稿を停止する。
+- X告知は台帳から文面を生成する。手動workflowまたは有効化済みの予約公開workflowだけが`X_USER_ACCESS_TOKEN` Secretを使える。通常のpushだけでは投稿しない。
+- 予約公開からのX告知は、品質検査、Vercel本番反映、対象URLの内容確認がすべて成功した後だけ実行する。投稿成功時は`announcedAt`を自動記録し、二重投稿を停止する。
+- 定期実行はRepository Variable `SCHEDULED_RELEASES_ENABLED=true`の場合だけ有効になる。緊急停止はこの変数を`false`へ変更する。
 
 ## 現在の例外
 

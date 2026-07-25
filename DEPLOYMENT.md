@@ -50,9 +50,26 @@ npm run create:tool -- --slug example-tool --title "表示名" --description "�
 ```
 
 予約時は`status`を`scheduled`にして`publishAt`へタイムゾーン付きISO日時を設定します。
-現在は予約情報を保持する段階であり、時刻到来だけでは公開されません。公開確認後に
+時刻到来だけでは公開されません。予約公開workflowが全品質検査を行い、合格後に
 `published`へ変更すると、ポータルカード、sitemap、ツールURLが公開されます。
 `draft`、`scheduled`、`archived`のツールURLは404になります。
+
+## 予約公開
+
+GitHub Actionsの`Scheduled tool release`は15分ごとに公開予定を確認します。初期状態では
+停止しており、Repository Variable `SCHEDULED_RELEASES_ENABLED`を`true`にした場合だけ
+定期公開を実行します。最初は手動実行の`dry_run: true`で対象ツールを確認してください。
+
+公開処理は次の順序を固定します。
+
+1. `npm run check`で構成、コンテンツ、テスト、lint、buildを検査する。
+2. 公開時刻を迎えた`scheduled`を`published`へ変更し、`main`へ記録する。
+3. Vercelの反映を待ち、対象URLが200かつ台帳のタイトルを含むことを確認する。
+4. 本番確認に失敗した場合は、台帳を公開前の状態へ戻して再デプロイする。
+5. 本番確認に成功し、`announceOnX: true`の場合だけXへ投稿する。
+
+緊急停止は`SCHEDULED_RELEASES_ENABLED=false`にします。手動workflowのdry runは停止中でも
+利用できます。公開失敗時はXへ投稿されません。
 
 実装後は`npm run check`で構成検査、lint、本番ビルドをまとめて実行してから
 `main`へPushします。
@@ -70,7 +87,8 @@ npm run release:post -- --slug example-tool
 `Announce released tool on X`を手動実行し、公開済みサービスのslugを指定します。
 投稿できるのは`published`かつ`announceOnX: true`で`announcedAt: null`のサービスだけです。
 成功後はworkflowが`announcedAt`を台帳へ記録するため、同じサービスの再投稿を停止できます。
-通常のpushでは投稿しません。
+通常のpushでは投稿しません。予約公開を有効化した場合だけ、本番確認成功後の自動告知も
+同じSecretを使用します。
 
 新しい単体Next.jsアプリやVercel Projectは作成しません。既存の単体互換アプリも、
 本番公開先はポータル内の`/tools/<service-name>`とします。
