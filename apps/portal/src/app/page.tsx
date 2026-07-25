@@ -38,7 +38,7 @@ export default function HomePage() {
               ⚡️ サクプラ by Norops
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">
-              さまざまな業務用ツールを一か所で管理するポータルサイトです。各アプリは独立して開発され、共通UIパッケージで一貫したデザインを提供します。
+              さまざまな業務用ツールを一か所で管理するポータルサイトです。各ツールは標準ボイラープレートと共通UIで、一貫した構成とデザインを提供します。
             </p>
           </div>
           <div className="rounded-3xl bg-slate-50 p-6 text-sm text-slate-700 shadow-sm dark:bg-slate-900 dark:text-slate-200">

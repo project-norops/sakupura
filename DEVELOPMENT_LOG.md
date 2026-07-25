@@ -36,3 +36,15 @@
 - `/ads.txt`を追加し、共通設定の公開者IDからGoogle AdSenseレコードを生成。
 - `npm run lint`: passed（両アプリ、警告なし）。
 - `npm run build`: passed（ポータルの`/ads.txt`を含め、両アプリの本番ビルド成功）。
+
+## 2026-07-25 12:52:02
+
+- `ARCHITECTURE.md`を追加し、単一Vercel Project、`packages/<slug>`、`/tools/<slug>`、本番ドメイン、外部連携の固定契約を明文化。
+- ルートとポータルの`AGENTS.md`を更新し、新規独立アプリ・Vercel Project・Google ID重複・旧資産利用を禁止。
+- `npm run create:tool`を追加。ボイラープレートからservice package、ポータルroute、サービス台帳、portal依存を一括生成可能にした。
+- サービス一覧を`tools.json`へ一元化し、ポータルカードとsitemapが同じ台帳を利用する構成へ変更。
+- `npm run check:architecture`を追加し、Vercel設定、許可アプリ、台帳、package、route、依存、SEO・Google連携など34項目を自動検査。
+- GitHub Actionsへ構成検査、lint、本番ビルドを追加。Tailwind走査対象を全service packageへ拡張。
+- 生成コマンドのドライランとテンプレート変数検査: passed。
+- Prettier検査: passed。
+- `npm run check`: passed（構成検査34項目、両アプリlint、両アプリ本番ビルド成功）。

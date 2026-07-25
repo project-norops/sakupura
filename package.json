@@ -8,6 +8,9 @@
     "packages/*"
   ],
   "scripts": {
+    "create:tool": "node scripts/create-tool.mjs",
+    "check:architecture": "node scripts/check-architecture.mjs",
+    "check": "npm run check:architecture && npm run lint && npm run build",
     "dev:portal": "npm --workspace apps/portal run dev",
     "build:portal": "npm --workspace apps/portal run build",
     "dev:dynamic-pricing": "npm --workspace apps/001-dynamic-pricing run dev",

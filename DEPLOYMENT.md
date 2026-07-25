@@ -29,14 +29,20 @@ Googleの現在値は `packages/shared-ui/GoogleServices.ts` に既定値があ�
 
 ## ミニサービス追加規約
 
-1. 再利用可能な実装を `packages/<service-name>` に置く。
-2. `apps/portal/src/app/tools/<service-name>/page.tsx` から公開する。
-3. `apps/portal/src/data/apps.ts` にポータルカードを追加する。
-4. `apps/portal/src/app/sitemap.ts` に公開URLを追加する。
-5. `npm run lint` と `npm run build` を通してから `main` へPushする。
+骨組みは標準コマンドから生成します。
 
-単体開発用Next.jsアプリを残す場合でも、本番公開先はポータル内の
-`/tools/<service-name>` とします。
+```bash
+npm run create:tool -- --slug example-tool --title "表示名" --description "説明" --badge "分類"
+```
+
+このコマンドが`packages/<service-name>`、`/tools/<service-name>`、サービス台帳、
+ポータル依存を同時に作成します。手作業で同じ情報を複数箇所へ追加しません。
+
+実装後は`npm run check`で構成検査、lint、本番ビルドをまとめて実行してから
+`main`へPushします。
+
+新しい単体Next.jsアプリやVercel Projectは作成しません。既存の単体互換アプリも、
+本番公開先はポータル内の`/tools/<service-name>`とします。
 
 ## デプロイ後の確認
 

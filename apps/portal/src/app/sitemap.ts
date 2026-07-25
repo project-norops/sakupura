@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import apps from "@/data/apps";
 import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -9,11 +10,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
-    {
-      url: `${siteUrl}/tools/dynamic-pricing`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
+    ...apps.map(
+      (app) =>
+        ({
+          url: `${siteUrl}${app.href}`,
+          lastModified: new Date(),
+          changeFrequency: "monthly",
+          priority: 0.8,
+        }) satisfies MetadataRoute.Sitemap[number],
+    ),
   ];
 }
