@@ -1,0 +1,29 @@
+{
+  "name": "@sakupla/social-text-formatter",
+  "version": "0.1.0",
+  "private": true,
+  "sideEffects": false,
+  "main": "index.ts",
+  "types": "index.ts",
+  "exports": {
+    ".": {
+      "import": "./index.ts",
+      "default": "./index.ts"
+    }
+  },
+  "peerDependencies": {
+    "react": "19.2.4"
+  },
+  "dependencies": {
+    "twitter-text": "^3.1.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.0.0",
+    "@types/twitter-text": "^3.1.10",
+    "jest-environment-jsdom": "^29.0.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  }
+}
