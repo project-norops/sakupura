@@ -1,6 +1,6 @@
 # サクプラ AI開発ガードレール
 
-このファイルはリポジトリ全体に適用される。作業開始時に本ファイル、`ARCHITECTURE.md`、`ANALYTICS.md`、`DEVELOPMENT_LOG.md`を読むこと。
+このファイルはリポジトリ全体に適用される。作業開始時に本ファイル、`ARCHITECTURE.md`、`ANALYTICS.md`、`PRODUCT_PLAN.md`、`ROADMAP.md`、`DEVELOPMENT_LOG.md`を読むこと。
 
 ## 変更してよい範囲
 
@@ -14,6 +14,8 @@
 - GA4へ入力値、生成結果、個人情報を送らない。操作計測は`ANALYTICS.md`と共通計測処理を利用する。
 
 ## 新しいミニサービス
+
+実装・改善前に`PRODUCT_PLAN.md`の対象者、解決する面倒、無料版の核、有料候補、固有の確認事項を読む。企画IDと実際のリリース順は別物として扱う。
 
 手作業で骨組みを作らず、次を使う。
 
