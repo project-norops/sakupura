@@ -27,6 +27,19 @@ function getEditor(): HTMLTextAreaElement {
 }
 
 describe("SocialTextFormatterPage", () => {
+  test("explains that text processing does not use AI or send text externally", () => {
+    render(<SocialTextFormatterPage />);
+
+    expect(
+      screen.getByText("AI不使用・文章は端末内で処理"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /入力した文章は、本ツールの処理としてサーバーや外部AIへ送信されません。/,
+      ),
+    ).toBeInTheDocument();
+  });
+
   test("switches platform limits and uses the official X count", async () => {
     const user = userEvent.setup();
     render(<SocialTextFormatterPage />);

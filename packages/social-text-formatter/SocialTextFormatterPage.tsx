@@ -268,6 +268,17 @@ export function SocialTextFormatterPage() {
           }
         </p>
 
+        <aside
+          className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-950 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-100"
+          aria-label="プライバシーに関するご案内"
+        >
+          <p className="font-semibold">AI不使用・文章は端末内で処理</p>
+          <p className="mt-1 leading-6">
+            入力した文章は、本ツールの処理としてサーバーや外部AIへ送信されません。
+            文字数計算と整形はブラウザ内で行います。
+          </p>
+        </aside>
+
         {/* Platform Tabs */}
         <div
           className="mt-8 flex gap-2 border-b border-slate-200 dark:border-slate-700"
