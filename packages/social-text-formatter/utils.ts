@@ -1,15 +1,17 @@
+import twitterText from "twitter-text";
+
+const {
+  extractMentions: extractTwitterMentions,
+  extractUrls: extractTwitterUrls,
+  extractUrlsWithIndices,
+  parseTweet,
+} = twitterText;
+
 /**
  * SNS Text Formatting Utilities
  * Pure functions for text processing and statistics
  *
- * Note: X character counting implements the official X weighting:
- * - URLs always count as 23 characters
- * - CJK characters (Japanese, Chinese, Korean) count as 2
- * - Emoji count as 2
- * - Other characters count as 1
- *
- * For browser compatibility, we implement the core logic here.
- * Tests verify this against the official twitter-text library.
+ * X character counts and social entities use the official twitter-text parser.
  */
 
 export interface TextStats {
@@ -35,17 +37,40 @@ export const PLATFORM_LIMITS = {
   linkedin: 3000, // LinkedIn post limit (approximate)
 } as const;
 
+interface HashtagEntity {
+  hashtag: string;
+  indices: [number, number];
+}
+
+function getHashtagEntities(text: string): HashtagEntity[] {
+  const urlRanges = extractUrlsWithIndices(text, {
+    extractUrlsWithoutProtocol: false,
+  }).map(({ indices }) => indices);
+  const hashtagRegex = /#[\w\p{L}\p{N}_]+/gu;
+
+  return Array.from(text.matchAll(hashtagRegex), (match) => {
+    const start = match.index;
+    const end = start + match[0].length;
+    return {
+      hashtag: match[0].slice(1),
+      indices: [start, end] as [number, number],
+    };
+  }).filter(({ indices: [start, end] }) =>
+    urlRanges.every(([urlStart, urlEnd]) => end <= urlStart || start > urlEnd),
+  );
+}
+
 /**
  * Calculate display character count using grapheme clusters (書記素単位)
  * Handles emoji, combining characters, and surrogate pairs correctly
  */
 export function getDisplayCharCount(text: string): number {
   if (!text) return 0;
-  
+
   // Use Intl.Segmenter if available (Node.js 16+, modern browsers)
-  if (typeof Intl !== "undefined" && (Intl as any).Segmenter) {
+  if (typeof Intl !== "undefined" && Intl.Segmenter) {
     try {
-      const segmenter = new (Intl as any).Segmenter("ja-JP", {
+      const segmenter = new Intl.Segmenter("ja-JP", {
         granularity: "grapheme",
       });
       const segments = Array.from(segmenter.segment(text));
@@ -79,9 +104,7 @@ export function getWordCount(text: string): number {
   const trimmed = text.trim();
   if (!trimmed) return 0;
   // Split by space, then by newline for more granular counting
-  return trimmed
-    .split(/\s+/)
-    .filter((word) => word.length > 0).length;
+  return trimmed.split(/\s+/).filter((word) => word.length > 0).length;
 }
 
 /**
@@ -99,36 +122,33 @@ export function getLineCount(text: string): number {
 export function getParagraphCount(text: string): number {
   if (!text.trim()) return 0;
   // Split by multiple consecutive newlines
-  return text
-    .split(/\n\s*\n/)
-    .filter((p) => p.trim().length > 0).length;
+  return text.split(/\n\s*\n/).filter((p) => p.trim().length > 0).length;
 }
 
 /**
- * Extract hashtags
+ * Extract hashtags while excluding URL fragments such as
+ * `#section` in `https://example.com#section`.
  */
 export function extractHashtags(text: string): string[] {
-  const hashtagRegex = /#[\w\p{L}\p{N}_]+/gu;
-  const matches = text.match(hashtagRegex) || [];
-  return matches;
+  return getHashtagEntities(text).map(({ hashtag }) => `#${hashtag}`);
 }
 
 /**
- * Check for duplicate hashtags
+ * Check for duplicate hashtags (excluding URL fragments)
  */
 export function findDuplicateHashtags(text: string): string[] {
   const hashtags = extractHashtags(text);
   const lowerCased = hashtags.map((tag) => tag.toLowerCase());
   const seen = new Set<string>();
   const duplicates = new Set<string>();
-  
+
   for (const tag of lowerCased) {
     if (seen.has(tag)) {
       duplicates.add(tag);
     }
     seen.add(tag);
   }
-  
+
   return Array.from(duplicates);
 }
 
@@ -136,18 +156,14 @@ export function findDuplicateHashtags(text: string): string[] {
  * Extract URLs
  */
 export function extractUrls(text: string): string[] {
-  const urlRegex = /https?:\/\/[\w\/:%#\$&\?\(\)~\.=\+\-]+/g;
-  const matches = text.match(urlRegex) || [];
-  return matches;
+  return extractTwitterUrls(text, { extractUrlsWithoutProtocol: false });
 }
 
 /**
  * Extract mentions (@username)
  */
 export function extractMentions(text: string): string[] {
-  const mentionRegex = /@[\w_]+/g;
-  const matches = text.match(mentionRegex) || [];
-  return matches;
+  return extractTwitterMentions(text).map((mention) => `@${mention}`);
 }
 
 /**
@@ -167,176 +183,17 @@ export function calculateStats(text: string): TextStats {
 }
 
 /**
- * Calculate Twitter (X) character count using official X weighting rules.
- * 
- * Implements X's text weighting:
- * - URLs (http(s)://...) count as 23 characters
- * - CJK characters (Japanese, Chinese, Korean) count as 2
- * - Emoji and modifier sequences count as 2
- * - Other characters count as 1
- * 
- * Note: This is a browser-compatible implementation that handles:
- * - ZWJ sequences (combining emoji)
- * - Emoji with skin tone modifiers
- * - Emoji tag sequences
- * - Surrogate pairs
- * 
- * Tests verify correctness against the official twitter-text library.
+ * Calculate the X weighted character count with the official twitter-text parser.
  */
 export function calculateTwitterCharCount(text: string): TwitterCharInfo {
   if (!text) return { count: 0, isOverLimit: false };
 
-  let count = 0;
-  
-  // Extract URLs using simple regex and replace with placeholder
-  const urlRegex = /https?:\/\/[^\s]+/g;
-  const urls = text.match(urlRegex) || [];
-  let textWithoutUrls = text.replace(urlRegex, "");
-  
-  // Count URLs (each URL is 23 characters)
-  count += urls.length * 23;
-  
-  // Use Intl.Segmenter to split into grapheme clusters if available
-  if (typeof Intl !== "undefined" && (Intl as any).Segmenter) {
-    try {
-      const segmenter = new (Intl as any).Segmenter("ja-JP", {
-        granularity: "grapheme",
-      });
-      const segments = Array.from(segmenter.segment(textWithoutUrls));
-      
-      for (const seg of segments) {
-        const grapheme = (seg as any).segment;
-        if (!grapheme) continue;
-        
-        // Get the first code point of the grapheme
-        const firstCode = grapheme.charCodeAt(0);
-        const codePoint = grapheme.codePointAt(0) || 0;
-        
-        // Check if this is an emoji (astral plane or emoji range)
-        if (isEmoji(codePoint) || isEmojiModifierOrZWJ(firstCode)) {
-          count += 2;
-        } else if (isCJKCharacter(codePoint)) {
-          count += 2;
-        } else {
-          count += 1;
-        }
-      }
-      
-      return {
-        count,
-        isOverLimit: count > PLATFORM_LIMITS.twitter,
-      };
-    } catch {
-      // Fall through to character-by-character processing
-    }
-  }
-  
-  // Fallback: character-by-character processing
-  let i = 0;
-  while (i < textWithoutUrls.length) {
-    const code = textWithoutUrls.charCodeAt(i);
-    const char = textWithoutUrls[i];
-    
-    // Check for surrogate pair (emoji and other astral-plane characters)
-    if (code >= 0xD800 && code <= 0xDBFF && i + 1 < textWithoutUrls.length) {
-      const nextCode = textWithoutUrls.charCodeAt(i + 1);
-      if (nextCode >= 0xDC00 && nextCode <= 0xDFFF) {
-        // This is an astral-plane character (emoji, etc.)
-        // Count as 2 initially, but may be modified by following variation selectors or modifiers
-        count += 2;
-        i += 2;
-        
-        // Check for emoji modifiers or ZWJ following
-        while (i < textWithoutUrls.length) {
-          const nextCode2 = textWithoutUrls.charCodeAt(i);
-          // Emoji modifier separator, skin tone modifiers, or ZWJ don't add count
-          if (
-            nextCode2 === 0xFE0F || // Variation selector-16 (emoji)
-            (nextCode2 >= 0x1F3FB && nextCode2 <= 0x1F3FF) || // Emoji skin tone modifiers
-            nextCode2 === 0x200D // ZWJ
-          ) {
-            i++;
-          } else {
-            break;
-          }
-        }
-        continue;
-      }
-    }
-    
-    // Check for CJK character ranges
-    const codePoint = char.codePointAt(0) || 0;
-    if (isCJKCharacter(codePoint)) {
-      count += 2;
-    } else {
-      count += 1;
-    }
-    
-    i++;
-  }
-  
+  const count = parseTweet(text).weightedLength;
+
   return {
     count,
     isOverLimit: count > PLATFORM_LIMITS.twitter,
   };
-}
-
-/**
- * Check if a code point is an emoji
- */
-function isEmoji(codePoint: number): boolean {
-  return (
-    // Emoji ranges (astral plane)
-    (codePoint >= 0x1F300 && codePoint <= 0x1F9FF) || // Main emoji blocks
-    (codePoint >= 0x1F000 && codePoint <= 0x1F02F) || // Emoticons
-    (codePoint >= 0x2600 && codePoint <= 0x27BF) || // Miscellaneous symbols and Dingbats
-    (codePoint >= 0x1F900 && codePoint <= 0x1F9FF) // Supplementary Multilingual Plane emoji
-  );
-}
-
-/**
- * Check if a character code is an emoji modifier or ZWJ
- */
-function isEmojiModifierOrZWJ(charCode: number): boolean {
-  return (
-    charCode === 0xFE0F || // Variation selector-16
-    (charCode >= 0x1F3FB && charCode <= 0x1F3FF) || // Emoji skin tone modifiers
-    charCode === 0x200D // ZWJ
-  );
-}
-
-/**
- * Check if a code point is a CJK character
- */
-function isCJKCharacter(codePoint: number): boolean {
-  return (
-    // CJK Unified Ideographs and extensions
-    (codePoint >= 0x2E80 && codePoint <= 0x2EFF) || // CJK Radicals Supplement
-    (codePoint >= 0x3000 && codePoint <= 0x303F) || // CJK Symbols and Punctuation
-    (codePoint >= 0x3040 && codePoint <= 0x309F) || // Hiragana
-    (codePoint >= 0x30A0 && codePoint <= 0x30FF) || // Katakana
-    (codePoint >= 0x3100 && codePoint <= 0x312F) || // Bopomofo
-    (codePoint >= 0x3130 && codePoint <= 0x318F) || // Hangul Compatibility Jamo
-    (codePoint >= 0x3190 && codePoint <= 0x319F) || // Kanbun
-    (codePoint >= 0x31A0 && codePoint <= 0x31BF) || // Bopomofo Extended
-    (codePoint >= 0x31C0 && codePoint <= 0x31EF) || // CJK Strokes
-    (codePoint >= 0x31F0 && codePoint <= 0x31FF) || // Katakana Phonetic Extensions
-    (codePoint >= 0x3200 && codePoint <= 0x32FF) || // Enclosed CJK Letters and Months
-    (codePoint >= 0x3300 && codePoint <= 0x33FF) || // CJK Compatibility
-    (codePoint >= 0x3400 && codePoint <= 0x4DBF) || // CJK Unified Ideographs Extension A
-    (codePoint >= 0x4E00 && codePoint <= 0x9FFF) || // CJK Unified Ideographs
-    (codePoint >= 0xA960 && codePoint <= 0xA97F) || // Hangul Jamo Extended-A
-    (codePoint >= 0xAC00 && codePoint <= 0xD7AF) || // Hangul Syllables
-    (codePoint >= 0xD7B0 && codePoint <= 0xD7FF) || // Hangul Jamo Extended-B
-    (codePoint >= 0xF900 && codePoint <= 0xFAFF) || // CJK Compatibility Ideographs
-    (codePoint >= 0xFE30 && codePoint <= 0xFE4F) || // CJK Compatibility Forms
-    (codePoint >= 0x20000 && codePoint <= 0x2A6DF) || // CJK Unified Ideographs Extension B
-    (codePoint >= 0x2A700 && codePoint <= 0x2B73F) || // CJK Unified Ideographs Extension C
-    (codePoint >= 0x2B740 && codePoint <= 0x2B81D) || // CJK Unified Ideographs Extension D
-    (codePoint >= 0x2B820 && codePoint <= 0x2CEAF) || // CJK Unified Ideographs Extension E
-    (codePoint >= 0x2CEB0 && codePoint <= 0x2EBEF) || // CJK Unified Ideographs Extension F
-    (codePoint >= 0x30000 && codePoint <= 0x3134F) // CJK Unified Ideographs Extension G
-  );
 }
 
 /**
@@ -384,8 +241,17 @@ export function normalizeFullwidthSpaces(text: string): string {
  * Add blank line before hashtags
  */
 export function addBlankLineBeforeHashtags(text: string): string {
-  // Add newline before hashtag if it's not already preceded by one
-  return text.replace(/([^\n])(#[\w\p{L}\p{N}_]+)/gu, "$1\n$2");
+  const hashtags = getHashtagEntities(text);
+  let result = text;
+
+  for (const { indices } of [...hashtags].reverse()) {
+    const start = indices[0];
+    if (start > 0 && result[start - 1] !== "\n") {
+      result = `${result.slice(0, start)}\n${result.slice(start)}`;
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -393,12 +259,24 @@ export function addBlankLineBeforeHashtags(text: string): string {
  * Ensures that URLs, mentions, paragraph breaks, and blank lines are not damaged
  */
 export function moveHashtagsToEnd(text: string): string {
-  const hashtags = extractHashtags(text);
-  if (hashtags.length === 0) return text;
+  const hashtagEntities = getHashtagEntities(text);
+  if (hashtagEntities.length === 0) return text;
 
-  // Remove hashtags but preserve structure
-  // Remove hashtag followed by optional non-newline spaces, but keep newlines
-  let textWithoutHashtags = text.replace(/#[\w\p{L}\p{N}_]+[ \t]*/gu, "");
+  const hashtags = hashtagEntities.map(({ hashtag }) => `#${hashtag}`);
+  let textWithoutHashtags = text;
+
+  for (const { indices } of [...hashtagEntities].reverse()) {
+    const [start, entityEnd] = indices;
+    let end = entityEnd;
+    while (
+      end < textWithoutHashtags.length &&
+      /[ \t]/.test(textWithoutHashtags[end])
+    ) {
+      end += 1;
+    }
+    textWithoutHashtags =
+      textWithoutHashtags.slice(0, start) + textWithoutHashtags.slice(end);
+  }
 
   // Process line by line, removing trailing spaces but preserving blank lines
   const lines = textWithoutHashtags.split("\n");
@@ -439,7 +317,7 @@ export interface FormattingOptions {
 
 export function applyFormatting(
   text: string,
-  options: FormattingOptions = {}
+  options: FormattingOptions = {},
 ): string {
   let result = text;
 
@@ -492,4 +370,3 @@ SNS投稿のための便利なツールです。
 
 #SNS #テキスト整形 #便利ツール`;
 }
-

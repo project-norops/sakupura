@@ -25,6 +25,9 @@ import {
   applyFormatting,
   PLATFORM_LIMITS,
 } from "./utils";
+import twitterText from "twitter-text";
+
+const { parseTweet: parseTweetOfficial } = twitterText;
 
 describe("Text Formatting Utilities - Complete Test Suite", () => {
   describe("Display Character Counting (grapheme-based)", () => {
@@ -71,7 +74,11 @@ describe("Text Formatting Utilities - Complete Test Suite", () => {
       const composed = "é";
       const decomposed = "e\u0301";
       // Both should return similar counts (accounting for normalization differences)
-      expect(Math.abs(getDisplayCharCount(composed) - getDisplayCharCount(decomposed))).toBeLessThanOrEqual(1);
+      expect(
+        Math.abs(
+          getDisplayCharCount(composed) - getDisplayCharCount(decomposed),
+        ),
+      ).toBeLessThanOrEqual(1);
     });
   });
 
@@ -230,7 +237,7 @@ describe("Text Formatting Utilities - Complete Test Suite", () => {
 
     test("should handle multiple URLs", () => {
       const result = calculateTwitterCharCount(
-        "see https://example.com and https://test.org"
+        "see https://example.com and https://test.org",
       );
       // "see " = 4 + URL1 = 23 + " and " = 5 + URL2 = 23 = 55
       expect(result.count).toBe(55);
@@ -287,6 +294,17 @@ describe("Text Formatting Utilities - Complete Test Suite", () => {
       expect(result.count).toBeGreaterThan(0);
       expect(result.isOverLimit).toBe(false);
     });
+
+    test.each([
+      ["https://example.com.", 24],
+      ["(https://example.com)", 25],
+      ["https://example.com/path?q=1,", 24],
+      ["™", 2],
+      ["1️⃣", 2],
+      ["🇯🇵", 2],
+    ])("should match official weighting for %s", (text, expected) => {
+      expect(calculateTwitterCharCount(text).count).toBe(expected);
+    });
   });
 
   describe("Text formatting functions", () => {
@@ -305,14 +323,12 @@ describe("Text Formatting Utilities - Complete Test Suite", () => {
 
     test("should normalize line breaks to LF", () => {
       expect(normalizeLineBreaks("line1\r\nline2\rline3")).toBe(
-        "line1\nline2\nline3"
+        "line1\nline2\nline3",
       );
     });
 
     test("should normalize full-width spaces", () => {
-      expect(normalizeFullwidthSpaces("hello　　world")).toBe(
-        "hello　world"
-      );
+      expect(normalizeFullwidthSpaces("hello　　world")).toBe("hello　world");
     });
 
     test("should add blank line before hashtags", () => {
@@ -352,9 +368,39 @@ describe("Text Formatting Utilities - Complete Test Suite", () => {
     });
 
     test("should handle hashtags with URLs and blank lines completely", () => {
-      const input = "First para\n\nSecond https://example.com #tag1\n\nThird #tag2";
+      const input =
+        "First para\n\nSecond https://example.com #tag1\n\nThird #tag2";
       const result = moveHashtagsToEnd(input);
-      expect(result).toBe("First para\n\nSecond https://example.com\n\nThird\n\n#tag1 #tag2");
+      expect(result).toBe(
+        "First para\n\nSecond https://example.com\n\nThird\n\n#tag1 #tag2",
+      );
+    });
+
+    test.each([
+      [
+        "https://example.com#section #tag",
+        "https://example.com#section\n\n#tag",
+      ],
+      [
+        "詳しくはこちら https://example.com/#price #案内",
+        "詳しくはこちら https://example.com/#price\n\n#案内",
+      ],
+      [
+        "参照 (https://example.com/a_(b)#section), 次へ #tag",
+        "参照 (https://example.com/a_(b)#section), 次へ\n\n#tag",
+      ],
+    ])(
+      "should preserve URL fragments when moving hashtags",
+      (input, expected) => {
+        expect(moveHashtagsToEnd(input)).toBe(expected);
+      },
+    );
+
+    test("should not add a line break inside a URL fragment", () => {
+      const input = "https://example.com/#price #案内";
+      expect(addBlankLineBeforeHashtags(input)).toBe(
+        "https://example.com/#price \n#案内",
+      );
     });
   });
 
@@ -468,30 +514,9 @@ describe("Text Formatting Utilities - Complete Test Suite", () => {
    * These tests validate that our implementation matches the official X character counting
    */
   describe("Official X character counting verification (twitter-text)", () => {
-    let parseTweet: any;
-
-    beforeAll(() => {
-      // Import twitter-text CommonJS in Node.js environment
-      try {
-        parseTweet = require("twitter-text").parseTweet;
-      } catch {
-        console.warn("twitter-text not available in test environment");
-      }
-    });
-
     const validateAgainstTwitterText = (text: string) => {
-      if (!parseTweet) {
-        console.warn(`Skipping twitter-text validation for: ${text}`);
-        return;
-      }
-      
-      const official = parseTweet(text).weightedLength;
+      const official = parseTweetOfficial(text).weightedLength;
       const our = calculateTwitterCharCount(text).count;
-      
-      console.log(`Text: "${text}"`);
-      console.log(`  Official twitter-text: ${official}`);
-      console.log(`  Our implementation: ${our}`);
-      
       expect(our).toBe(official);
     };
 

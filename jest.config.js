@@ -15,7 +15,8 @@ module.exports = {
       "ts-jest",
       {
         tsconfig: {
-          jsx: "react",
+          lib: ["ES2022", "DOM", "ES2022.Intl"],
+          jsx: "react-jsx",
           esModuleInterop: true,
           allowSyntheticDefaultImports: true,
         },

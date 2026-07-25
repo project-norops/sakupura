@@ -22,8 +22,9 @@
     "build:dynamic-pricing": "npm --workspace apps/001-dynamic-pricing run build",
     "lint:portal": "npm --workspace apps/portal run lint",
     "lint:dynamic-pricing": "npm --workspace apps/001-dynamic-pricing run lint",
+    "lint:social-text-formatter": "eslint packages/social-text-formatter",
     "dev": "npx concurrently \"npm run dev:portal\" \"npm run dev:dynamic-pricing\"",
-    "lint": "npm run lint:portal && npm run lint:dynamic-pricing",
+    "lint": "npm run lint:portal && npm run lint:dynamic-pricing && npm run lint:social-text-formatter",
     "build": "npm run build:portal && npm run build:dynamic-pricing"
   },
   "devDependencies": {
@@ -34,9 +35,5 @@
     "prettier": "^3.0.0",
     "ts-jest": "^29.0.0",
     "typescript": "^5.5.0"
-  },
-  "dependencies": {
-    "@types/twitter-text": "^3.1.10",
-    "twitter-text": "^3.1.0"
   }
 }

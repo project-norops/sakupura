@@ -25,6 +25,13 @@ const STORAGE_KEYS = {
   groups: "social-text-formatter:hashtag-groups",
 } as const;
 
+const DEFAULT_FORMATTING: FormattingOptions = {
+  removeTrailingSpaces: true,
+  trimEnds: true,
+  reduceBlankLines: true,
+  normalizeLineBreaks: true,
+};
+
 function getLocalStorage<T>(key: string, defaultValue: T): T {
   if (typeof window === "undefined") return defaultValue;
   try {
@@ -62,12 +69,8 @@ export function SocialTextFormatterPage() {
   const [text, setText] = useState("");
   const [originalText, setOriginalText] = useState("");
   const [platform, setPlatform] = useState<Platform>("twitter");
-  const [formatting, setFormatting] = useState<FormattingOptions>({
-    removeTrailingSpaces: true,
-    trimEnds: true,
-    reduceBlankLines: true,
-    normalizeLineBreaks: true,
-  });
+  const [formatting, setFormatting] =
+    useState<FormattingOptions>(DEFAULT_FORMATTING);
   const [hashtagGroups, setHashtagGroups] = useState<HashtagGroup[]>([]);
   const [copiedType, setCopiedType] = useState<string | null>(null);
   const [showNewGroupForm, setShowNewGroupForm] = useState(false);
@@ -77,7 +80,7 @@ export function SocialTextFormatterPage() {
   const [editGroupName, setEditGroupName] = useState("");
   const [editGroupTags, setEditGroupTags] = useState("");
   const [showClipboardFallback, setShowClipboardFallback] = useState(false);
-  const [fallbackType, setFallbackType] = useState<string | null>(null);
+  const [fallbackText, setFallbackText] = useState("");
   const fallbackRef = useRef<HTMLTextAreaElement>(null);
 
   // Load from LocalStorage on mount
@@ -85,16 +88,21 @@ export function SocialTextFormatterPage() {
     const savedText = getLocalStorage(STORAGE_KEYS.draft, "");
     const savedFormatting = getLocalStorage<FormattingOptions>(
       STORAGE_KEYS.formatting,
-      formatting
+      DEFAULT_FORMATTING,
     );
     const savedGroups = getLocalStorage<HashtagGroup[]>(
       STORAGE_KEYS.groups,
-      []
+      [],
     );
 
-    if (savedText) setText(savedText);
-    if (Object.keys(savedFormatting).length > 0) setFormatting(savedFormatting);
-    if (savedGroups.length > 0) setHashtagGroups(savedGroups);
+    const timer = setTimeout(() => {
+      if (savedText) setText(savedText);
+      if (Object.keys(savedFormatting).length > 0)
+        setFormatting(savedFormatting);
+      if (savedGroups.length > 0) setHashtagGroups(savedGroups);
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Auto-save text
@@ -119,12 +127,9 @@ export function SocialTextFormatterPage() {
   const twitterInfo = useMemo(() => calculateTwitterCharCount(text), [text]);
   const formattedText = useMemo(
     () => applyFormatting(text, formatting),
-    [text, formatting]
+    [text, formatting],
   );
-  const duplicateHashtags = useMemo(
-    () => findDuplicateHashtags(text),
-    [text]
-  );
+  const duplicateHashtags = useMemo(() => findDuplicateHashtags(text), [text]);
 
   const platformLimit = getPlatformLimit(platform);
   const displayCharCount =
@@ -134,26 +139,22 @@ export function SocialTextFormatterPage() {
       ? twitterInfo.isOverLimit
       : displayCharCount > platformLimit;
 
-  const handleCopy = useCallback(
-    async (textToCopy: string, type: string) => {
-      try {
-        await navigator.clipboard.writeText(textToCopy);
-        setCopiedType(type);
-        setTimeout(() => setCopiedType(null), 2000);
-      } catch {
-        // Fallback: show textarea for manual selection
-        setShowClipboardFallback(true);
-        setFallbackType(type);
-        setTimeout(() => {
-          if (fallbackRef.current) {
-            fallbackRef.current.value = textToCopy;
-            fallbackRef.current.select();
-          }
-        }, 0);
-      }
-    },
-    []
-  );
+  const handleCopy = useCallback(async (textToCopy: string, type: string) => {
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      setCopiedType(type);
+      setTimeout(() => setCopiedType(null), 2000);
+    } catch {
+      // Fallback: show textarea for manual selection
+      setFallbackText(textToCopy);
+      setShowClipboardFallback(true);
+      setTimeout(() => {
+        if (fallbackRef.current) {
+          fallbackRef.current.select();
+        }
+      }, 0);
+    }
+  }, []);
 
   const handleInsertSample = useCallback(() => {
     setText(getSampleText());
@@ -201,29 +202,24 @@ export function SocialTextFormatterPage() {
     setShowNewGroupForm(false);
   }, [newGroupName, newGroupTags, hashtagGroups]);
 
-  const handleInsertGroup = useCallback(
-    (group: HashtagGroup) => {
-      const textToAdd = group.hashtags.join(" ");
-      setText((prev) => `${prev}\n${textToAdd}`);
-    },
-    []
-  );
+  const handleInsertGroup = useCallback((group: HashtagGroup) => {
+    const textToAdd = group.hashtags.join(" ");
+    setText((prev) => `${prev}\n${textToAdd}`);
+  }, []);
 
   const handleDeleteGroup = useCallback((id: string) => {
     setHashtagGroups((prev) => prev.filter((g) => g.id !== id));
   }, []);
 
-  const handleEditGroup = useCallback(
-    (group: HashtagGroup) => {
-      setEditingGroupId(group.id);
-      setEditGroupName(group.name);
-      setEditGroupTags(group.hashtags.join("\n"));
-    },
-    []
-  );
+  const handleEditGroup = useCallback((group: HashtagGroup) => {
+    setEditingGroupId(group.id);
+    setEditGroupName(group.name);
+    setEditGroupTags(group.hashtags.join("\n"));
+  }, []);
 
   const handleSaveEditGroup = useCallback(() => {
-    if (!editingGroupId || !editGroupName.trim() || !editGroupTags.trim()) return;
+    if (!editingGroupId || !editGroupName.trim() || !editGroupTags.trim())
+      return;
 
     const tags = editGroupTags
       .split("\n")
@@ -239,8 +235,8 @@ export function SocialTextFormatterPage() {
       prev.map((g) =>
         g.id === editingGroupId
           ? { ...g, name: editGroupName, hashtags: tags }
-          : g
-      )
+          : g,
+      ),
     );
     setEditingGroupId(null);
     setEditGroupName("");
@@ -267,11 +263,13 @@ export function SocialTextFormatterPage() {
           {"SNS文章整形・文字数チェッカー"}
         </h1>
         <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">
-          {"X、Instagram、LinkedIn向けの文章を、改行・空白・文字数・ハッシュタグを確認しながらブラウザ上で整形できます。"}
+          {
+            "X、Instagram、LinkedIn向けの文章を、改行・空白・文字数・ハッシュタグを確認しながらブラウザ上で整形できます。"
+          }
         </p>
 
         {/* Platform Tabs */}
-        <div 
+        <div
           className="mt-8 flex gap-2 border-b border-slate-200 dark:border-slate-700"
           role="tablist"
         >
@@ -338,8 +336,16 @@ export function SocialTextFormatterPage() {
 
         {/* Statistics */}
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          <StatBox label="文字数" value={displayCharCount} limit={platformLimit} isOver={isOverLimit} />
-          <StatBox label="文字数（空白除）" value={stats.charCountWithoutSpaces} />
+          <StatBox
+            label="文字数"
+            value={displayCharCount}
+            limit={platformLimit}
+            isOver={isOverLimit}
+          />
+          <StatBox
+            label="文字数（空白除）"
+            value={stats.charCountWithoutSpaces}
+          />
           <StatBox label="単語数" value={stats.wordCount} />
           <StatBox label="行数" value={stats.lineCount} />
           <StatBox label="段落数" value={stats.paragraphCount} />
@@ -352,7 +358,8 @@ export function SocialTextFormatterPage() {
         {duplicateHashtags.length > 0 && (
           <div className="mt-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950">
             <p className="text-sm font-medium text-amber-900 dark:text-amber-100">
-              ⚠️ 重複するハッシュタグが検出されました: {duplicateHashtags.join(", ")}
+              ⚠️ 重複するハッシュタグが検出されました:{" "}
+              {duplicateHashtags.join(", ")}
             </p>
           </div>
         )}
@@ -368,7 +375,10 @@ export function SocialTextFormatterPage() {
                 type="checkbox"
                 checked={formatting.removeTrailingSpaces ?? false}
                 onChange={(e) =>
-                  setFormatting({ ...formatting, removeTrailingSpaces: e.target.checked })
+                  setFormatting({
+                    ...formatting,
+                    removeTrailingSpaces: e.target.checked,
+                  })
                 }
                 className="rounded"
                 aria-label="行末の空白を削除"
@@ -396,7 +406,10 @@ export function SocialTextFormatterPage() {
                 type="checkbox"
                 checked={formatting.reduceBlankLines ?? false}
                 onChange={(e) =>
-                  setFormatting({ ...formatting, reduceBlankLines: e.target.checked })
+                  setFormatting({
+                    ...formatting,
+                    reduceBlankLines: e.target.checked,
+                  })
                 }
                 className="rounded"
                 aria-label="連続空行を整理（3行以上→2行）"
@@ -410,7 +423,10 @@ export function SocialTextFormatterPage() {
                 type="checkbox"
                 checked={formatting.normalizeLineBreaks ?? false}
                 onChange={(e) =>
-                  setFormatting({ ...formatting, normalizeLineBreaks: e.target.checked })
+                  setFormatting({
+                    ...formatting,
+                    normalizeLineBreaks: e.target.checked,
+                  })
                 }
                 className="rounded"
                 aria-label="改行コードを統一"
@@ -424,7 +440,10 @@ export function SocialTextFormatterPage() {
                 type="checkbox"
                 checked={formatting.normalizeFullwidthSpaces ?? false}
                 onChange={(e) =>
-                  setFormatting({ ...formatting, normalizeFullwidthSpaces: e.target.checked })
+                  setFormatting({
+                    ...formatting,
+                    normalizeFullwidthSpaces: e.target.checked,
+                  })
                 }
                 className="rounded"
                 aria-label="連続全角スペースを整理"
@@ -438,7 +457,10 @@ export function SocialTextFormatterPage() {
                 type="checkbox"
                 checked={formatting.addBlankBeforeHashtags ?? false}
                 onChange={(e) =>
-                  setFormatting({ ...formatting, addBlankBeforeHashtags: e.target.checked })
+                  setFormatting({
+                    ...formatting,
+                    addBlankBeforeHashtags: e.target.checked,
+                  })
                 }
                 className="rounded"
                 aria-label="ハッシュタグの前に空行を追加"
@@ -452,7 +474,10 @@ export function SocialTextFormatterPage() {
                 type="checkbox"
                 checked={formatting.moveHashtagsToEnd ?? false}
                 onChange={(e) =>
-                  setFormatting({ ...formatting, moveHashtagsToEnd: e.target.checked })
+                  setFormatting({
+                    ...formatting,
+                    moveHashtagsToEnd: e.target.checked,
+                  })
                 }
                 className="rounded"
                 aria-label="ハッシュタグを文末にまとめる"
@@ -470,7 +495,8 @@ export function SocialTextFormatterPage() {
             プレビュー
           </h3>
           <p className="text-xs text-slate-600 dark:text-slate-400">
-            ※ プレビューは投稿前の参考目安です。実際のSNS画面での表示は異なる場合があります。投稿前に必ず対象SNSの実画面でも確認してください。
+            ※
+            プレビューは投稿前の参考目安です。実際のSNS画面での表示は異なる場合があります。投稿前に必ず対象SNSの実画面でも確認してください。
           </p>
           <div className="grid gap-4 lg:grid-cols-2">
             <PreviewBox
@@ -505,6 +531,7 @@ export function SocialTextFormatterPage() {
             <textarea
               ref={fallbackRef}
               readOnly
+              value={fallbackText}
               className="w-full min-h-32 rounded bg-white p-3 font-mono text-sm dark:bg-slate-900 dark:text-slate-100"
               aria-label="コピー用テキスト"
             />
@@ -619,19 +646,19 @@ export function SocialTextFormatterPage() {
                       挿入
                     </button>
                     <button
-                     onClick={() => handleEditGroup(group)}
-                     className="rounded px-3 py-1 text-sm font-medium text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-950"
-                     aria-label={`${group.name}を編集`}
+                      onClick={() => handleEditGroup(group)}
+                      className="rounded px-3 py-1 text-sm font-medium text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-950"
+                      aria-label={`${group.name}を編集`}
                     >
-                     編集
+                      編集
                     </button>
-                   <button
-                     onClick={() => handleDeleteGroup(group.id)}
-                     className="rounded px-3 py-1 text-sm font-medium text-red-600 hover:bg-red-100 dark:hover:bg-red-950"
-                     aria-label={`${group.name}を削除`}
-                   >
-                     削除
-                   </button>
+                    <button
+                      onClick={() => handleDeleteGroup(group.id)}
+                      className="rounded px-3 py-1 text-sm font-medium text-red-600 hover:bg-red-100 dark:hover:bg-red-950"
+                      aria-label={`${group.name}を削除`}
+                    >
+                      削除
+                    </button>
                   </div>
                 </div>
               ))}
@@ -673,7 +700,12 @@ function StatBox({
         }`}
       >
         {value}
-        {limit && <span className="text-sm font-normal text-slate-600 dark:text-slate-400"> / {limit}</span>}
+        {limit && (
+          <span className="text-sm font-normal text-slate-600 dark:text-slate-400">
+            {" "}
+            / {limit}
+          </span>
+        )}
       </p>
     </div>
   );
@@ -693,7 +725,9 @@ function PreviewBox({
   return (
     <div className="rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-600 dark:bg-slate-950">
       <div className="mb-3 flex items-center justify-between">
-        <h4 className="font-medium text-slate-900 dark:text-slate-100">{title}</h4>
+        <h4 className="font-medium text-slate-900 dark:text-slate-100">
+          {title}
+        </h4>
         <button
           onClick={onCopy}
           className={`rounded px-3 py-1 text-sm font-medium transition-colors ${
