@@ -114,8 +114,8 @@
       ]
     },
     "releasePost": "新しいツール『SNS文章整形・文字数チェッカー』を公開しました。X、Instagram、LinkedInの各プラットフォームに対応した文章整形と文字数チェックをブラウザ上で完結できます。改行・空白・ハッシュタグを整理しながら、複数のSNSへの使い回しをサポートします。",
-    "status": "draft",
-    "publishAt": null,
+    "status": "published",
+    "publishAt": "2026-07-25T13:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
   }
