@@ -5,6 +5,7 @@ import {
   completeTask,
   dueLabel,
   nextDueDate,
+  undoCompleteTask,
   type Frequency,
   type RoutineTask,
 } from "./utils";
@@ -282,6 +283,24 @@ export function RoutineTaskLoopPage() {
                           >
                             完了・次へ
                           </button>
+                          {task.previousDue && (
+                            <button
+                              type="button"
+                              aria-label={`${task.title}の直前の完了を取り消す`}
+                              onClick={() =>
+                                setTasks((items) =>
+                                  items.map((item) =>
+                                    item.id === task.id
+                                      ? undoCompleteTask(item)
+                                      : item,
+                                  ),
+                                )
+                              }
+                              className="flex-1 rounded-full border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-bold text-amber-900 hover:bg-amber-100"
+                            >
+                              未了に戻す
+                            </button>
+                          )}
                           <button
                             type="button"
                             aria-label={`${task.title}を削除`}
@@ -296,6 +315,11 @@ export function RoutineTaskLoopPage() {
                           </button>
                         </div>
                       </div>
+                      {task.previousDue && (
+                        <p className="mt-3 text-xs font-medium text-amber-800 sm:text-right">
+                          直前の完了操作を1回だけ取り消せます。
+                        </p>
+                      )}
                     </article>
                   );
                 })}

@@ -1,9 +1,44 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { buildReply, type ReplyTone } from "./utils";
+import { buildReply, type BusinessType, type ReplyTone } from "./utils";
+
+const keywordOptions: Record<BusinessType, string[]> = {
+  service: ["接客", "施術・サービス", "店内の雰囲気", "待ち時間"],
+  retail: ["商品の品質", "梱包", "配送", "価格"],
+};
+
+function HighlightedReply({
+  text,
+  values,
+}: {
+  text: string;
+  values: string[];
+}) {
+  const highlights = [
+    ...new Set(values.map((value) => value.trim()).filter(Boolean)),
+  ].sort((a, b) => b.length - a.length);
+  if (highlights.length === 0) return text;
+  const escaped = highlights.map((value) =>
+    value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+  );
+  const parts = text.split(new RegExp(`(${escaped.join("|")})`, "g"));
+  return parts.map((part, index) =>
+    highlights.includes(part) ? (
+      <mark
+        key={`${part}-${index}`}
+        className="rounded bg-blue-100 px-0.5 font-bold text-blue-800"
+      >
+        {part}
+      </mark>
+    ) : (
+      part
+    ),
+  );
+}
 
 export function ReviewReplyBuilderPage() {
+  const [businessType, setBusinessType] = useState<BusinessType>("service");
   const [rating, setRating] = useState(5);
   const [tone, setTone] = useState<ReplyTone>("polite");
   const [customerName, setCustomerName] = useState("");
@@ -14,6 +49,7 @@ export function ReviewReplyBuilderPage() {
   const reply = useMemo(
     () =>
       buildReply({
+        businessType,
         rating,
         tone,
         customerName,
@@ -21,7 +57,7 @@ export function ReviewReplyBuilderPage() {
         staffName,
         detail,
       }),
-    [rating, tone, customerName, storeName, staffName, detail],
+    [businessType, rating, tone, customerName, storeName, staffName, detail],
   );
   const field =
     "mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-950 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100";
@@ -54,7 +90,20 @@ export function ReviewReplyBuilderPage() {
             <h2 className="text-xl font-black text-slate-950">
               1. 口コミの状況を選ぶ
             </h2>
-            <fieldset className="mt-5">
+            <label className="mt-5 block text-sm font-bold text-slate-700">
+              業態
+              <select
+                value={businessType}
+                onChange={(event) =>
+                  setBusinessType(event.target.value as BusinessType)
+                }
+                className={field}
+              >
+                <option value="service">サービス業</option>
+                <option value="retail">物販・EC</option>
+              </select>
+            </label>
+            <fieldset className="mt-4">
               <legend className="text-sm font-bold text-slate-700">評価</legend>
               <div className="mt-2 flex flex-wrap gap-2">
                 {[1, 2, 3, 4, 5].map((value) => (
@@ -116,12 +165,16 @@ export function ReviewReplyBuilderPage() {
               <input
                 value={detail}
                 onChange={(event) => setDetail(event.target.value)}
-                placeholder="例：接客、料理、待ち時間"
+                placeholder={
+                  businessType === "service"
+                    ? "例：接客、施術、待ち時間"
+                    : "例：商品の品質、梱包、配送"
+                }
                 className={field}
               />
             </label>
             <div className="mt-3 flex flex-wrap gap-2">
-              {["接客", "料理", "店内の雰囲気", "待ち時間"].map((item) => (
+              {keywordOptions[businessType].map((item) => (
                 <button
                   key={item}
                   type="button"
@@ -138,11 +191,18 @@ export function ReviewReplyBuilderPage() {
             <h2 className="text-xl font-black text-slate-950">
               2. 返信文を確認してコピー
             </h2>
+            <p className="mt-2 text-sm text-slate-600">
+              <span className="font-bold text-blue-700">青色の太字</span>
+              は、入力内容が反映された部分です。コピーされる文章に色は付きません。
+            </p>
             <div
               className="mt-5 min-h-64 whitespace-pre-wrap rounded-2xl border border-slate-200 bg-slate-50 p-5 leading-8 text-slate-800"
               aria-live="polite"
             >
-              {reply}
+              <HighlightedReply
+                text={reply}
+                values={[customerName, storeName, staffName, detail]}
+              />
             </div>
             <button
               type="button"

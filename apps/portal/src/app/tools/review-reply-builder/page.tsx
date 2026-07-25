@@ -10,7 +10,7 @@ const tool = getToolBySlug("review-reply-builder");
 export const metadata: Metadata = {
   title: "口コミ返信テンプレート作成",
   description:
-    "星評価、口コミの話題、対応者名をもとに、自然で丁寧な口コミ返信文をブラウザ上で作成します。",
+    "サービス業・物販の業態、星評価、話題、対応者名をもとに、自然な口コミ返信文をブラウザ上で作成します。",
   alternates: { canonical: "/tools/review-reply-builder" },
   openGraph: {
     title: "口コミ返信テンプレート作成",

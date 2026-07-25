@@ -6,6 +6,7 @@ export type RoutineTask = {
   interval: number;
   nextDue: string;
   completedCount: number;
+  previousDue?: string;
 };
 
 function parseDate(value: string): Date {
@@ -41,8 +42,19 @@ export function nextDueDate(
 export function completeTask(task: RoutineTask): RoutineTask {
   return {
     ...task,
+    previousDue: task.nextDue,
     nextDue: nextDueDate(task.nextDue, task.frequency, task.interval),
     completedCount: task.completedCount + 1,
+  };
+}
+
+export function undoCompleteTask(task: RoutineTask): RoutineTask {
+  if (!task.previousDue) return task;
+  const { previousDue, ...rest } = task;
+  return {
+    ...rest,
+    nextDue: previousDue,
+    completedCount: Math.max(0, task.completedCount - 1),
   };
 }
 
