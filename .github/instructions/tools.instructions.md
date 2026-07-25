@@ -4,6 +4,7 @@ applyTo: "packages/**,apps/portal/src/app/tools/**,apps/portal/src/data/tools.js
 
 # ミニサービス固有ルール
 
+- 新規ツールの実装前に`PRODUCT_RESEARCH.md`の調査と採否判断を完了し、承認された内容を`PRODUCT_PLAN.md`へ反映する。既存ツールとの重複や市場根拠が未確認のまま量産しない。
 - 機能はブラウザ内で完結させ、サーバー費用や外部AI API依存を増やさない。
 - 計算根拠、対象外の条件、データ保存場所を利用者に説明する。
 - `ToolGuide`を外さず、台帳の`content`をツール固有の検証済み文章で完成させる。

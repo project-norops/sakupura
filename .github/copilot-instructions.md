@@ -1,7 +1,8 @@
 # サクプラ Copilot instructions
 
-- 作業前に`AGENTS.md`、`ARCHITECTURE.md`、`ANALYTICS.md`、`DEVELOPMENT_LOG.md`を読む。
+- 作業前に`AGENTS.md`、`ARCHITECTURE.md`、`ANALYTICS.md`、`PRODUCT_RESEARCH.md`、`PRODUCT_PLAN.md`、`ROADMAP.md`、`DEVELOPMENT_LOG.md`を読む。
 - 本番はGitHub `project-norops/sakupura`、Vercel Project `100apps-portal`、`https://www.norops.jp`の1系統だけである。
+- 新規アプリを企画・提案・開発する前に`PRODUCT_RESEARCH.md`で市場性、対象者、競合、重複、MVP、AdSense、将来課金を根拠付きで評価する。未確認情報を捏造せず、採否の承認前に実装を始めない。
 - 新規ツールは必ず`npm run create:tool`から作成し、`packages/<slug>`と`/tools/<slug>`へ配置する。新規Next.jsアプリ、Vercel Project、独自ドメインを作らない。
 - `apps/portal/src/data/tools.json`をサービス台帳の唯一の情報源とする。カード、sitemap、依存関係を別々に手編集しない。
 - 新規ツールは`draft`で生成する。`status`、`publishAt`、`announceOnX`、`announcedAt`を削除せず、`published`になるまでカード・sitemap・URLへ公開しない。
