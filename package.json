@@ -27,8 +27,11 @@
     "lint:dynamic-pricing": "npm --workspace apps/001-dynamic-pricing run lint",
     "lint:social-text-formatter": "eslint packages/social-text-formatter",
     "lint:email-signature-generator": "eslint packages/email-signature-generator",
+    "lint:review-reply-builder": "eslint packages/review-reply-builder",
+    "lint:lp-structure-builder": "eslint packages/lp-structure-builder",
+    "lint:routine-task-loop": "eslint packages/routine-task-loop",
     "dev": "npx concurrently \"npm run dev:portal\" \"npm run dev:dynamic-pricing\"",
-    "lint": "npm run lint:portal && npm run lint:dynamic-pricing && npm run lint:social-text-formatter && npm run lint:email-signature-generator",
+    "lint": "npm run lint:portal && npm run lint:dynamic-pricing && npm run lint:social-text-formatter && npm run lint:email-signature-generator && npm run lint:review-reply-builder && npm run lint:lp-structure-builder && npm run lint:routine-task-loop",
     "build": "npm run build:portal && npm run build:dynamic-pricing"
   },
   "devDependencies": {
