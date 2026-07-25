@@ -6,6 +6,7 @@ import {
   moveSection,
   toMarkdown,
   type LpSection,
+  type OutputMode,
 } from "./utils";
 
 export function LpStructureBuilderPage() {
@@ -14,13 +15,14 @@ export function LpStructureBuilderPage() {
   );
   const [title, setTitle] = useState("");
   const [audience, setAudience] = useState("");
+  const [outputMode, setOutputMode] = useState<OutputMode>("document");
   const [sections, setSections] = useState<LpSection[]>(() =>
     createSections("service"),
   );
   const [copied, setCopied] = useState(false);
   const markdown = useMemo(
-    () => toMarkdown(title, audience, sections),
-    [title, audience, sections],
+    () => toMarkdown(title, audience, sections, outputMode),
+    [title, audience, sections, outputMode],
   );
   const field =
     "mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-950 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100";
@@ -41,20 +43,35 @@ export function LpStructureBuilderPage() {
           Web制作
         </p>
         <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-          LP構成ジェネレーター
+          LP構成案作成ツール
         </h1>
         <p className="mt-4 max-w-3xl leading-7 text-slate-600">
-          目的に合う型を選び、セクションを並べ替えるだけ。LP制作前の構成案をMarkdownで持ち帰れます。
+          LPで「何を・どの順番で伝えるか」を整理するツールです。サービス、商品、イベントに合う構成を選び、Notionや企画書へ貼り付けられる構成メモを作れます。
         </p>
         <div className="mt-5 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm leading-6 text-blue-950">
           <strong>AI・外部送信なし。</strong>{" "}
           テンプレートをブラウザ内で組み立てます。成果を保証するものではないため、商材と読者に合わせて内容を調整してください。
         </div>
 
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          {[
+            ["企画を整理", "必要なセクションと伝える順番を決める"],
+            ["制作を依頼", "ライターやデザイナーへ構成を共有する"],
+            ["Notionで進行", "見出しごとの制作チェックリストにする"],
+          ].map(([title, description]) => (
+            <div key={title} className="rounded-2xl bg-slate-50 p-4">
+              <p className="font-black text-slate-900">{title}</p>
+              <p className="mt-1 text-sm leading-6 text-slate-600">
+                {description}
+              </p>
+            </div>
+          ))}
+        </div>
+
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.05fr_.95fr]">
           <section>
             <h2 className="text-xl font-black text-slate-950">
-              1. LPの土台を作る
+              1. 用途に合う構成を選ぶ
             </h2>
             <label className="mt-5 block text-sm font-bold text-slate-700">
               LPの種類
@@ -65,8 +82,8 @@ export function LpStructureBuilderPage() {
                 }
                 className={field}
               >
-                <option value="service">サービス</option>
-                <option value="product">商品販売</option>
+                <option value="service">サービス・SaaS</option>
+                <option value="product">商品販売・EC</option>
                 <option value="event">イベント・セミナー</option>
               </select>
             </label>
@@ -190,9 +207,27 @@ export function LpStructureBuilderPage() {
           </section>
           <section>
             <h2 className="text-xl font-black text-slate-950">
-              2. 構成案をコピー
+              2. 構成メモをコピー
             </h2>
-            <pre className="mt-5 max-h-[44rem] min-h-80 overflow-auto whitespace-pre-wrap rounded-2xl bg-slate-950 p-5 text-sm leading-7 text-slate-100">
+            <label className="mt-5 block text-sm font-bold text-slate-700">
+              出力形式
+              <select
+                value={outputMode}
+                onChange={(event) =>
+                  setOutputMode(event.target.value as OutputMode)
+                }
+                className={field}
+              >
+                <option value="document">企画書・共有用Markdown</option>
+                <option value="notion">Notion向け制作チェックリスト</option>
+              </select>
+            </label>
+            <p className="mt-3 text-sm leading-6 text-slate-500">
+              {outputMode === "notion"
+                ? "Notionへ貼り付けると、セクションごとの作業チェックリストとして使えます。Notion APIとの自動連携ではありません。"
+                : "Googleドキュメント、Notion、ChatGPTなどへ貼り付けて、企画整理や制作依頼に使えます。"}
+            </p>
+            <pre className="mt-4 max-h-[44rem] min-h-80 overflow-auto whitespace-pre-wrap rounded-2xl bg-slate-950 p-5 text-sm leading-7 text-slate-100">
               {markdown}
             </pre>
             <button
@@ -202,7 +237,11 @@ export function LpStructureBuilderPage() {
               data-analytics-tool-id="lp-structure-builder"
               className="mt-4 w-full rounded-full bg-blue-600 px-5 py-3 font-bold text-white hover:bg-blue-700"
             >
-              {copied ? "コピーしました" : "Markdownをコピー"}
+              {copied
+                ? "コピーしました"
+                : outputMode === "notion"
+                  ? "Notion用チェックリストをコピー"
+                  : "構成メモをコピー"}
             </button>
           </section>
         </div>

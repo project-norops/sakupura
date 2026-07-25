@@ -1,4 +1,5 @@
 export type LpSection = { id: string; name: string; purpose: string };
+export type OutputMode = "document" | "notion";
 
 export const PRESETS: Record<string, Omit<LpSection, "id">[]> = {
   service: [
@@ -65,6 +66,7 @@ export function toMarkdown(
   title: string,
   audience: string,
   sections: LpSection[],
+  mode: OutputMode = "document",
 ): string {
   const heading = title.trim() || "LPタイトル（未入力）";
   const target = audience.trim() || "想定するお客様を記入";
@@ -73,14 +75,25 @@ export function toMarkdown(
     "",
     `想定読者: ${target}`,
     "",
-    ...sections.flatMap((section, index) => [
-      `## ${index + 1}. ${section.name}`,
-      "",
-      section.purpose,
-      "",
-      "本文メモ:",
-      "",
-    ]),
+    ...sections.flatMap((section, index) => {
+      const common = [
+        `## ${index + 1}. ${section.name}`,
+        "",
+        `役割: ${section.purpose}`,
+        "",
+      ];
+      return mode === "notion"
+        ? [
+            ...common,
+            "- [ ] 見出しを決める",
+            "- [ ] 本文を作成する",
+            "- [ ] 画像・実績・リンクを用意する",
+            "",
+            "メモ:",
+            "",
+          ]
+        : [...common, "本文メモ:", ""];
+    }),
   ]
     .join("\n")
     .trim();

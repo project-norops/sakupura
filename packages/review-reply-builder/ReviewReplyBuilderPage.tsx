@@ -8,11 +8,20 @@ export function ReviewReplyBuilderPage() {
   const [tone, setTone] = useState<ReplyTone>("polite");
   const [customerName, setCustomerName] = useState("");
   const [storeName, setStoreName] = useState("");
+  const [staffName, setStaffName] = useState("");
   const [detail, setDetail] = useState("");
   const [copied, setCopied] = useState(false);
   const reply = useMemo(
-    () => buildReply({ rating, tone, customerName, storeName, detail }),
-    [rating, tone, customerName, storeName, detail],
+    () =>
+      buildReply({
+        rating,
+        tone,
+        customerName,
+        storeName,
+        staffName,
+        detail,
+      }),
+    [rating, tone, customerName, storeName, staffName, detail],
   );
   const field =
     "mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-950 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100";
@@ -33,7 +42,7 @@ export function ReviewReplyBuilderPage() {
           口コミ返信テンプレート作成
         </h1>
         <p className="mt-4 max-w-3xl leading-7 text-slate-600">
-          評価と口コミ内容を選ぶだけで、失礼のない返信文をすぐに作れます。Googleマップなどの口コミ返信の下書きにご利用ください。
+          星評価、口コミで触れられた内容、文体を選ぶと、自然な返信文の下書きを作れます。Googleマップなどへ投稿する前の文章整理にご利用ください。
         </p>
         <div className="mt-5 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm leading-6 text-blue-950">
           <strong>AI不使用・ブラウザ内で処理。</strong>{" "}
@@ -93,6 +102,15 @@ export function ReviewReplyBuilderPage() {
                 />
               </label>
             </div>
+            <label className="mt-4 block text-sm font-bold text-slate-700">
+              対応者名・店員名（任意）
+              <input
+                value={staffName}
+                onChange={(event) => setStaffName(event.target.value)}
+                placeholder="例：佐藤（敬称は入力不要）"
+                className={field}
+              />
+            </label>
             <label className="mt-4 block text-sm font-bold text-slate-700">
               触れたい内容（任意）
               <input

@@ -22,4 +22,15 @@ describe("LP構成", () => {
     expect(result).toContain("想定読者: 子育て世代");
     expect(result).toContain("## 1.");
   });
+
+  test("Notion向けは制作チェックリストを含める", () => {
+    const result = toMarkdown(
+      "新サービス",
+      "小規模事業者",
+      createSections("service").slice(0, 1),
+      "notion",
+    );
+    expect(result).toContain("- [ ] 見出しを決める");
+    expect(result).toContain("- [ ] 画像・実績・リンクを用意する");
+  });
 });

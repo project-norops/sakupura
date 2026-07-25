@@ -8,21 +8,20 @@ import { siteUrl } from "@/lib/site";
 const tool = getToolBySlug("routine-task-loop");
 
 export const metadata: Metadata = {
-  title: "定期タスク・ルーティン管理",
+  title: "定期タスク専用チェックリスト｜次回日を自動更新",
   description:
-    "毎週・毎月の定期作業を登録し、完了すると次回予定日へ自動更新します。",
+    "毎週・毎月の定期業務だけを日常タスクから分けて管理し、完了すると次回予定日へ自動で繰り越します。",
   alternates: { canonical: "/tools/routine-task-loop" },
   openGraph: {
-    title: "定期タスク・ルーティン管理",
+    title: "定期タスク専用チェックリスト",
     description:
-      "毎週・毎月の定期作業を登録し、完了すると次回予定日へ自動更新します。",
+      "繰り返す定期業務を一覧化し、完了すると次回予定日へ自動で繰り越します。",
     url: "/tools/routine-task-loop",
   },
   twitter: {
     card: "summary",
-    title: "定期タスク・ルーティン管理",
-    description:
-      "毎週・毎月の定期作業を登録し、完了すると次回予定日へ自動更新します。",
+    title: "定期タスク専用チェックリスト",
+    description: "定期業務を日常のToDoから分け、完了と次回予定日を管理します。",
   },
 };
 
