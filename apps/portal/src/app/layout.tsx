@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   verification: {
     google: googleServices.siteVerification,
   },
+  other: {
+    "google-adsense-account": googleServices.adsenseClientId,
+  },
 };
 
 export default function RootLayout({

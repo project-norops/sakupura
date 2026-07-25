@@ -28,3 +28,11 @@
 - `npm run build`: passed（ポータルに`/tools/dynamic-pricing`を静的生成、単体互換アプリも成功）。
 - 本番依存監査でNext.js 16.2.11内のPostCSS／Sharpにhigh 3件を確認。安全な修正版Next.jsが未公開で、`npm audit fix --force`はNext.js 9への破壊的ダウングレードとなるため未適用。
 - Vercelデプロイ成功。本番トップと`/tools/dynamic-pricing`の200応答、内部リンク、Googleコード、sitemap掲載を確認。
+
+## 2026-07-25 10:20:00
+
+- Google各サービスの確認失敗を調査し、`norops.jp`のDNS未構成とVercel DNSレコード欠落を特定。
+- AdSense所有確認用の`google-adsense-account`メタタグをポータル全体へ追加。
+- `/ads.txt`を追加し、共通設定の公開者IDからGoogle AdSenseレコードを生成。
+- `npm run lint`: passed（両アプリ、警告なし）。
+- `npm run build`: passed（ポータルの`/ads.txt`を含め、両アプリの本番ビルド成功）。
