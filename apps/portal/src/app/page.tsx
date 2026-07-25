@@ -1,42 +1,7 @@
 import Link from "next/link";
-import apps, { type AppDefinition } from "@/data/apps";
+import apps from "@/data/apps";
+import { ToolDirectory } from "@/components/ToolDirectory";
 import { siteUrl } from "@/lib/site";
-
-function AppCard({ app, index }: { app: AppDefinition; index: number }) {
-  return (
-    <Link
-      href={app.href}
-      data-analytics-event="select_content"
-      data-analytics-content-type="tool"
-      data-analytics-item-id={app.slug}
-      className="group relative flex min-h-64 flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_12px_40px_-28px_rgba(15,23,42,0.45)] transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_24px_56px_-30px_rgba(37,99,235,0.45)] sm:p-7"
-    >
-      <div className="flex items-center justify-between gap-4">
-        <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-          {app.badge}
-        </span>
-        <span className="text-xs font-semibold text-slate-400">
-          TOOL {String(index + 1).padStart(2, "0")}
-        </span>
-      </div>
-      <h2 className="mt-7 text-2xl font-bold leading-snug tracking-tight text-slate-950">
-        {app.title}
-      </h2>
-      <p className="mt-4 flex-1 text-sm leading-7 text-slate-600">
-        {app.description}
-      </p>
-      <span className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-blue-700">
-        無料で使う
-        <span
-          aria-hidden="true"
-          className="transition-transform group-hover:translate-x-1"
-        >
-          →
-        </span>
-      </span>
-    </Link>
-  );
-}
 
 export default function HomePage() {
   const structuredData = {
@@ -130,11 +95,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
-          {apps.map((app, index) => (
-            <AppCard key={app.id} app={app} index={index} />
-          ))}
-        </div>
+        <ToolDirectory apps={apps} />
       </section>
 
       <section className="border-y border-slate-200 bg-white">
