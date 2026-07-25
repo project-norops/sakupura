@@ -1,5 +1,13 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-26（ミニサービス No.4〜No.6 本番リリース完了）
+
+- PR [#6](https://github.com/project-norops/sakupura/pull/6) を`main`へマージ。マージコミットは`075a6b636f969982be1f0824d0ffc39420e56df5`。
+- Vercel Project `100apps-portal`のProductionデプロイ`dpl_FQrFynkDR1QRkMaTy8PyVfvC7usu`がReadyとなり、`https://www.norops.jp`へエイリアスされたことを確認。
+- 本番トップ、`/tools/review-reply-builder`、`/tools/lp-structure-builder`、`/tools/routine-task-loop`がすべてHTTP 200を返すことを確認。
+- 本番HTMLで、口コミ返信の「物販・EC」と色分け案内、LP構成案のNotion出力、定期タスクの「未了に戻す」が反映済みであることを確認。
+- No.4〜No.6は台帳上`published`。`announceOnX: false`を維持したため、今回のリリースに伴うX自動告知は実行していない。
+
 ## 2026-07-26（口コミ返信と定期タスクの操作改善）
 
 - 口コミ返信テンプレートへ「サービス業」「物販・EC」の業態選択を追加し、高評価時の案内と低評価時の確認・改善文を業態別に切り替え。
