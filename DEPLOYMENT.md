@@ -41,6 +41,19 @@ npm run create:tool -- --slug example-tool --title "表示名" --description "�
 実装後は`npm run check`で構成検査、lint、本番ビルドをまとめて実行してから
 `main`へPushします。
 
+## Xリリース告知
+
+告知文はサービス台帳の`releasePost`から生成します。
+
+```bash
+npm run release:post -- --slug example-tool
+```
+
+実投稿にはX Developer AppのUser Access TokenをGitHub Repository Secret
+`X_USER_ACCESS_TOKEN`へ登録します。GitHub Actionsの
+`Announce released tool on X`を手動実行し、公開済みサービスのslugを指定します。
+通常のpushでは投稿しないため、未公開情報や重複投稿を防げます。
+
 新しい単体Next.jsアプリやVercel Projectは作成しません。既存の単体互換アプリも、
 本番公開先はポータル内の`/tools/<service-name>`とします。
 

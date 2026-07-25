@@ -25,10 +25,11 @@ npm run create:tool -- --slug example-tool --title "表示名" --description "�
 ## 完了条件
 
 1. `npm run check:architecture`
-2. `npm run lint`
-3. `npm run build`
-4. `DEVELOPMENT_LOG.md`へ日時、変更内容、検証結果を追記
-5. `git add`、`git commit`、`git push`
-6. 本番に影響する変更はVercelの成功と公開URLの応答を確認
+2. `npm run check:content`
+3. `npm run lint`
+4. `npm run build`
+5. `DEVELOPMENT_LOG.md`へ日時、変更内容、検証結果を追記
+6. `git add`、`git commit`、`git push`
+7. 本番に影響する変更はVercelの成功と公開URLの応答を確認
 
 エラーを無視して完了扱いにしない。秘密情報をコミットしない。破壊的操作は対象と復旧方法を確認してから行う。

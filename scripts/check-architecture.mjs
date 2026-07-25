@@ -66,6 +66,15 @@ assert(
     "node scripts/check-architecture.mjs",
   "構成検査コマンドが存在",
 );
+assert(
+  rootPackage.scripts?.["check:content"] === "node scripts/check-content.mjs",
+  "コンテンツ品質検査が存在",
+);
+assert(
+  rootPackage.scripts?.["release:post"] ===
+    "node scripts/generate-release-post.mjs",
+  "X告知文生成コマンドが存在",
+);
 
 const vercel = readJson("vercel.json");
 assert(vercel.framework === "nextjs", "Vercel frameworkはNext.js");
@@ -122,7 +131,14 @@ for (const tool of manifest) {
   );
   assert(tool.href === expectedHref, `${label}: 公開URLが規約どおり`);
   assert(
-    Boolean(tool.title && tool.description && tool.badge && tool.componentName),
+    Boolean(
+      tool.title &&
+      tool.description &&
+      tool.badge &&
+      tool.componentName &&
+      tool.content &&
+      tool.releasePost,
+    ),
     `${label}: 表示情報が揃っている`,
   );
   registeredPackages.add(tool.slug);
@@ -163,6 +179,10 @@ for (const tool of manifest) {
         routeSource.includes(tool.componentName),
       `${label}: routeが登録componentを使用`,
     );
+    assert(
+      routeSource.includes("ToolGuide") && routeSource.includes("tool.content"),
+      `${label}: routeが固有ガイドを表示`,
+    );
   }
   assert(
     portalPackage.dependencies?.[expectedPackageName] ===
@@ -200,7 +220,14 @@ for (const requiredPath of [
   ["apps", "portal", "src", "app", "robots.ts"],
   ["apps", "portal", "src", "app", "sitemap.ts"],
   ["apps", "portal", "src", "app", "ads.txt", "route.ts"],
+  ["apps", "portal", "src", "app", "privacy", "page.tsx"],
+  ["apps", "portal", "src", "app", "disclaimer", "page.tsx"],
   ["packages", "shared-ui", "GoogleServices.ts"],
+  ["packages", "shared-ui", "BookmarkButton.tsx"],
+  ["packages", "shared-ui", "ToolGuide.tsx"],
+  [".github", "copilot-instructions.md"],
+  [".github", "instructions", "tools.instructions.md"],
+  [".github", "workflows", "announce-tool.yml"],
   ["ARCHITECTURE.md"],
   ["DEPLOYMENT.md"],
 ]) {
@@ -209,6 +236,23 @@ for (const requiredPath of [
     `${requiredPath.join("/")}が存在`,
   );
 }
+
+const footerSource = readText("packages", "shared-ui", "Footer.tsx");
+assert(
+  footerSource.includes("/privacy") && footerSource.includes("/disclaimer"),
+  "共通footerに法務ページへのリンクが存在",
+);
+const qualityWorkflow = readText(".github", "workflows", "quality.yml");
+assert(
+  qualityWorkflow.includes("npm run check:content"),
+  "CIがコンテンツ品質を検査",
+);
+const announceWorkflow = readText(".github", "workflows", "announce-tool.yml");
+assert(
+  announceWorkflow.includes("workflow_dispatch") &&
+    !announceWorkflow.includes("branches:"),
+  "X投稿は手動workflowだけで実行",
+);
 
 const googleValuePatterns = [/G-[A-Z0-9]{6,}/g, /ca-pub-\d{10,}/g];
 const sourceRoots = [

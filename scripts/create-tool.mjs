@@ -202,6 +202,51 @@ manifest.push({
   badge,
   packageName,
   componentName,
+  content: {
+    summary: `TODO: ${title}が解決する課題、計算や処理の仕組み、利用者が得られる結果を具体的に説明してください。`,
+    audience:
+      "TODO: どのような状況の利用者に向いているかを具体的に説明してください。",
+    features: [
+      {
+        title: "TODO: 特徴1",
+        description:
+          "TODO: 他のツールと区別できる具体的な機能を説明してください。",
+      },
+      {
+        title: "TODO: 特徴2",
+        description: "TODO: 入力・処理・出力の価値を具体的に説明してください。",
+      },
+      {
+        title: "TODO: 特徴3",
+        description:
+          "TODO: 保存・共有・安全性など固有の価値を説明してください。",
+      },
+    ],
+    steps: [
+      "TODO: 最初に入力または選択する内容を具体的に説明してください。",
+      "TODO: ツール内で行う操作と確認ポイントを具体的に説明してください。",
+      "TODO: 結果の読み方と次の行動を具体的に説明してください。",
+    ],
+    notes: [
+      "TODO: 計算条件、データ保存、対象外のケースなど重要な制約を説明してください。",
+      "TODO: 公式情報や専門家の確認が必要になるケースを説明してください。",
+    ],
+    faq: [
+      {
+        question: "TODO: よくある質問1",
+        answer: "TODO: 利用前に迷いやすい点へ具体的に回答してください。",
+      },
+      {
+        question: "TODO: よくある質問2",
+        answer: "TODO: データや結果の扱いについて具体的に回答してください。",
+      },
+      {
+        question: "TODO: よくある質問3",
+        answer: "TODO: 制約や応用方法について具体的に回答してください。",
+      },
+    ],
+  },
+  releasePost: `TODO: ${title}の対象者、解決できる課題、主要機能を含むX告知文を作成してください。`,
 });
 writeFile(manifestPath, JSON.stringify(manifest, null, 2));
 

@@ -3,6 +3,8 @@ import apps from "@/data/apps";
 import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const staticPages = ["/privacy", "/disclaimer"];
+
   return [
     {
       url: siteUrl,
@@ -10,6 +12,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
+    ...staticPages.map(
+      (href) =>
+        ({
+          url: `${siteUrl}${href}`,
+          lastModified: new Date(),
+          changeFrequency: "yearly",
+          priority: 0.4,
+        }) satisfies MetadataRoute.Sitemap[number],
+    ),
     ...apps.map(
       (app) =>
         ({

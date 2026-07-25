@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import { DynamicPricingPage } from "@sakupla/dynamic-pricing";
+import { ToolGuide } from "@sakupla/shared-ui";
+import { getToolBySlug } from "@/data/apps";
+
+const tool = getToolBySlug("dynamic-pricing");
 
 export const metadata: Metadata = {
   title: "動的プライシング・収益シミュレーター | サクプラ",
@@ -8,5 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <DynamicPricingPage />;
+  return (
+    <>
+      <DynamicPricingPage />
+      <ToolGuide title={tool.title} content={tool.content} />
+    </>
+  );
 }

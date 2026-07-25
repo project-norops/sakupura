@@ -1,0 +1,28 @@
+name: Announce released tool on X
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Released tool slug (example: dynamic-pricing)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  announce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Publish approved announcement
+        run: npm run release:x -- --slug "${{ inputs.slug }}" --publish
+        env:
+          X_USER_ACCESS_TOKEN: ${{ secrets.X_USER_ACCESS_TOKEN }}

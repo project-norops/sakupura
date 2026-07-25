@@ -28,6 +28,8 @@ apps/portal/src/app/tools/<slug>/
 
 台帳を唯一のサービス一覧とし、ポータルカードとsitemapは台帳から生成する。新規サービスは`npm run create:tool`で追加する。
 
+各サービスは機能だけでなく、台帳内に対象者、固有機能、使い方、注意点、FAQ、リリース告知文を持つ。`ToolGuide`がその内容を共通レイアウトで表示し、`npm run check:content`が公開品質を検査する。
+
 ## 配信と外部サービス
 
 - GitHubの`main`へのpushをVercel本番デプロイへ接続する。
@@ -35,6 +37,7 @@ apps/portal/src/app/tools/<slug>/
 - canonical、robots、sitemapは`https://www.norops.jp`を基準にする。
 - GA4、Search Console、AdSenseの値は`packages/shared-ui/GoogleServices.ts`だけで管理し、各サービスへ直書きしない。
 - DNS、Vercelドメイン、Google管理画面はリポジトリ外の構成である。コードの存在だけで完了とせず、本番URLから確認する。
+- X告知は台帳から文面を生成する。実投稿はGitHub Actionsの手動workflowと`X_USER_ACCESS_TOKEN` Secretを使い、通常のpushだけで勝手に投稿しない。
 
 ## 現在の例外
 

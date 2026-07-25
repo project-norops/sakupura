@@ -49,3 +49,18 @@
 - 生成コマンドのドライランとテンプレート変数検査: passed。
 - Prettier検査: passed。
 - `npm run check`: passed（構成検査34項目、両アプリlint、両アプリ本番ビルド成功）。
+
+## 2026-07-25 13:28:16
+
+- 共通`BookmarkButton`を追加。PC、iOS、Android向けの保存方法とURLコピーを全ページで案内。
+- フッターへプライバシーポリシー、免責事項、トップへの共通リンクを追加し、`/privacy`と`/disclaimer`を新設。
+- AdSense、GA4、Cookie、CMP、ブラウザ内データ保存をプライバシーポリシーへ明記し、法務ページをsitemapへ追加。
+- 共通`ToolGuide`を追加し、各ツールにsummary、対象者、固有機能3件、使い方3件、注意点2件、FAQ3件を表示する構成へ変更。
+- `npm run check:content`を追加。TODO、説明不足、重複summary、ガイド総量、X告知文をCIで検査。
+- 動的プライシングへ固有の説明、使い方、制約、FAQ、リリース告知文を追加。
+- X告知文生成とドライランを追加。実投稿は`X_USER_ACCESS_TOKEN`を使う手動GitHub Actionsに限定し、通常pushからの誤投稿を防止。
+- `.github/copilot-instructions.md`とpath固有instructionsを追加し、現行リポジトリ構成、品質基準、外部操作制限をCopilotへ常時伝達。
+- モバイル幅の実画面で横スクロールなし、ブックマークdialog、ツールガイド、法務ページ、外部リンクを確認。
+- `npm run create:tool -- --dry-run`: passed。
+- X告知文生成・投稿ドライラン: passed（実投稿なし）。
+- `npm run check`: passed（構成検査47項目、コンテンツ品質検査、両アプリlint、両アプリ本番ビルド成功）。
