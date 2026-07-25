@@ -326,6 +326,21 @@ assert(
     announceWorkflow.includes("git push"),
   "X投稿成功後に告知状態を台帳へ記録",
 );
+for (const secretName of [
+  "X_API_KEY",
+  "X_API_KEY_SECRET",
+  "X_ACCESS_TOKEN",
+  "X_ACCESS_TOKEN_SECRET",
+]) {
+  assert(
+    announceWorkflow.includes(`secrets.${secretName}`),
+    `手動X告知は${secretName}をRepository Secretから取得`,
+  );
+}
+assert(
+  !announceWorkflow.includes("X_USER_ACCESS_TOKEN"),
+  "期限更新のない単一OAuth 2.0 Tokenへ依存しない",
+);
 const scheduledReleaseWorkflow = readText(
   ".github",
   "workflows",
@@ -349,6 +364,17 @@ assert(
     scheduledReleaseWorkflow.includes("release:x"),
   "X告知は本番確認成功後だけ実行",
 );
+for (const secretName of [
+  "X_API_KEY",
+  "X_API_KEY_SECRET",
+  "X_ACCESS_TOKEN",
+  "X_ACCESS_TOKEN_SECRET",
+]) {
+  assert(
+    scheduledReleaseWorkflow.includes(`secrets.${secretName}`),
+    `予約X告知は${secretName}をRepository Secretから取得`,
+  );
+}
 assert(
   scheduledReleaseWorkflow.includes("group: release-state-writes") &&
     announceWorkflow.includes("group: release-state-writes"),

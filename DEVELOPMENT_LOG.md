@@ -1,5 +1,12 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-26（X予約投稿の長期認証対応）
+
+- 更新処理を持たない単一OAuth 2.0 User Access Token方式を廃止し、無人運用向けにOAuth 1.0a User Contextへ変更。
+- X API Key／SecretとユーザーAccess Token／Secretの4情報をGitHub Repository Secretからだけ取得し、HMAC-SHA1でリクエストごとに署名する実装を追加。
+- RFC 3986エンコード、RFC 5849既知署名、Secret不足時の停止をNode標準テストで検証。
+- 手動告知と予約公開workflowの両方を同じ認証方式へ統一。実投稿およびRepository Variableの有効化は行っていない。
+
 ## 2026-07-25（予約公開・X告知自動化基盤）
 
 - 公開時刻を迎えた`scheduled`ツールだけを検出し、`published`へ変更する`release:due`を追加。
