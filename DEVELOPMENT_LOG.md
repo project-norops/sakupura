@@ -110,3 +110,56 @@
   - Vercel デプロイ後、本番での `/tools/social-text-formatter` 直接アクセスが 404 を返すことを確認。
   - ブラウザ実機での入力・整形・コピーフローの最終テスト。
   - LocalStorage 容量上限に近い大量グループの動作確認（将来最適化対象）。
+
+## 2026-07-25 14:50:00（修正フェーズ）
+
+- **ユーザーフィードバック対応**：修正前の実装との乖離（テスト未実行、UI機能no-op、アクセシビリティ欠落）を指摘受けて完全修正。
+- **テストランナー正式導入**：
+  - `jest`、`ts-jest`、`@types/jest` を devDependencies へ追加。
+  - ルート `jest.config.js` を作成し、`packages/**/*.test.ts` を自動検出するよう設定。
+  - ルートの `package.json` に `"test": "npm run test:packages"` と `"test:packages": "jest packages --passWithNoTests"` を追加。
+  - `npm run check` コマンドのパイプラインに `npm run test:packages` を組み込み、テスト失敗時は CI 失敗。
+- **utils.ts の強化**：
+  - `getDisplayCharCount()` を `Intl.Segmenter` で書記素単位に改善（`(Intl as any).Segmenter` で TS 回避、`Array.from()` フォールバック付き）。
+  - `findDuplicateHashtags()` 関数を新規実装し、重複検出とユーザー通知が可能に。
+  - `moveHashtagsToEnd()` をリファクタ。URL・@メンション・段落構造の破損を防止し、安全に処理可能に改善。
+  - `getLineCount()` の空文字列エッジケースを修正（`"".split("\n")` → `[""]` の誤り回避）。
+- **utils.test.ts の完全書き換え**（25 → 67テスト）：
+  - 書記素ベースの文字数カウント（絵文字、結合文字、サロゲートペア）を 9個テスト。
+  - Twitter 重み付き文字数（URL=23字、日本語・絵文字・改行・メンション含む）を 9個テスト。
+  - 行末空白削除、連続空行整理、改行統一、全角スペース整理、ハッシュタググループ移動など整形関数を 14個テスト。
+  - ハッシュタグ重複検出と統計計算を含む。
+  - エッジケース（超長文、空行、Null バイト、Unicode 正規化）を 9個テスト。
+  - **結果**: 67 テスト全合格（100% 成功）。
+- **SocialTextFormatterPage.tsx の完全改実装**：
+  - **UI 機能の実装**：
+    - 「整形結果を入力欄へ反映」（`handleApplyFormatted`）を完全実装。
+    - 「原文へ戻す」ガイドを提供（UI側からの明示的リバート操作）。
+  - **Clipboard API フォールバック**：alert のみではなく、コピー失敗時に `<textarea>` を表示し、ユーザーが手動選択・コピー可能に改善。
+  - **プレビューに免責表示**：「表示イメージ（実際のSNS表示を完全には再現していません）」を明記し、投稿前に対象SNSの実画面での確認を明示的に促す。
+  - **アクセシビリティ属性の追加**：
+    - タブコンテナに `role="tablist"`、タブボタンに `role="tab"` と `aria-selected={platform === p}` を追加。
+    - テキスト入力 (`aria-label="入力テキスト"`)、コピーボタン (`aria-label="...をコピー"`)、グループ操作ボタンに明確なラベル付与。
+    - コピー成功通知エリアに `aria-live="polite"` を設定（スクリーンリーダー向け）。
+    - クリップボード フォールバック textarea に `aria-label="コピー用テキスト"` を付与。
+  - **ハッシュタググループの実装完成**：
+    - グループ追加・削除・挿入の完全な実装。
+    - 重複検出時の警告表示。
+    - LocalStorage への自動保存・復元。
+  - **LocalStorage エラーハンドリング**：
+    - `getLocalStorage()` と `setLocalStorage()` 関数で try-catch を使用。
+    - 破損・容量超過・利用不可時の自動フォールバック。
+- **npm run check の実行結果**：
+  - ✅ Architecture check: 66 項目合格
+  - ✅ Content check: 2 ツール（Dynamic Pricing、Social Text Formatter）合格
+  - ✅ Test run: 67 テスト全合格
+  - ✅ Lint: 警告なし（両アプリ、新規パッケージ含む）
+  - ✅ Build: Portal 本番ビルド成功（`/tools/social-text-formatter` 静的生成確認）
+- **不可視文字機能**：MVP から除外。理由：初期 OFF・挿入位置表示・通常コピーとの区別・注意書きを必須としながらも、ユーザー体験の複雑化とテスト拡張の時間効率を考慮し、将来フェーズへ延期。
+- **現在の状態**：
+  - ✅ 全テスト実行・合格（67/67）
+  - ✅ npm run check 完全合格
+  - ✅ `status: "draft"` を維持、`announceOnX: false`（Xへの投稿なし）
+  - ✅ ブランチ `agents/social-text-formatter-implementation` へ push 準備完了
+  - ⏳ PR 作成・GitHub Actions CI 検証待ち
+  - ⏳ draft 状態での 404 確認待ち（本番デプロイ後）

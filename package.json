@@ -13,7 +13,9 @@
     "check:content": "node scripts/check-content.mjs",
     "release:post": "node scripts/generate-release-post.mjs",
     "release:x": "node scripts/post-to-x.mjs",
-    "check": "npm run check:architecture && npm run check:content && npm run lint && npm run build",
+    "test": "jest --passWithNoTests",
+    "test:packages": "jest packages --passWithNoTests",
+    "check": "npm run check:architecture && npm run check:content && npm run test:packages && npm run lint && npm run build",
     "dev:portal": "npm --workspace apps/portal run dev",
     "build:portal": "npm --workspace apps/portal run build",
     "dev:dynamic-pricing": "npm --workspace apps/001-dynamic-pricing run dev",
@@ -28,6 +30,9 @@
     "concurrently": "^8.0.0",
     "typescript": "^5.5.0",
     "eslint": "^9.0.0",
-    "prettier": "^3.0.0"
+    "prettier": "^3.0.0",
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0",
+    "ts-jest": "^29.0.0"
   }
 }

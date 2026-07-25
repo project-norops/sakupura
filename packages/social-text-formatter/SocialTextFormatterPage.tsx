@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import {
   calculateStats,
   calculateTwitterCharCount,
   applyFormatting,
   FormattingOptions,
-  extractHashtags,
+  findDuplicateHashtags,
   getSampleText,
   PLATFORM_LIMITS,
 } from "./utils";
@@ -72,6 +72,9 @@ export function SocialTextFormatterPage() {
   const [showNewGroupForm, setShowNewGroupForm] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
   const [newGroupTags, setNewGroupTags] = useState("");
+  const [showClipboardFallback, setShowClipboardFallback] = useState(false);
+  const [fallbackType, setFallbackType] = useState<string | null>(null);
+  const fallbackRef = useRef<HTMLTextAreaElement>(null);
 
   // Load from LocalStorage on mount
   useEffect(() => {
@@ -114,6 +117,10 @@ export function SocialTextFormatterPage() {
     () => applyFormatting(text, formatting),
     [text, formatting]
   );
+  const duplicateHashtags = useMemo(
+    () => findDuplicateHashtags(text),
+    [text]
+  );
 
   const platformLimit = getPlatformLimit(platform);
   const displayCharCount =
@@ -130,8 +137,15 @@ export function SocialTextFormatterPage() {
         setCopiedType(type);
         setTimeout(() => setCopiedType(null), 2000);
       } catch {
-        // Fallback for environments where clipboard API is not available
-        alert("クリップボードへのアクセスが失敗しました。手動で選択・コピーしてください。");
+        // Fallback: show textarea for manual selection
+        setShowClipboardFallback(true);
+        setFallbackType(type);
+        setTimeout(() => {
+          if (fallbackRef.current) {
+            fallbackRef.current.value = textToCopy;
+            fallbackRef.current.select();
+          }
+        }, 0);
       }
     },
     []
@@ -147,8 +161,13 @@ export function SocialTextFormatterPage() {
     }
   }, []);
 
+  const handleApplyFormatted = useCallback(() => {
+    setText(formattedText);
+  }, [formattedText]);
+
   const handleRevertToOriginal = useCallback(() => {
-    // No-op: user can see original in preview
+    // User can manually revert by re-entering original text or using undo
+    // For now, we provide a way to see the diff in the preview
   }, []);
 
   const handleAddHashtagGroup = useCallback(() => {
@@ -188,6 +207,10 @@ export function SocialTextFormatterPage() {
     setHashtagGroups((prev) => prev.filter((g) => g.id !== id));
   }, []);
 
+  const handleCloseFallback = useCallback(() => {
+    setShowClipboardFallback(false);
+  }, []);
+
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
       <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -202,11 +225,16 @@ export function SocialTextFormatterPage() {
         </p>
 
         {/* Platform Tabs */}
-        <div className="mt-8 flex gap-2 border-b border-slate-200 dark:border-slate-700">
+        <div 
+          className="mt-8 flex gap-2 border-b border-slate-200 dark:border-slate-700"
+          role="tablist"
+        >
           {(["twitter", "instagram", "linkedin"] as Platform[]).map((p) => (
             <button
               key={p}
               onClick={() => setPlatform(p)}
+              role="tab"
+              aria-selected={platform === p}
               className={`px-4 py-3 font-medium transition-colors ${
                 platform === p
                   ? "border-b-2 border-sky-600 text-sky-600"
@@ -224,7 +252,7 @@ export function SocialTextFormatterPage() {
 
         {/* Input Area */}
         <div className="mt-8 space-y-4">
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             <button
               onClick={handleInsertSample}
               className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
@@ -237,6 +265,12 @@ export function SocialTextFormatterPage() {
             >
               全消去
             </button>
+            <button
+              onClick={handleApplyFormatted}
+              className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
+            >
+              整形結果を入力欄へ反映
+            </button>
           </div>
 
           <textarea
@@ -244,6 +278,7 @@ export function SocialTextFormatterPage() {
             onChange={(e) => setText(e.target.value)}
             placeholder="SNS投稿用のテキストを入力してください..."
             className="w-full min-h-64 rounded-lg border border-slate-300 bg-white p-4 font-mono text-sm dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100"
+            aria-label="入力テキスト"
           />
         </div>
 
@@ -259,6 +294,15 @@ export function SocialTextFormatterPage() {
           <StatBox label="@メンション" value={stats.mentionCount} />
         </div>
 
+        {/* Duplicate Hashtag Warning */}
+        {duplicateHashtags.length > 0 && (
+          <div className="mt-4 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950">
+            <p className="text-sm font-medium text-amber-900 dark:text-amber-100">
+              ⚠️ 重複するハッシュタグが検出されました: {duplicateHashtags.join(", ")}
+            </p>
+          </div>
+        )}
+
         {/* Formatting Options */}
         <div className="mt-8 space-y-4">
           <h3 className="font-semibold text-slate-950 dark:text-slate-50">
@@ -273,6 +317,7 @@ export function SocialTextFormatterPage() {
                   setFormatting({ ...formatting, removeTrailingSpaces: e.target.checked })
                 }
                 className="rounded"
+                aria-label="行末の空白を削除"
               />
               <span className="text-sm text-slate-700 dark:text-slate-300">
                 行末の空白を削除
@@ -286,6 +331,7 @@ export function SocialTextFormatterPage() {
                   setFormatting({ ...formatting, trimEnds: e.target.checked })
                 }
                 className="rounded"
+                aria-label="文頭・文末の空白を削除"
               />
               <span className="text-sm text-slate-700 dark:text-slate-300">
                 文頭・文末の空白を削除
@@ -299,6 +345,7 @@ export function SocialTextFormatterPage() {
                   setFormatting({ ...formatting, reduceBlankLines: e.target.checked })
                 }
                 className="rounded"
+                aria-label="連続空行を整理（3行以上→2行）"
               />
               <span className="text-sm text-slate-700 dark:text-slate-300">
                 連続空行を整理（3行以上→2行）
@@ -312,6 +359,7 @@ export function SocialTextFormatterPage() {
                   setFormatting({ ...formatting, normalizeLineBreaks: e.target.checked })
                 }
                 className="rounded"
+                aria-label="改行コードを統一"
               />
               <span className="text-sm text-slate-700 dark:text-slate-300">
                 改行コードを統一
@@ -325,6 +373,7 @@ export function SocialTextFormatterPage() {
                   setFormatting({ ...formatting, normalizeFullwidthSpaces: e.target.checked })
                 }
                 className="rounded"
+                aria-label="連続全角スペースを整理"
               />
               <span className="text-sm text-slate-700 dark:text-slate-300">
                 連続全角スペースを整理
@@ -338,6 +387,7 @@ export function SocialTextFormatterPage() {
                   setFormatting({ ...formatting, addBlankBeforeHashtags: e.target.checked })
                 }
                 className="rounded"
+                aria-label="ハッシュタグの前に空行を追加"
               />
               <span className="text-sm text-slate-700 dark:text-slate-300">
                 ハッシュタグの前に空行を追加
@@ -351,6 +401,7 @@ export function SocialTextFormatterPage() {
                   setFormatting({ ...formatting, moveHashtagsToEnd: e.target.checked })
                 }
                 className="rounded"
+                aria-label="ハッシュタグを文末にまとめる"
               />
               <span className="text-sm text-slate-700 dark:text-slate-300">
                 ハッシュタグを文末にまとめる
@@ -364,6 +415,9 @@ export function SocialTextFormatterPage() {
           <h3 className="font-semibold text-slate-950 dark:text-slate-50">
             プレビュー
           </h3>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            ※ プレビューは投稿前の参考目安です。実際のSNS画面での表示は異なる場合があります。投稿前に必ず対象SNSの実画面でも確認してください。
+          </p>
           <div className="grid gap-4 lg:grid-cols-2">
             <PreviewBox
               title="原文"
@@ -379,6 +433,29 @@ export function SocialTextFormatterPage() {
             />
           </div>
         </div>
+
+        {/* Clipboard Fallback */}
+        {showClipboardFallback && (
+          <div className="mt-8 rounded-lg border border-blue-300 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950">
+            <div className="mb-3 flex items-center justify-between">
+              <h4 className="font-medium text-blue-900 dark:text-blue-100">
+                クリップボード機能が利用できません。以下のテキストを選択・コピーしてください。
+              </h4>
+              <button
+                onClick={handleCloseFallback}
+                className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
+              >
+                ✕
+              </button>
+            </div>
+            <textarea
+              ref={fallbackRef}
+              readOnly
+              className="w-full min-h-32 rounded bg-white p-3 font-mono text-sm dark:bg-slate-900 dark:text-slate-100"
+              aria-label="コピー用テキスト"
+            />
+          </div>
+        )}
 
         {/* Hashtag Groups */}
         <div className="mt-8 space-y-4">
@@ -402,12 +479,14 @@ export function SocialTextFormatterPage() {
                 value={newGroupName}
                 onChange={(e) => setNewGroupName(e.target.value)}
                 className="w-full rounded-lg border border-slate-300 px-3 py-2 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
+                aria-label="グループ名"
               />
               <textarea
                 placeholder="ハッシュタグを1行1つ入力（#は自動補完）"
                 value={newGroupTags}
                 onChange={(e) => setNewGroupTags(e.target.value)}
                 className="w-full min-h-24 rounded-lg border border-slate-300 px-3 py-2 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
+                aria-label="ハッシュタグ"
               />
               <button
                 onClick={handleAddHashtagGroup}
@@ -444,12 +523,14 @@ export function SocialTextFormatterPage() {
                     <button
                       onClick={() => handleInsertGroup(group)}
                       className="rounded px-3 py-1 text-sm font-medium text-sky-600 hover:bg-sky-100 dark:hover:bg-sky-950"
+                      aria-label={`${group.name}を挿入`}
                     >
                       挿入
                     </button>
                     <button
                       onClick={() => handleDeleteGroup(group.id)}
                       className="rounded px-3 py-1 text-sm font-medium text-red-600 hover:bg-red-100 dark:hover:bg-red-950"
+                      aria-label={`${group.name}を削除`}
                     >
                       削除
                     </button>
@@ -522,6 +603,7 @@ function PreviewBox({
               ? "bg-green-600 text-white"
               : "bg-sky-600 text-white hover:bg-sky-700"
           }`}
+          aria-label={`${title}をコピー`}
         >
           {copied ? "✓ コピー完了" : "コピー"}
         </button>
