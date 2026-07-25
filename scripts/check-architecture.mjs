@@ -265,7 +265,10 @@ for (const requiredPath of [
   ["packages", "shared-ui", "GoogleServices.ts"],
   ["packages", "shared-ui", "AnalyticsEvents.tsx"],
   ["packages", "shared-ui", "BookmarkButton.tsx"],
+  ["packages", "shared-ui", "assets", "sakupura-mark.png"],
   ["packages", "shared-ui", "ToolGuide.tsx"],
+  ["apps", "portal", "src", "app", "icon.png"],
+  ["apps", "portal", "src", "app", "apple-icon.png"],
   [".github", "copilot-instructions.md"],
   [".github", "instructions", "tools.instructions.md"],
   [".github", "workflows", "announce-tool.yml"],
@@ -286,6 +289,12 @@ const footerSource = readText("packages", "shared-ui", "Footer.tsx");
 assert(
   footerSource.includes("/privacy") && footerSource.includes("/disclaimer"),
   "共通footerに法務ページへのリンクが存在",
+);
+const headerSource = readText("packages", "shared-ui", "Header.tsx");
+assert(
+  headerSource.includes('from "./assets/sakupura-mark.png"') &&
+    headerSource.includes("brandMark"),
+  "共通headerがサクプラのブランドアイコンを表示",
 );
 const analyticsSource = readText(
   "packages",

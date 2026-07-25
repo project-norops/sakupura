@@ -1,6 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { BookmarkButton } from "./BookmarkButton";
 import { ShareButton } from "./ShareButton";
+import brandMark from "./assets/sakupura-mark.png";
 
 export type HeaderProps = {
   title?: string;
@@ -15,16 +17,19 @@ export function Header({ title }: HeaderProps) {
             href="/"
             className="group inline-flex items-center gap-2.5 font-bold tracking-tight text-slate-950"
           >
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-slate-950 text-sm text-white transition group-hover:bg-blue-600">
-              S
-            </span>
+            <Image
+              src={brandMark}
+              alt=""
+              aria-hidden="true"
+              className="h-9 w-9 rounded-full ring-1 ring-slate-200 transition duration-200 group-hover:scale-105 group-hover:ring-blue-300"
+            />
             <span>サクプラ</span>
             <span className="hidden text-xs font-medium text-slate-400 sm:inline">
               by NOROPS
             </span>
           </Link>
           {title ? (
-            <p className="hidden truncate pl-[42px] text-xs text-slate-500 md:block">
+            <p className="hidden truncate pl-[46px] text-xs text-slate-500 md:block">
               {title}
             </p>
           ) : null}
