@@ -26,8 +26,9 @@
     "lint:portal": "npm --workspace apps/portal run lint",
     "lint:dynamic-pricing": "npm --workspace apps/001-dynamic-pricing run lint",
     "lint:social-text-formatter": "eslint packages/social-text-formatter",
+    "lint:email-signature-generator": "eslint packages/email-signature-generator",
     "dev": "npx concurrently \"npm run dev:portal\" \"npm run dev:dynamic-pricing\"",
-    "lint": "npm run lint:portal && npm run lint:dynamic-pricing && npm run lint:social-text-formatter",
+    "lint": "npm run lint:portal && npm run lint:dynamic-pricing && npm run lint:social-text-formatter && npm run lint:email-signature-generator",
     "build": "npm run build:portal && npm run build:dynamic-pricing"
   },
   "devDependencies": {
