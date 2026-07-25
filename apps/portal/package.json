@@ -11,6 +11,9 @@
   "dependencies": {
     "@sakupla/dynamic-pricing": "file:../../packages/dynamic-pricing",
     "@sakupla/email-signature-generator": "file:../../packages/email-signature-generator",
+    "@sakupla/lp-structure-builder": "file:../../packages/lp-structure-builder",
+    "@sakupla/review-reply-builder": "file:../../packages/review-reply-builder",
+    "@sakupla/routine-task-loop": "file:../../packages/routine-task-loop",
     "@sakupla/shared-ui": "file:../../packages/shared-ui",
     "@sakupla/social-text-formatter": "file:../../packages/social-text-formatter",
     "next": "16.2.11",
