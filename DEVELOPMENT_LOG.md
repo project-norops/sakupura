@@ -45,6 +45,7 @@
 - サービス一覧を`tools.json`へ一元化し、ポータルカードとsitemapが同じ台帳を利用する構成へ変更。
 - `npm run check:architecture`を追加し、Vercel設定、許可アプリ、台帳、package、route、依存、SEO・Google連携など34項目を自動検査。
 - GitHub Actionsへ構成検査、lint、本番ビルドを追加。Tailwind走査対象を全service packageへ拡張。
+- GitHub Actions公式ActionをNode.js 24対応の`checkout@v6`、`setup-node@v6`で固定。
 - 生成コマンドのドライランとテンプレート変数検査: passed。
 - Prettier検査: passed。
 - `npm run check`: passed（構成検査34項目、両アプリlint、両アプリ本番ビルド成功）。
