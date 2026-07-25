@@ -76,9 +76,18 @@ assert(
   "X告知文生成コマンドが存在",
 );
 assert(
+  rootPackage.scripts?.["release:due"] ===
+    "node scripts/release-schedule.mjs" &&
+    rootPackage.scripts?.["release:verify"] ===
+      "node scripts/verify-release.mjs",
+  "予約公開と本番確認コマンドが存在",
+);
+assert(
   rootPackage.scripts?.["test"] === "jest" &&
-    rootPackage.scripts?.["test:packages"] === "jest packages",
-  "テストランナーが統合され、--passWithNoTests なしで必須化",
+    rootPackage.scripts?.["test:packages"] ===
+      "jest packages && npm run test:release" &&
+    rootPackage.scripts?.["test:release"] === "node --test scripts/*.test.mjs",
+  "アプリと予約公開のテストランナーが統合され、必須化",
 );
 assert(
   rootPackage.scripts?.["check"] ===
@@ -260,6 +269,9 @@ for (const requiredPath of [
   [".github", "copilot-instructions.md"],
   [".github", "instructions", "tools.instructions.md"],
   [".github", "workflows", "announce-tool.yml"],
+  [".github", "workflows", "scheduled-release.yml"],
+  ["scripts", "release-schedule.mjs"],
+  ["scripts", "verify-release.mjs"],
   ["ARCHITECTURE.md"],
   ["ANALYTICS.md"],
   ["DEPLOYMENT.md"],
@@ -313,6 +325,34 @@ assert(
     announceWorkflow.includes("Record successful announcement") &&
     announceWorkflow.includes("git push"),
   "X投稿成功後に告知状態を台帳へ記録",
+);
+const scheduledReleaseWorkflow = readText(
+  ".github",
+  "workflows",
+  "scheduled-release.yml",
+);
+assert(
+  scheduledReleaseWorkflow.includes("schedule:") &&
+    scheduledReleaseWorkflow.includes("workflow_dispatch:") &&
+    scheduledReleaseWorkflow.includes("SCHEDULED_RELEASES_ENABLED"),
+  "予約公開は定期実行・手動確認・明示的な有効化スイッチを持つ",
+);
+assert(
+  scheduledReleaseWorkflow.includes("npm run check") &&
+    scheduledReleaseWorkflow.includes("release:verify") &&
+    scheduledReleaseWorkflow.includes("Roll back failed release") &&
+    scheduledReleaseWorkflow.includes("--now"),
+  "予約公開は品質検査・本番確認・失敗時ロールバックを行う",
+);
+assert(
+  scheduledReleaseWorkflow.includes("steps.verify.outcome == 'success'") &&
+    scheduledReleaseWorkflow.includes("release:x"),
+  "X告知は本番確認成功後だけ実行",
+);
+assert(
+  scheduledReleaseWorkflow.includes("group: release-state-writes") &&
+    announceWorkflow.includes("group: release-state-writes"),
+  "予約公開と手動X告知は同時に台帳を変更しない",
 );
 const createToolSource = readText("scripts", "create-tool.mjs");
 assert(

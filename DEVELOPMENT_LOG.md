@@ -1,5 +1,15 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-25（予約公開・X告知自動化基盤）
+
+- 公開時刻を迎えた`scheduled`ツールだけを検出し、`published`へ変更する`release:due`を追加。
+- 予約判定の境界時刻、未来日時、公開済み・下書き除外、不正日時をNode標準テストで検証。
+- 本番URLが200を返し、対象ツール名を含むまで待機する`release:verify`を追加。
+- 15分間隔の`Scheduled tool release` workflowを追加。初期状態は停止し、Repository Variable `SCHEDULED_RELEASES_ENABLED=true`の場合だけ定期実行する。
+- 公開前の全品質検査、本番反映確認、失敗時の台帳ロールバック、成功後だけのX告知を固定化。
+- 手動dry runを用意し、外部変更なしで公開対象を事前確認できるようにした。
+- 既存の`apps/portal/next-env.d.ts`ローカル変更には触れていない。
+
 ## 🛡️ AI開発 ガードレール規約
 
 1. [cite_start]**基盤非破壊ルール**: 共通UI・ログ収集関数・共通レイアウトを変更・削除しないこと 。

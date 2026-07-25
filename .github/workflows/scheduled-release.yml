@@ -1,0 +1,95 @@
+name: Scheduled tool release
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "公開対象の確認だけを行う"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-state-writes
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.event_name == 'workflow_dispatch' || vars.SCHEDULED_RELEASES_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Run all quality guardrails
+        run: npm run check
+      - name: Find due tools
+        id: due
+        shell: bash
+        run: |
+          release_now="$(date --utc +%Y-%m-%dT%H:%M:%SZ)"
+          due_json="$(npm run --silent release:due -- --json --now "$release_now")"
+          echo "now=$release_now" >> "$GITHUB_OUTPUT"
+          echo "json=$due_json" >> "$GITHUB_OUTPUT"
+          echo "count=$(node -e 'console.log(JSON.parse(process.argv[1]).length)' "$due_json")" >> "$GITHUB_OUTPUT"
+          echo "slugs=$(node -e 'console.log(JSON.parse(process.argv[1]).map(x => x.slug).join(","))' "$due_json")" >> "$GITHUB_OUTPUT"
+      - name: Show dry-run result
+        if: steps.due.outputs.count != '0'
+        env:
+          DUE_TOOLS_JSON: ${{ steps.due.outputs.json }}
+        run: printf '%s\n' "$DUE_TOOLS_JSON"
+      - name: Stop after dry run
+        if: github.event_name == 'workflow_dispatch' && inputs.dry_run
+        run: echo "Dry run completed. No files were changed."
+      - name: Back up release registry
+        if: steps.due.outputs.count != '0' && !(github.event_name == 'workflow_dispatch' && inputs.dry_run)
+        run: cp apps/portal/src/data/tools.json "$RUNNER_TEMP/tools-before-release.json"
+      - name: Publish due tools
+        if: steps.due.outputs.count != '0' && !(github.event_name == 'workflow_dispatch' && inputs.dry_run)
+        run: npm run release:due -- --apply --now "${{ steps.due.outputs.now }}"
+      - name: Commit release state
+        if: steps.due.outputs.count != '0' && !(github.event_name == 'workflow_dispatch' && inputs.dry_run)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/portal/src/data/tools.json
+          git commit -m "chore(release): publish scheduled tools"
+          git push
+      - name: Verify production deployment
+        id: verify
+        if: steps.due.outputs.count != '0' && !(github.event_name == 'workflow_dispatch' && inputs.dry_run)
+        continue-on-error: true
+        run: npm run release:verify -- --slugs "${{ steps.due.outputs.slugs }}"
+      - name: Roll back failed release
+        if: steps.verify.outcome == 'failure'
+        run: |
+          cp "$RUNNER_TEMP/tools-before-release.json" apps/portal/src/data/tools.json
+          git add apps/portal/src/data/tools.json
+          git commit -m "revert(release): restore scheduled tool state"
+          git push
+          exit 1
+      - name: Announce verified tools on X
+        if: steps.verify.outcome == 'success'
+        env:
+          DUE_TOOLS_JSON: ${{ steps.due.outputs.json }}
+          X_USER_ACCESS_TOKEN: ${{ secrets.X_USER_ACCESS_TOKEN }}
+        shell: bash
+        run: |
+          mapfile -t announce_slugs < <(node -e 'for (const x of JSON.parse(process.env.DUE_TOOLS_JSON)) if (x.announceOnX) console.log(x.slug)')
+          for slug in "${announce_slugs[@]}"; do
+            npm run release:x -- --slug "$slug" --publish
+            git add apps/portal/src/data/tools.json
+            git commit -m "chore(release): record X announcement for $slug"
+            git push
+          done
