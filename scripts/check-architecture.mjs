@@ -277,11 +277,36 @@ for (const requiredPath of [
   ["scripts", "verify-release.mjs"],
   ["ARCHITECTURE.md"],
   ["ANALYTICS.md"],
+  ["PRODUCT_RESEARCH.md"],
+  ["PRODUCT_PLAN.md"],
+  ["ROADMAP.md"],
   ["DEPLOYMENT.md"],
 ]) {
   assert(
     fs.existsSync(path.join(rootDir, ...requiredPath)),
     `${requiredPath.join("/")}が存在`,
+  );
+}
+
+const agentsSource = readText("AGENTS.md");
+const copilotSource = readText(".github", "copilot-instructions.md");
+const toolInstructionsSource = readText(
+  ".github",
+  "instructions",
+  "tools.instructions.md",
+);
+const productPlanSource = readText("PRODUCT_PLAN.md");
+const roadmapSource = readText("ROADMAP.md");
+for (const [label, source] of [
+  ["AGENTS.md", agentsSource],
+  ["Copilot instructions", copilotSource],
+  ["ミニサービス固有ルール", toolInstructionsSource],
+  ["PRODUCT_PLAN.md", productPlanSource],
+  ["ROADMAP.md", roadmapSource],
+]) {
+  assert(
+    source.includes("PRODUCT_RESEARCH.md"),
+    `${label}が新規企画の調査基準を参照`,
   );
 }
 
