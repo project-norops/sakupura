@@ -170,8 +170,8 @@
       ]
     },
     "releasePost": "無料の「メール署名ジェネレーター」を公開しました。氏名や会社情報を入力するだけで、Gmail・Outlookに貼り付けられるビジネス署名を作成できます。登録不要・AI不使用で、入力内容はブラウザ内だけで処理します。",
-    "status": "draft",
-    "publishAt": null,
+    "status": "published",
+    "publishAt": "2026-07-26T03:02:03+09:00",
     "announceOnX": false,
     "announcedAt": null
   }
