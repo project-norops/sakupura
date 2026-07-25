@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 import "@testing-library/jest-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { EmailSignatureGeneratorPage } from "./EmailSignatureGeneratorPage";
 
@@ -36,9 +36,27 @@ test("loads a complete sample and renders the preview", async () => {
   expect(screen.getByDisplayValue("山田 太郎")).toBeInTheDocument();
   expect(screen.getByText("山田 太郎")).toBeInTheDocument();
   expect(screen.getByText("taro@example.com")).toBeInTheDocument();
+  expect(screen.getByText("メール")).toBeInTheDocument();
+  expect(screen.getByText("電話")).toBeInTheDocument();
+  expect(screen.getAllByText("住所")).toHaveLength(2);
   expect(
     screen.getByRole("button", { name: "書式付き署名をコピー" }),
   ).toBeEnabled();
+});
+
+test("uses a custom accent color in the copied preview", async () => {
+  const user = userEvent.setup();
+  render(<EmailSignatureGeneratorPage />);
+
+  await user.click(screen.getByRole("button", { name: "サンプルを試す" }));
+  const colorPicker = screen.getByLabelText("カスタムカラー");
+  fireEvent.input(colorPicker, { target: { value: "#123456" } });
+
+  expect(colorPicker).toHaveValue("#123456");
+  expect(screen.getByText("#123456")).toBeInTheDocument();
+  expect(screen.getByText("山田 太郎").parentElement).toHaveStyle({
+    borderLeftColor: "#123456",
+  });
 });
 
 test("copies the plain-text signature and reports success", async () => {

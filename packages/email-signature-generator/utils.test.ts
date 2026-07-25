@@ -5,6 +5,7 @@ import {
   generatePlainText,
   generateSignatureHtml,
   hasSignatureContent,
+  normalizeAccentColor,
   normalizeWebsite,
 } from "./utils";
 
@@ -31,7 +32,16 @@ describe("email signature utilities", () => {
     expect(normalizeWebsite(" ")).toBeNull();
   });
 
-  test("uses only the predefined accent colors", () => {
+  test("accepts safe custom colors and rejects CSS injection", () => {
+    expect(normalizeAccentColor("#12ABef")).toBe("#12abef");
+    expect(normalizeAccentColor("red")).toBe("#2563eb");
+
+    const customHtml = generateSignatureHtml({
+      ...SAMPLE_SIGNATURE,
+      accentColor: "#123456",
+    });
+    expect(customHtml).toContain("border-left:4px solid #123456");
+
     const html = generateSignatureHtml({
       ...SAMPLE_SIGNATURE,
       accentColor: "red; background:url(javascript:alert(1))",
@@ -54,10 +64,10 @@ describe("email signature utilities", () => {
       [
         "山田 太郎",
         "代表 / クリエイティブ事業部 / サクプラデザイン",
-        "Email: taro@example.com",
-        "Tel: 03-1234-5678",
+        "メール: taro@example.com",
+        "電話: 03-1234-5678",
         "Web: https://example.com",
-        "Address: 東京都千代田区1-2-3",
+        "住所: 東京都千代田区1-2-3",
       ].join("\n"),
     );
     expect(generatePlainText({ ...EMPTY_SIGNATURE, name: "山田" })).toBe(

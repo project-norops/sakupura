@@ -7,6 +7,7 @@ import {
   generatePlainText,
   generateSignatureHtml,
   hasSignatureContent,
+  normalizeAccentColor,
   type SignatureData,
 } from "./utils";
 
@@ -310,6 +311,26 @@ export function EmailSignatureGeneratorPage() {
                     </label>
                   ))}
                 </div>
+                <label className="mt-4 flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+                  <input
+                    type="color"
+                    aria-label="カスタムカラー"
+                    value={normalizeAccentColor(data.accentColor)}
+                    onInput={(event) =>
+                      update(
+                        "accentColor",
+                        (event.target as HTMLInputElement).value,
+                      )
+                    }
+                    className="h-11 w-14 cursor-pointer rounded-lg border border-slate-300 bg-white p-1"
+                  />
+                  <span className="text-sm font-bold text-slate-700">
+                    自由に選ぶ
+                    <span className="ml-2 font-mono text-xs font-medium uppercase text-slate-500">
+                      {normalizeAccentColor(data.accentColor)}
+                    </span>
+                  </span>
+                </label>
               </fieldset>
             )}
           </div>
@@ -319,7 +340,7 @@ export function EmailSignatureGeneratorPage() {
               2. プレビューしてコピー
             </h2>
             <p className="mt-2 text-sm leading-6 text-slate-500">
-              実際の表示はメールアプリや受信環境によって多少異なります。
+              コピーされる内容を表示しています。メールアプリや受信環境によって見た目が多少異なる場合があります。
             </p>
             <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm">
               <div className="border-b border-slate-200 bg-white px-4 py-3 text-xs font-bold text-slate-500">

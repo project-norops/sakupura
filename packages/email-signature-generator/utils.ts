@@ -39,13 +39,13 @@ export const SAMPLE_SIGNATURE: SignatureData = {
   accentColor: "#2563eb",
 };
 
-const ALLOWED_COLORS = new Set([
-  "#2563eb",
-  "#0f766e",
-  "#7c3aed",
-  "#be123c",
-  "#334155",
-]);
+const DEFAULT_ACCENT_COLOR = "#2563eb";
+
+export function normalizeAccentColor(value: string): string {
+  return /^#[0-9a-f]{6}$/i.test(value)
+    ? value.toLowerCase()
+    : DEFAULT_ACCENT_COLOR;
+}
 
 export function escapeHtml(value: string): string {
   return value
@@ -95,23 +95,21 @@ function contactLine(
   const content = href
     ? `<a href="${escapeHtml(href)}" style="color:#334155;text-decoration:none;">${escapedValue}</a>`
     : escapedValue;
-  return `<div style="margin:2px 0;color:#475569;font-size:13px;line-height:1.55;"><span style="color:#94a3b8;">${label}</span> ${content}</div>`;
+  return `<div style="margin:2px 0;color:#475569;font-size:13px;line-height:1.55;"><span style="display:inline-block;min-width:42px;color:#94a3b8;">${label}</span>${content}</div>`;
 }
 
 export function generateSignatureHtml(data: SignatureData): string {
-  const color = ALLOWED_COLORS.has(data.accentColor)
-    ? data.accentColor
-    : "#2563eb";
+  const color = normalizeAccentColor(data.accentColor);
   const website = normalizeWebsite(data.website);
   const companyLine = [data.department.trim(), data.company.trim()]
     .filter(Boolean)
     .join(" / ");
   const roleLine = data.role.trim();
   const details = [
-    contactLine("E", data.email, emailHref(data.email)),
-    contactLine("T", data.phone, phoneHref(data.phone)),
-    contactLine("W", data.website, website),
-    contactLine("A", data.address, null),
+    contactLine("メール", data.email, emailHref(data.email)),
+    contactLine("電話", data.phone, phoneHref(data.phone)),
+    contactLine("Web", data.website, website),
+    contactLine("住所", data.address, null),
   ].join("");
   const border =
     data.template === "accent"
@@ -132,10 +130,10 @@ export function generatePlainText(data: SignatureData): string {
     [data.role.trim(), data.department.trim(), data.company.trim()]
       .filter(Boolean)
       .join(" / "),
-    data.email.trim() ? `Email: ${data.email.trim()}` : "",
-    data.phone.trim() ? `Tel: ${data.phone.trim()}` : "",
+    data.email.trim() ? `メール: ${data.email.trim()}` : "",
+    data.phone.trim() ? `電話: ${data.phone.trim()}` : "",
     data.website.trim() ? `Web: ${data.website.trim()}` : "",
-    data.address.trim() ? `Address: ${data.address.trim()}` : "",
+    data.address.trim() ? `住所: ${data.address.trim()}` : "",
   ];
   return lines.filter(Boolean).join("\n");
 }
