@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import apps from "@/data/apps";
+import { categories } from "@/data/categories";
 import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPages = ["/privacy", "/disclaimer"];
+  const staticPages = ["/privacy", "/disclaimer", "/categories"];
 
   return [
     {
@@ -28,6 +29,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
           lastModified: new Date(),
           changeFrequency: "monthly",
           priority: 0.8,
+        }) satisfies MetadataRoute.Sitemap[number],
+    ),
+    ...categories.map(
+      (category) =>
+        ({
+          url: `${siteUrl}/categories/${category.id}`,
+          lastModified: new Date(),
+          changeFrequency: "weekly",
+          priority: 0.7,
         }) satisfies MetadataRoute.Sitemap[number],
     ),
   ];

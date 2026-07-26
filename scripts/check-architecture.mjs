@@ -130,6 +130,13 @@ const uniqueIds = new Set();
 const uniqueSlugs = new Set();
 const registeredPackages = new Set();
 const portalPackage = readJson("apps", "portal", "package.json");
+const categoryCatalog = new Map([
+  ["content-marketing", "発信・集客"],
+  ["business-operations", "業務効率化"],
+  ["commerce-data", "EC・CSV"],
+  ["web-design", "Web制作・改善"],
+]);
+const categoryCounts = new Map();
 
 for (const tool of manifest) {
   const label = tool.slug || tool.id || "unknown";
@@ -156,6 +163,8 @@ for (const tool of manifest) {
       tool.badge &&
       tool.componentName &&
       tool.content &&
+      tool.categoryId &&
+      tool.categoryName &&
       tool.releasePost &&
       tool.status &&
       "publishAt" in tool &&
@@ -163,6 +172,14 @@ for (const tool of manifest) {
       "announcedAt" in tool,
     ),
     `${label}: 表示情報が揃っている`,
+  );
+  assert(
+    categoryCatalog.get(tool.categoryId) === tool.categoryName,
+    `${label}: 固定カテゴリーIDと表示名が一致`,
+  );
+  categoryCounts.set(
+    tool.categoryId,
+    (categoryCounts.get(tool.categoryId) ?? 0) + 1,
   );
   registeredPackages.add(tool.slug);
 
@@ -225,6 +242,13 @@ for (const tool of manifest) {
   );
 }
 
+for (const [categoryId] of categoryCatalog) {
+  assert(
+    (categoryCounts.get(categoryId) ?? 0) >= 3,
+    `${categoryId}: SEO公開基準の3ツール以上を満たす`,
+  );
+}
+
 const unregisteredPackages = directoriesAt("packages").filter(
   (name) => name !== "shared-ui" && !registeredPackages.has(name),
 );
@@ -236,7 +260,8 @@ assert(
 const sitemapSource = readText("apps", "portal", "src", "app", "sitemap.ts");
 assert(
   sitemapSource.includes('from "@/data/apps"') &&
-    sitemapSource.includes("apps.map"),
+    sitemapSource.includes("apps.map") &&
+    sitemapSource.includes("categories.map"),
   "sitemapは公開済みサービス台帳から生成",
 );
 const appDataSource = readText("apps", "portal", "src", "data", "apps.ts");
@@ -262,6 +287,11 @@ for (const requiredPath of [
   ["apps", "portal", "src", "app", "ads.txt", "route.ts"],
   ["apps", "portal", "src", "app", "privacy", "page.tsx"],
   ["apps", "portal", "src", "app", "disclaimer", "page.tsx"],
+  ["apps", "portal", "src", "app", "categories", "page.tsx"],
+  ["apps", "portal", "src", "app", "categories", "[slug]", "page.tsx"],
+  ["apps", "portal", "src", "data", "categories.ts"],
+  ["apps", "portal", "src", "components", "CategoryNavigation.tsx"],
+  ["apps", "portal", "src", "components", "ToolGuideWithRelated.tsx"],
   ["packages", "shared-ui", "GoogleServices.ts"],
   ["packages", "shared-ui", "AnalyticsEvents.tsx"],
   ["packages", "shared-ui", "BookmarkButton.tsx"],

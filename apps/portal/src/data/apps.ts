@@ -8,6 +8,8 @@ export type AppDefinition = {
   description: string;
   href: string;
   badge: string;
+  categoryId: string;
+  categoryName: string;
   packageName: string;
   componentName: string;
   content: ToolGuideContent;
@@ -30,6 +32,16 @@ export function getToolBySlug(slug: string) {
   const tool = allApps.find((app) => app.slug === slug);
   if (!tool) throw new Error(`Unknown tool slug: ${slug}`);
   return tool;
+}
+
+export function getRelatedTools(tool: AppDefinition, limit = 3) {
+  return apps
+    .filter(
+      (candidate) =>
+        candidate.slug !== tool.slug &&
+        candidate.categoryId === tool.categoryId,
+    )
+    .slice(0, limit);
 }
 
 export default apps;

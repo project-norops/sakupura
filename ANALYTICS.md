@@ -9,6 +9,7 @@
 | イベント               | 発火条件                             | 主なパラメータ                      |
 | ---------------------- | ------------------------------------ | ----------------------------------- |
 | `select_content`       | トップや関連欄からツール・一覧を選ぶ | `content_type`, `item_id`           |
+| `search`               | トップ・カテゴリー内で検索する       | `content_type`, `result_count`      |
 | `share`                | X共有または共有URLのコピーを試す     | `method`, `content_type`, `item_id` |
 | `bookmark_prompt_open` | 保存案内を開く                       | `method`, `content_type`, `item_id` |
 | `bookmark_url_copy`    | 保存用URLのコピーに成功              | `method`, `content_type`, `item_id` |
@@ -18,6 +19,8 @@
 | `tool_post_open`       | SNS投稿画面を開く                    | `tool_id`, `platform`               |
 
 `share`と`select_content`はGA4の推奨イベントを利用する。それ以外はサクプラ固有イベントとする。
+
+`select_content`の`content_type`は、カテゴリー選択を`category`、ツール詳細からのカテゴリー遷移を`category_from_tool`、同カテゴリーのツール遷移を`related_tool`として区別する。検索イベントでは検索語を送らず、固定値`tool_directory`と結果件数だけを送る。
 
 ## 送信禁止
 
