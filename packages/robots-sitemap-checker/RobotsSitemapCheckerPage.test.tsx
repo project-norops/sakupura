@@ -16,11 +16,18 @@ afterEach(() => {
 test("loads the sample, diagnoses it, and copies the report", async () => {
   render(<RobotsSitemapCheckerPage />);
   fireEvent.click(
-    screen.getByRole("button", { name: "操作サンプルを読み込む" }),
+    screen.getByRole("button", { name: "指摘例入りサンプルを読み込む" }),
   );
   fireEvent.click(screen.getByRole("button", { name: "2ファイルを診断する" }));
   expect(
-    screen.getByText("URL 2件・Disallow 1件・指摘 0件"),
+    screen.getByText("URL 5件・Disallow 1件・指摘 3件"),
+  ).toBeInTheDocument();
+  expect(screen.getByText(/URLが重複しています/)).toBeInTheDocument();
+  expect(
+    screen.getByText(/想定ホスト「example.com」と異なるURL/),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(/Disallow「\/members\/」に該当する候補/),
   ).toBeInTheDocument();
   expect(screen.getAllByText("開発検討中")).toHaveLength(2);
   fireEvent.click(screen.getByRole("button", { name: "診断レポートをコピー" }));

@@ -5,8 +5,8 @@ import { useState } from "react";
 import { checkRobotsAndSitemap, formatReport, type CheckResult } from "./utils";
 
 const MAX_SIZE = 10 * 1024 * 1024;
-const ROBOTS_SAMPLE = `User-agent: *\nDisallow: /admin/\nAllow: /admin/help/\nSitemap: https://example.com/sitemap.xml`;
-const SITEMAP_SAMPLE = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://example.com/</loc></url>\n  <url><loc>https://example.com/about</loc></url>\n</urlset>`;
+const ROBOTS_SAMPLE = `User-agent: *\nDisallow: /members/\nSitemap: https://example.com/sitemap.xml`;
+const SITEMAP_SAMPLE = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://example.com/</loc></url>\n  <url><loc>https://example.com/members/profile</loc></url>\n  <url><loc>https://example.com/about</loc></url>\n  <url><loc>https://example.com/about</loc></url>\n  <url><loc>https://shop.example.net/products</loc></url>\n</urlset>`;
 
 export function RobotsSitemapCheckerPage() {
   const [robots, setRobots] = useState("");
@@ -139,7 +139,7 @@ export function RobotsSitemapCheckerPage() {
               setError("");
             }}
           >
-            操作サンプルを読み込む
+            指摘例入りサンプルを読み込む
           </button>
           <button
             type="button"
