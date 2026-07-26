@@ -1,0 +1,1 @@
+export { ContrastColorFixerPage } from "./ContrastColorFixerPage";

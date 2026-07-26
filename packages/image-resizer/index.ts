@@ -1,0 +1,1 @@
+export { ImageResizerPage } from "./ImageResizerPage";

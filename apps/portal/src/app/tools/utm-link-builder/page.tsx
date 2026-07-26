@@ -1,0 +1,44 @@
+import type { Metadata } from "next";
+import { UtmLinkBuilderPage } from "@sakupla/utm-link-builder";
+import { ToolGuide, ToolStructuredData } from "@sakupla/shared-ui";
+import { notFound } from "next/navigation";
+import { getToolBySlug, isToolPublished } from "@/data/apps";
+import { siteUrl } from "@/lib/site";
+
+const tool = getToolBySlug("utm-link-builder");
+
+export const metadata: Metadata = {
+  title: "UTMリンク・QRコード作成ツール",
+  description:
+    "計測用UTMリンクを命名チェック付きで作成し、QRコードとして保存できます。",
+  alternates: { canonical: "/tools/utm-link-builder" },
+  openGraph: {
+    title: "UTMリンク・QRコード作成ツール",
+    description:
+      "計測用UTMリンクを命名チェック付きで作成し、QRコードとして保存できます。",
+    url: "/tools/utm-link-builder",
+  },
+  twitter: {
+    card: "summary",
+    title: "UTMリンク・QRコード作成ツール",
+    description:
+      "計測用UTMリンクを命名チェック付きで作成し、QRコードとして保存できます。",
+  },
+};
+
+export default function Page() {
+  if (!isToolPublished(tool)) notFound();
+
+  return (
+    <>
+      <ToolStructuredData
+        title={tool.title}
+        description={tool.description}
+        url={`${siteUrl}${tool.href}`}
+        content={tool.content}
+      />
+      <UtmLinkBuilderPage />
+      <ToolGuide title={tool.title} content={tool.content} />
+    </>
+  );
+}
