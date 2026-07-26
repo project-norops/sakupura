@@ -585,3 +585,15 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 検索ボリューム実数は未確認と明記し、Google Search Central、Google Calendar、IETF RFC 5545、Open Graph protocol、CIPA Exif、OpenRefine、Flatfile、Adobe、Smallpdf等の公式情報を2026-07-27に確認。
 - 採用5案を`PRODUCT_PLAN.md`の企画ID 23〜27、評価結果を`ROADMAP.md`へ反映。実装は「サクプラ 開発・リリース」タスクへ移管し、この企画タスクでは開始しない。
 - `npm run check`: passed（構成検査420項目、コンテンツ20ツール、Jest 36 suites・239 tests、リリース8 tests、全Lint、portal＋dynamic-pricing build）。
+
+## 2026-07-27（企画ID 23 CSV列マッピング・変換テンプレート プレビュー実装）
+
+- 承認済み企画ID 23を`npm run create:tool`で生成し、`packages/csv-column-mapper`と`/tools/csv-column-mapper`へ21本目のツールとして実装。プレビュー確認用にブランチ内だけ`published`とし、`announceOnX: false`を維持。
+- 変換元CSVと取込先テンプレートCSVの読込、列ごとの明示的な対応付け、出力列の名称変更・並べ替え、不要列の除外、全行への固定値追加、先頭10行のプレビュー、BOM付きUTF-8 CSV保存を実装。
+- 自動推測だけで列を確定しないよう、正規化した同名列は候補表示に限定。未割当の出力列が残る間は変換を停止し、除外される変換元列と出力列順を保存前に表示。
+- UTF-8・10MB以下を初期対象とし、不正UTF-8、閉じていない引用符、重複・空列名、列数超過をエラーにした。RFC 4180の一般的なCSV形式への公式リンクと、取込先固有仕様を優先する注意を追加。
+- 列名と入力例を含む変換元サンプルCSV、ヘッダー行だけで使える取込先テンプレートCSVのダウンロードを追加。ファイル内容はブラウザ内で処理し、GA4は固定slugの`sample_load`と成功可能時の`tool_run`だけを計測。
+- 新規ルートでもカテゴリーと関連ツールを表示するよう生成テンプレートを`ToolGuideWithRelated`へ更新し、構成検査も同じ要件を検査するよう強化。
+- 自動検証合格：構成437件、コンテンツ21ツール、Jest 38 suites・250 tests、リリース基盤8 tests、全Lint、portal／dynamic-pricing本番相当ビルド。
+- ローカル実画面でサンプル変換、実CSV 2ファイルの読込、未割当時の停止、除外列3件、固定値追加、変換プレビュー、不正引用符エラーを確認。デスクトップと375px幅で横スクロールなし、ブラウザーエラーなしを確認。ダウンロード内容はCSV直列化テストとUIのBlob生成テストで確認。
+- 本番公開、X告知、有料機能、外部API、認証、バックエンド追加は実施していない。Vercelプレビューでの人間レビュー後に本番公開可否を判断する。

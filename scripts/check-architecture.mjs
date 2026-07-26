@@ -220,7 +220,8 @@ for (const tool of manifest) {
       `${label}: routeが登録componentを使用`,
     );
     assert(
-      routeSource.includes("ToolGuide") && routeSource.includes("tool.content"),
+      routeSource.includes("ToolGuideWithRelated") &&
+        routeSource.includes("tool={tool}"),
       `${label}: routeが固有ガイドを表示`,
     );
     assert(

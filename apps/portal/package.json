@@ -11,6 +11,7 @@
   "dependencies": {
     "@sakupla/business-day-calculator": "file:../../packages/business-day-calculator",
     "@sakupla/contrast-color-fixer": "file:../../packages/contrast-color-fixer",
+    "@sakupla/csv-column-mapper": "file:../../packages/csv-column-mapper",
     "@sakupla/csv-diff-checker": "file:../../packages/csv-diff-checker",
     "@sakupla/csv-encoding-fixer": "file:../../packages/csv-encoding-fixer",
     "@sakupla/dynamic-pricing": "file:../../packages/dynamic-pricing",
