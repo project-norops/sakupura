@@ -619,3 +619,14 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - Vercel Production deployment `dpl_FYKGTH7Sp9dxjt9i5yHzBKUD4ugX`がReadyとなり、`www.norops.jp`、`norops.jp`、`100apps-portal.vercel.app`へ反映されたことを確認した。
 - 本番の`/tools/csv-column-mapper`でHTTP表示、ページ冒頭の4ステップ、サンプルCSV読込後の2行・6列表示、取込先4列、列割当画面を確認した。
 - サービス台帳上の公開ツールは21本。X告知、外部API、認証、バックエンド追加は行っていない。
+
+## 2026-07-27（企画ID 24 CSV重複・表記ゆれクリーナー プレビュー実装）
+
+- 承認済み企画ID 24を`npm run create:tool`で生成し、`packages/csv-duplicate-cleaner`と`/tools/csv-duplicate-cleaner`へ22本目のツールとして実装。プレビュー確認用にブランチ内だけ`published`とし、`announceOnX: false`を維持した。
+- UTF-8・10MB以下のCSV読込、単一キー列選択、前後空白・連続空白・Unicode NFKCによる全角半角・英字大小・指定記号の正規化条件、完全一致と表記ゆれ候補のグループ表示を実装した。
+- 曖昧な候補を自動削除せず、各グループで残す元行を明示的に選択するまで保存を停止。キー空欄行は重複判定から除外して元行番号を表示する。
+- 整理済みCSVへ元行番号、除外行CSVへ元行番号・除外理由・残した元行番号を追加し、元データへ戻って照合できるようにした。入力サンプルと列名・入力例付きテンプレートのダウンロードも追加した。
+- RFC 4180とUnicode Normalization Formsへの公式リンク、固有の対象者・説明・利用例・注意・FAQ・関連ツール導線を追加。結果表示後に「整理ルール保存」「複数ファイル一括処理」の匿名関心度テストを組み込んだ。
+- `npm run check`は構成454件、コンテンツ22ツール、Jest 41 suites・265 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格。専用テスト7件でCSV解析、正規化、候補分類、明示選択、監査列、直列化、2種類のダウンロード処理を確認した。
+- ローカル本番相当画面でサンプル4行・4列、氏名キー、候補1グループ・3行、未選択時の保存停止、残す行選択後の整理済み2行・除外2行、関心度候補2件を確認。375px幅は横スクロールなしで、既存AdSense警告以外の画面エラーはなかった。
+- 本番公開、X告知、有料機能本体、外部API、認証、バックエンドは追加していない。Vercelプレビューで人間レビュー後に本番公開可否を判断する。
