@@ -619,3 +619,13 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - Vercel Production deployment `dpl_FYKGTH7Sp9dxjt9i5yHzBKUD4ugX`がReadyとなり、`www.norops.jp`、`norops.jp`、`100apps-portal.vercel.app`へ反映されたことを確認した。
 - 本番の`/tools/csv-column-mapper`でHTTP表示、ページ冒頭の4ステップ、サンプルCSV読込後の2行・6列表示、取込先4列、列割当画面を確認した。
 - サービス台帳上の公開ツールは21本。X告知、外部API、認証、バックエンド追加は行っていない。
+
+## 2026-07-27（企画ID 25 予定CSV・ICS一括変換 プレビュー実装）
+
+- 承認済み企画ID 25を`npm run create:tool`で生成し、`packages/calendar-csv-ics-converter`と`/tools/calendar-csv-ics-converter`へプレビュー実装した。ブランチ内だけ`published`とし、`announceOnX: false`を維持した。
+- UTF-8・10MB以下の予定CSV読込、日本語・英語列名の候補表示、件名・開始・終了・終日・場所・説明・タイムゾーンの明示割り当て、元行番号付き検証、RFC 5545形式のICS保存をブラウザ内処理で実装した。
+- 通常予定の`YYYY-MM-DD HH:mm`、終日予定の`YYYY-MM-DD`、空の件名、実在しない日時、終了が開始以前、タイムゾーン形式を検証し、エラーが残る間は保存を停止する。招待送信、同期、外部API、繰り返し予定本体は追加していない。
+- 列名と入力例付きのサンプル／テンプレートCSV、RFC 5545とGoogle Calendar公式案内、固有の対象者・説明・利用例・注意・FAQ・関連ツール導線を追加。正常な結果後に「変換プリセット保存」「繰り返し予定」の匿名関心度テストを表示する。
+- 自動テスト6件でCSV解析、列候補、通常予定・終日予定、エラー、ICS主要行、画面上のサンプル検証、保存Blob生成、必須列停止を確認した。`npm run check`は構成454件、コンテンツ22ツール、Jest 41 suites・264 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+- ローカル本番相当画面でサンプル2件、7列の自動割り当て、エラー0件、ICS保存有効化、関心度候補2件を確認した。375px幅で表示幅360px・横スクロールなしを確認した。
+- 本番公開、X告知、有料機能本体、外部API、認証、バックエンドは追加していない。Vercelプレビューで人間レビュー後に本番公開可否を判断する。
