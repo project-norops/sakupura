@@ -35,8 +35,14 @@
     "lint:utm-link-builder": "eslint packages/utm-link-builder",
     "lint:focus-cost-timer": "eslint packages/focus-cost-timer",
     "lint:contrast-color-fixer": "eslint packages/contrast-color-fixer",
+    "lint:csv-diff-checker": "eslint packages/csv-diff-checker",
+    "lint:email-subject-previewer": "eslint packages/email-subject-previewer",
+    "lint:invoice-pdf-generator": "eslint packages/invoice-pdf-generator",
+    "lint:merchant-feed-checker": "eslint packages/merchant-feed-checker",
+    "lint:redirect-map-checker": "eslint packages/redirect-map-checker",
+    "lint:csv-encoding-fixer": "eslint packages/csv-encoding-fixer",
     "dev": "npx concurrently \"npm run dev:portal\" \"npm run dev:dynamic-pricing\"",
-    "lint": "npm run lint:portal && npm run lint:dynamic-pricing && npm run lint:social-text-formatter && npm run lint:email-signature-generator && npm run lint:review-reply-builder && npm run lint:lp-structure-builder && npm run lint:routine-task-loop && npm run lint:image-resizer && npm run lint:shopify-csv-checker && npm run lint:utm-link-builder && npm run lint:focus-cost-timer && npm run lint:contrast-color-fixer",
+    "lint": "npm run lint:portal && npm run lint:dynamic-pricing && npm run lint:social-text-formatter && npm run lint:email-signature-generator && npm run lint:review-reply-builder && npm run lint:lp-structure-builder && npm run lint:routine-task-loop && npm run lint:image-resizer && npm run lint:shopify-csv-checker && npm run lint:utm-link-builder && npm run lint:focus-cost-timer && npm run lint:contrast-color-fixer && npm run lint:csv-diff-checker && npm run lint:email-subject-previewer && npm run lint:invoice-pdf-generator && npm run lint:merchant-feed-checker && npm run lint:redirect-map-checker && npm run lint:csv-encoding-fixer",
     "build": "npm run build:portal && npm run build:dynamic-pricing"
   },
   "devDependencies": {

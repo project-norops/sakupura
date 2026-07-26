@@ -1,0 +1,44 @@
+import type { Metadata } from "next";
+import { CsvDiffCheckerPage } from "@sakupla/csv-diff-checker";
+import { ToolGuide, ToolStructuredData } from "@sakupla/shared-ui";
+import { notFound } from "next/navigation";
+import { getToolBySlug, isToolPublished } from "@/data/apps";
+import { siteUrl } from "@/lib/site";
+
+const tool = getToolBySlug("csv-diff-checker");
+
+export const metadata: Metadata = {
+  title: "CSV差分比較・変更抽出ツール",
+  description:
+    "2つのCSVをキー列で比較し、追加・削除・変更された行とセルをブラウザ内で確認できます。",
+  alternates: { canonical: "/tools/csv-diff-checker" },
+  openGraph: {
+    title: "CSV差分比較・変更抽出ツール",
+    description:
+      "2つのCSVをキー列で比較し、追加・削除・変更された行とセルをブラウザ内で確認できます。",
+    url: "/tools/csv-diff-checker",
+  },
+  twitter: {
+    card: "summary",
+    title: "CSV差分比較・変更抽出ツール",
+    description:
+      "2つのCSVをキー列で比較し、追加・削除・変更された行とセルをブラウザ内で確認できます。",
+  },
+};
+
+export default function Page() {
+  if (!isToolPublished(tool)) notFound();
+
+  return (
+    <>
+      <ToolStructuredData
+        title={tool.title}
+        description={tool.description}
+        url={`${siteUrl}${tool.href}`}
+        content={tool.content}
+      />
+      <CsvDiffCheckerPage />
+      <ToolGuide title={tool.title} content={tool.content} />
+    </>
+  );
+}

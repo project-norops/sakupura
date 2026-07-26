@@ -1,5 +1,13 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-26（次期6ツールのプレビュー開発）
+
+- 推奨順位1〜6のミニサービスとして、`csv-diff-checker`、`email-subject-previewer`、`invoice-pdf-generator`、`merchant-feed-checker`、`redirect-map-checker`、`csv-encoding-fixer` を追加。
+- 各ツールを `packages/<slug>` の独立パッケージとして実装し、ポータルの `/tools/<slug>` ルートとサービス台帳へ登録。入力データはブラウザ内で処理し、外部AIや外部APIへ送信しない構成を維持。
+- CSV差分はキー列による追加・削除・変更セル検出、メール件名はPC／スマホ受信箱プレビューと長さ警告、帳票は税率別計算と印刷PDF保存、商品フィードは主要属性の事前診断、リダイレクトは重複・チェーン・ループ検出、文字コード変換はUTF-8／Shift_JIS判定とUTF-8・BOM付きUTF-8保存を実装。
+- `PRODUCT_PLAN.md` に仕様14〜19、`ROADMAP.md` に今回の開発範囲を記録。各ツールのSEO説明、対象者、機能、使い方、注意事項、FAQ、X告知文も固有内容で追加。
+- 全品質チェック合格：構成343件、コンテンツ17ツール、Jest 202件、リリース基盤8件、全lint、portal／dynamic-pricing本番相当ビルド。6つのローカルURLがすべてHTTP 200を返すことも確認。
+
 ## 2026-07-26（新規ミニアプリのリサーチ・採否判断基準を固定化）
 
 - `PRODUCT_RESEARCH.md`を追加し、海外トレンド、市場性、ターゲット、ペイン、競合、重複、MVP、AdSense、将来課金を新規企画前に評価する正本として整理。
