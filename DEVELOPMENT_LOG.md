@@ -564,3 +564,14 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - GA4へカテゴリー選択、ツール詳細からのカテゴリー遷移、関連ツール遷移、検索結果件数を追加。検索語、入力値、個人情報は送信しない。
 - `npm run check`: passed（構成検査420項目、コンテンツ20ツール、Jest 36 suites・239 tests、リリース8 tests、全Lint、portal＋dynamic-pricing build）。
 - ローカル実画面でトップ、カテゴリー一覧、発信・集客カテゴリー、販売価格・利益シミュレーターの関連欄を確認。PC・375px相当とも横スクロールなし、関連リンク3件、ブラウザーエラー0件。
+- PR #12、merge commit `ae1955c26d5c3dc8fad8639e7520fee2fc95c44b`で`main`へ統合。Vercel Production deployment `dpl_624iv6N49Qn5St8uAoaJ9dpaaNHs`が`www.norops.jp`と`norops.jp`へ反映済みであることを確認。
+- 本番の`/categories`、`/categories/content-marketing`、`/tools/dynamic-pricing`がすべて200を返し、カテゴリー表示と関連ツール導線が公開されていることを確認。
+
+## 2026-07-27（100ツール・ポートフォリオ拡張方針と記録同期）
+
+- 20ツールから100ツールを目指す方針を承認。1回につき10案を調査し、`PRODUCT_RESEARCH.md`で75点以上かつ停止条件のない上位最大5案を開発候補へ採用する方式とした。
+- 上位5案の機械的採用や1日5本の公開ノルマは設けず、既存ツールとの重複は統合を先に比較する。企画採用と実装・公開承認を分離した。
+- 公開後7日・14日・28日の検索表示、利用完了、結果利用、関連ツール遷移、再訪を比較し、25・40・60・80・100ツール到達時にポートフォリオを再評価する方針を`PRODUCT_RESEARCH.md`と`ROADMAP.md`へ反映。
+- `ROADMAP.md`のカテゴリー・関連ツール導線を「プレビュー実装済み」から「本番公開済み」へ修正し、実装予定形の記述を完了形へ同期した。
+- `npm run check`: passed（構成検査420項目、コンテンツ20ツール、Jest 36 suites・239 tests、リリース8 tests、全Lint、portal＋dynamic-pricing build）。
+- 企画・運用方針と公開記録の文書更新のみで、アプリ実装や追加デプロイは実施していない。
