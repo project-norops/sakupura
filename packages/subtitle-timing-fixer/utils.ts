@@ -166,6 +166,30 @@ export function shiftCues(cues: SubtitleCue[], requestedMs: number) {
   };
 }
 
+export function updateCueTiming(
+  cues: SubtitleCue[],
+  position: number,
+  startMs: number,
+  endMs: number,
+): SubtitleCue[] {
+  if (
+    position < 0 ||
+    position >= cues.length ||
+    !Number.isFinite(startMs) ||
+    !Number.isFinite(endMs) ||
+    startMs < 0 ||
+    endMs < 0
+  ) {
+    return cues;
+  }
+
+  return cues.map((cue, index) =>
+    index === position
+      ? { ...cue, startMs: Math.round(startMs), endMs: Math.round(endMs) }
+      : cue,
+  );
+}
+
 export function formatSubtitle(
   cues: SubtitleCue[],
   format: SubtitleFormat,

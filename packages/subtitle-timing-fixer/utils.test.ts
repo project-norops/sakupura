@@ -4,6 +4,7 @@ import {
   parseSubtitle,
   parseTimecode,
   shiftCues,
+  updateCueTiming,
 } from "./utils";
 
 describe("subtitle utilities", () => {
@@ -53,5 +54,21 @@ describe("subtitle utilities", () => {
 
   test("accepts minute-based WebVTT timecodes", () => {
     expect(parseTimecode("02:03.250")).toBe(123250);
+  });
+
+  test("updates one cue without changing the others", () => {
+    const cues = [
+      { index: 1, startMs: 1000, endMs: 2000, text: "one" },
+      { index: 2, startMs: 3000, endMs: 4000, text: "two" },
+    ];
+    const updated = updateCueTiming(cues, 1, 3250, 4750);
+    expect(updated[0]).toEqual(cues[0]);
+    expect(updated[1]).toMatchObject({ startMs: 3250, endMs: 4750 });
+    expect(cues[1]).toMatchObject({ startMs: 3000, endMs: 4000 });
+  });
+
+  test("rejects a negative individual time", () => {
+    const cues = [{ index: 1, startMs: 1000, endMs: 2000, text: "one" }];
+    expect(updateCueTiming(cues, 0, -1, 1000)).toBe(cues);
   });
 });
