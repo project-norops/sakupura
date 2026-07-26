@@ -1,0 +1,1 @@
+export { RobotsSitemapCheckerPage } from "./RobotsSitemapCheckerPage";
