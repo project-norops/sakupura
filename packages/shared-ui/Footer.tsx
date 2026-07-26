@@ -33,7 +33,19 @@ export function Footer() {
           >
             サクプラ トップ
           </a>
+          <a
+            aria-label="ご意見・不具合報告（X・新しいタブで開く）"
+            className="underline-offset-4 hover:text-blue-600 hover:underline"
+            href="https://x.com/sakupura_tools"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            ご意見・不具合報告（X）
+          </a>
         </nav>
+        <p className="text-xs leading-5 md:col-span-2">
+          Xの公開投稿には個人情報・機密情報を書かないでください。
+        </p>
         <p className="md:col-span-2">© 2026 NOROPS / サクプラ</p>
       </div>
     </footer>
