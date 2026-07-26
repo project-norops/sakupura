@@ -1,5 +1,6 @@
 "use client";
 
+import { PremiumInterestCards } from "@sakupla/shared-ui/PremiumInterestCards";
 import { useMemo, useState } from "react";
 import {
   createEmptyMappings,
@@ -451,6 +452,24 @@ export function CsvColumnMapperPage() {
             >
               変換CSVを保存
             </button>
+            <PremiumInterestCards
+              toolId="csv-column-mapper"
+              placement="result_after"
+              candidates={[
+                {
+                  featureId: "mapping_rule_save",
+                  name: "変換ルール保存",
+                  description:
+                    "今回設定した列対応・固定値・除外内容を保存し、次回の変換で呼び出せる候補です。",
+                },
+                {
+                  featureId: "batch_files",
+                  name: "複数ファイル一括処理",
+                  description:
+                    "同じ列対応を使って複数のCSVをまとめて変換し、繰り返し操作を減らす候補です。",
+                },
+              ]}
+            />
           </section>
         )}
       </section>

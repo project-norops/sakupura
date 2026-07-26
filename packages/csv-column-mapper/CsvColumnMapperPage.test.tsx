@@ -5,6 +5,12 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { CsvColumnMapperPage } from "./CsvColumnMapperPage";
 
 beforeEach(() => {
+  window.localStorage.clear();
+  window.gtag = jest.fn();
+  window.requestAnimationFrame = (callback) => {
+    callback(0);
+    return 1;
+  };
   URL.createObjectURL = jest.fn(() => "blob:csv");
   URL.revokeObjectURL = jest.fn();
   jest.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {});
@@ -67,4 +73,10 @@ test("requires explicit mappings before preview and shows excluded columns", () 
   expect(screen.getByText("A-001")).toBeInTheDocument();
   expect(screen.getAllByText("draft")).toHaveLength(2);
   expect(screen.getByRole("button", { name: "変換CSVを保存" })).toBeEnabled();
+  expect(
+    screen.getByRole("heading", {
+      name: "この作業で、さらに省ける手間を教えてください",
+    }),
+  ).toBeInTheDocument();
+  expect(screen.getAllByText("開発検討中")).toHaveLength(2);
 });

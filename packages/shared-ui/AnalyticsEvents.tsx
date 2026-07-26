@@ -5,6 +5,61 @@ import { useEffect } from "react";
 type AnalyticsValue = string | number | boolean;
 type AnalyticsParameters = Record<string, AnalyticsValue | undefined>;
 
+export const premiumInterestFeatures = {
+  "csv-column-mapper": ["mapping_rule_save", "batch_files"],
+  "csv-duplicate-cleaner": ["cleaning_rule_save", "batch_files"],
+  "calendar-csv-ics-converter": [
+    "conversion_preset_save",
+    "recurring_events",
+  ],
+  "robots-sitemap-checker": ["project_save", "live_url_check"],
+  "ogp-card-preview": ["brand_preset_save", "bulk_page_audit"],
+} as const;
+
+export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;
+export type PremiumInterestFeatureId =
+  (typeof premiumInterestFeatures)[PremiumInterestToolId][number];
+export type PremiumInterestPlacement = "result_after";
+
+const premiumInterestEvents = new Set([
+  "premium_interest_open",
+  "premium_interest_confirm",
+]);
+
+function isAllowedPremiumInterestEvent(
+  eventName: string,
+  parameters: AnalyticsParameters,
+) {
+  if (!premiumInterestEvents.has(eventName)) return true;
+
+  const keys = Object.keys(parameters).filter(
+    (key) => parameters[key] !== undefined,
+  );
+  if (
+    keys.length !== 3 ||
+    !keys.every((key) =>
+      ["tool_id", "feature_id", "placement"].includes(key),
+    ) ||
+    parameters.placement !== "result_after"
+  ) {
+    return false;
+  }
+
+  const toolId = parameters.tool_id;
+  const featureId = parameters.feature_id;
+  if (
+    typeof toolId !== "string" ||
+    typeof featureId !== "string" ||
+    !(toolId in premiumInterestFeatures)
+  ) {
+    return false;
+  }
+
+  return (premiumInterestFeatures[toolId as PremiumInterestToolId] as readonly string[]).includes(
+    featureId,
+  );
+}
+
 declare global {
   interface Window {
     gtag?: (
@@ -23,11 +78,17 @@ export function trackAnalyticsEvent(
     return;
   }
 
+  if (!isAllowedPremiumInterestEvent(eventName, parameters)) return;
+
   const cleanParameters = Object.fromEntries(
     Object.entries(parameters).filter((entry) => entry[1] !== undefined),
   ) as Record<string, AnalyticsValue>;
 
-  window.gtag("event", eventName, cleanParameters);
+  try {
+    window.gtag("event", eventName, cleanParameters);
+  } catch {
+    // Analytics must never block the tool or its dialogs.
+  }
 }
 
 function parametersFromElement(element: HTMLElement): AnalyticsParameters {

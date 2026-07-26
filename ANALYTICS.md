@@ -17,10 +17,22 @@
 | `tool_run`             | ツールの主処理を実行する             | `tool_id`, `platform`               |
 | `tool_result_copy`     | ツールの結果をコピーする             | `tool_id`, `result_type`            |
 | `tool_post_open`       | SNS投稿画面を開く                    | `tool_id`, `platform`               |
+| `premium_interest_open` | 開発検討中の有料候補機能の説明を開く | `tool_id`, `feature_id`, `placement` |
+| `premium_interest_confirm` | 有料候補機能への関心を明示する    | `tool_id`, `feature_id`, `placement` |
 
 `share`と`select_content`はGA4の推奨イベントを利用する。それ以外はサクプラ固有イベントとする。
 
 `select_content`の`content_type`は、カテゴリー選択を`category`、ツール詳細からのカテゴリー遷移を`category_from_tool`、同カテゴリーのツール遷移を`related_tool`として区別する。検索イベントでは検索語を送らず、固定値`tool_directory`と結果件数だけを送る。
+
+`premium_interest_open`は説明ダイアログを開いた弱い関心、`premium_interest_confirm`は利用者が「興味があります」を押した強い関心として区別する。`feature_id`と`placement`は実装前に許可リストへ登録した固定値だけを使う。メールアドレスや自由記述をGA4へ送らない。
+
+## 有料候補機能の関心度判定
+
+- 主指標は`premium_interest_confirm / tool_run`、補助指標は`premium_interest_confirm / premium_interest_open`とする。
+- ツール別・機能別に28日間で比較し、クリック数だけで採否を判断しない。
+- 初期の運用仮説は、主指標8%以上を優先検証、3%以上8%未満を表示・説明改善後の再検証、3%未満を保留とする。
+- 原則として`tool_run`が300回程度に達するまでは早期の中止判断をしない。母数が小さい場合は参考値として扱う。
+- 内部確認や自動テストの操作は、可能な範囲で集計から除外する。
 
 ## 送信禁止
 
@@ -38,3 +50,4 @@
 - 成功時だけ測る操作は`trackAnalyticsEvent`を成功処理の直後に呼ぶ。
 - 新規ツールでは最低でも主処理の`tool_run`を実装する。
 - GA4未読込、広告ブロッカー、通信失敗時もツール機能を停止させない。
+- 関心度テストは自動表示せず、利用者の操作で開く。計測失敗時もダイアログ表示や閉じる操作を妨げない。

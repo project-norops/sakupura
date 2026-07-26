@@ -3,6 +3,16 @@ export { Header } from "./Header";
 export { Footer } from "./Footer";
 export { Analytics } from "./Analytics";
 export { AnalyticsEvents, trackAnalyticsEvent } from "./AnalyticsEvents";
+export {
+  premiumInterestFeatures,
+  type PremiumInterestFeatureId,
+  type PremiumInterestPlacement,
+  type PremiumInterestToolId,
+} from "./AnalyticsEvents";
+export {
+  PremiumInterestCards,
+  type PremiumInterestCandidate,
+} from "./PremiumInterestCards";
 export { DisclaimerModal } from "./DisclaimerModal";
 export { BookmarkButton } from "./BookmarkButton";
 export { ShareButton } from "./ShareButton";

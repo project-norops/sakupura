@@ -9,6 +9,10 @@
     ".": {
       "import": "./index.ts",
       "default": "./index.ts"
+    },
+    "./PremiumInterestCards": {
+      "import": "./PremiumInterestCards.tsx",
+      "default": "./PremiumInterestCards.tsx"
     }
   },
   "peerDependencies": {
