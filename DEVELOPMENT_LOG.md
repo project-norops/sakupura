@@ -612,3 +612,10 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 
 - 人間レビューを受け、ページ冒頭の説明直後へ「かんたん操作手順」を追加。変換元CSV選択、取込先テンプレート選択、列対応・除外列確認、プレビュー・保存の4段階を短く表示した。
 - 初めての利用者向けに、操作サンプルを読み込むと手順3から試せる案内を併記。既存の入力欄、無料機能、関心度テストの動作は変更していない。
+
+## 2026-07-27（企画ID 23 本番公開）
+
+- 人間レビュー承認後、PR #16をmerge commit `4b650a86e994b13c340068323587b0b691f50e2b`でmainへ統合した。
+- Vercel Production deployment `dpl_FYKGTH7Sp9dxjt9i5yHzBKUD4ugX`がReadyとなり、`www.norops.jp`、`norops.jp`、`100apps-portal.vercel.app`へ反映されたことを確認した。
+- 本番の`/tools/csv-column-mapper`でHTTP表示、ページ冒頭の4ステップ、サンプルCSV読込後の2行・6列表示、取込先4列、列割当画面を確認した。
+- サービス台帳上の公開ツールは21本。X告知、外部API、認証、バックエンド追加は行っていない。
