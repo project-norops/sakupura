@@ -619,3 +619,13 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - Vercel Production deployment `dpl_FYKGTH7Sp9dxjt9i5yHzBKUD4ugX`がReadyとなり、`www.norops.jp`、`norops.jp`、`100apps-portal.vercel.app`へ反映されたことを確認した。
 - 本番の`/tools/csv-column-mapper`でHTTP表示、ページ冒頭の4ステップ、サンプルCSV読込後の2行・6列表示、取込先4列、列割当画面を確認した。
 - サービス台帳上の公開ツールは21本。X告知、外部API、認証、バックエンド追加は行っていない。
+
+## 2026-07-27（企画ID 27 OGP・SNSシェアカードプレビュー／タグ作成 プレビュー実装）
+
+- 承認済み企画ID 27を`npm run create:tool`で生成し、`packages/ogp-card-preview`と`/tools/ogp-card-preview`へプレビュー実装した。ブランチ内だけ`published`とし、`announceOnX: false`を維持した。
+- タイトル、説明、ページURL、画像URL・幅・高さ・代替説明、サイト名から汎用カード見本とOpen Graph・X向けmetaタグを生成する。HTML特殊文字をエスケープし、タグをまとめてコピーできるようにした。
+- 貼り付けたhead断片からog:title、og:description、og:url、og:imageの不足／空欄をエラー、画像寸法・代替説明・twitter:cardの不足を警告として静的診断する。URL先や画像へアクセスせず、入力内容・生成結果を外部送信しない。
+- 操作サンプル、The Open Graph protocolとX Cards markupの公式リンク、固有の対象者・説明・利用例・注意・FAQ・関連ツール導線を追加。正常な結果後に「ブランドプリセット保存」「複数ページ一括監査」の匿名関心度テストを表示する。
+- 自動テスト6件でURL・寸法・長文・代替説明の検証、HTMLエスケープ、タグ生成、head不足／完全断片、画面上の生成・コピー、入力エラー停止を確認した。`npm run check`は構成454件、コンテンツ22ツール、Jest 41 suites・264 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+- ローカル本番相当画面でサンプル反映、og:titleを含むタグ生成、head診断成功、コピー導線、関心度候補2件を確認した。375px幅で表示幅360px・横スクロールなしを確認した。
+- 本番公開、X告知、有料機能本体、外部API、認証、バックエンドは追加していない。Vercelプレビューで人間レビュー後に本番公開可否を判断する。
