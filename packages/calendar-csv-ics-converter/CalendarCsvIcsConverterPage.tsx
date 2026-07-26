@@ -114,7 +114,7 @@ export function CalendarCsvIcsConverterPage() {
           予定CSV・ICS一括変換
         </h1>
         <p className="mt-4 leading-7 text-slate-600">
-          日本語の予定CSVで列を割り当て、日付・時刻・終日・タイムゾーンを行ごとに検証してICSへ一括変換します。ファイルはブラウザ内だけで処理します。
+          CSVで管理している予定表を、GoogleカレンダーやAppleカレンダーへまとめて取り込めるICSファイルに変換できます。件名・開始・終了などの列を選び、日時の間違いを確認してから保存します。CSVの内容はブラウザ内だけで処理します。
         </p>
         <section
           aria-labelledby="quick-steps"

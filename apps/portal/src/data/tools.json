@@ -1237,7 +1237,7 @@
     "id": "022-calendar-csv-ics-converter",
     "slug": "calendar-csv-ics-converter",
     "title": "予定CSV・ICS一括変換",
-    "description": "予定CSVの列を割り当てて検証し、Google CalendarやApple Calendarへ読み込めるICSファイルを作成します。",
+    "description": "CSVで管理している予定表を、GoogleカレンダーやAppleカレンダーへまとめて取り込めるICSファイルに変換します。",
     "href": "/tools/calendar-csv-ics-converter",
     "badge": "業務効率化",
     "categoryId": "business-operations",

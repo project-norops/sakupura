@@ -23,6 +23,11 @@ afterEach(() => {
 
 test("loads the sample, validates events, and saves an ICS file", () => {
   render(<CalendarCsvIcsConverterPage />);
+  expect(
+    screen.getByText(
+      /CSVで管理している予定表を、GoogleカレンダーやAppleカレンダーへ/,
+    ),
+  ).toBeInTheDocument();
   fireEvent.click(
     screen.getByRole("button", { name: "操作サンプルを読み込む" }),
   );

@@ -11,19 +11,19 @@ const tool = getToolBySlug("calendar-csv-ics-converter");
 export const metadata: Metadata = {
   title: "予定CSV・ICS一括変換",
   description:
-    "予定CSVの列を割り当てて検証し、Google CalendarやApple Calendarへ読み込めるICSファイルを作成します。",
+    "CSVで管理している予定表を、GoogleカレンダーやAppleカレンダーへまとめて取り込めるICSファイルに変換します。",
   alternates: { canonical: "/tools/calendar-csv-ics-converter" },
   openGraph: {
     title: "予定CSV・ICS一括変換",
     description:
-      "予定CSVの列を割り当てて検証し、Google CalendarやApple Calendarへ読み込めるICSファイルを作成します。",
+      "CSVで管理している予定表を、GoogleカレンダーやAppleカレンダーへまとめて取り込めるICSファイルに変換します。",
     url: "/tools/calendar-csv-ics-converter",
   },
   twitter: {
     card: "summary",
     title: "予定CSV・ICS一括変換",
     description:
-      "予定CSVの列を割り当てて検証し、Google CalendarやApple Calendarへ読み込めるICSファイルを作成します。",
+      "CSVで管理している予定表を、GoogleカレンダーやAppleカレンダーへまとめて取り込めるICSファイルに変換します。",
   },
 };
 
