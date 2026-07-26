@@ -9,6 +9,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@sakupla/business-day-calculator": "file:../../packages/business-day-calculator",
     "@sakupla/contrast-color-fixer": "file:../../packages/contrast-color-fixer",
     "@sakupla/csv-diff-checker": "file:../../packages/csv-diff-checker",
     "@sakupla/csv-encoding-fixer": "file:../../packages/csv-encoding-fixer",
@@ -26,7 +27,9 @@
     "@sakupla/shared-ui": "file:../../packages/shared-ui",
     "@sakupla/shopify-csv-checker": "file:../../packages/shopify-csv-checker",
     "@sakupla/social-text-formatter": "file:../../packages/social-text-formatter",
+    "@sakupla/subtitle-timing-fixer": "file:../../packages/subtitle-timing-fixer",
     "@sakupla/utm-link-builder": "file:../../packages/utm-link-builder",
+    "@sakupla/youtube-chapter-maker": "file:../../packages/youtube-chapter-maker",
     "next": "16.2.11",
     "react": "19.2.4",
     "react-dom": "19.2.4"
