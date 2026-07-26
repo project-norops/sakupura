@@ -1,6 +1,7 @@
 import Link from "next/link";
 import apps from "@/data/apps";
 import { ToolDirectory } from "@/components/ToolDirectory";
+import { CategoryNavigation } from "@/components/CategoryNavigation";
 import { siteUrl } from "@/lib/site";
 
 export default function HomePage() {
@@ -95,6 +96,7 @@ export default function HomePage() {
           </p>
         </div>
 
+        <CategoryNavigation />
         <ToolDirectory apps={apps} />
       </section>
 

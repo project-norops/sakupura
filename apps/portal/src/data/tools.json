@@ -6,6 +6,8 @@
     "description": "目標手取り額、原価、決済手数料、販売数を入力して最適な販売単価を計算します。",
     "href": "/tools/dynamic-pricing",
     "badge": "収益計算",
+    "categoryId": "business-operations",
+    "categoryName": "業務効率化",
     "packageName": "@sakupla/dynamic-pricing",
     "componentName": "DynamicPricingPage",
     "content": {
@@ -62,6 +64,8 @@
     "description": "X、Instagram、LinkedIn向けの文章を、改行・空白・文字数・ハッシュタグを確認しながらブラウザ上で整形できます。",
     "href": "/tools/social-text-formatter",
     "badge": "SNS運用",
+    "categoryId": "content-marketing",
+    "categoryName": "発信・集客",
     "packageName": "@sakupla/social-text-formatter",
     "componentName": "SocialTextFormatterPage",
     "content": {
@@ -126,6 +130,8 @@
     "description": "名前や会社情報を入力して、Gmail・Outlookで使えるメール署名をブラウザ上で作成します。",
     "href": "/tools/email-signature-generator",
     "badge": "業務効率化",
+    "categoryId": "business-operations",
+    "categoryName": "業務効率化",
     "packageName": "@sakupla/email-signature-generator",
     "componentName": "EmailSignatureGeneratorPage",
     "content": {
@@ -182,6 +188,8 @@
     "description": "サービス業・物販の業態、評価、話題、対応者名をもとに、自然で丁寧な口コミ返信文を作成します。",
     "href": "/tools/review-reply-builder",
     "badge": "店舗運営",
+    "categoryId": "content-marketing",
+    "categoryName": "発信・集客",
     "packageName": "@sakupla/review-reply-builder",
     "componentName": "ReviewReplyBuilderPage",
     "content": {
@@ -238,6 +246,8 @@
     "description": "LPで伝える内容と順番を整理し、企画書用MarkdownやNotion向け制作チェックリストを作成します。",
     "href": "/tools/lp-structure-builder",
     "badge": "Web制作",
+    "categoryId": "web-design",
+    "categoryName": "Web制作・改善",
     "packageName": "@sakupla/lp-structure-builder",
     "componentName": "LpStructureBuilderPage",
     "content": {
@@ -294,6 +304,8 @@
     "description": "繰り返す業務だけを日常タスクから分けて一覧化し、完了すると次回予定日へ自動で繰り越します。",
     "href": "/tools/routine-task-loop",
     "badge": "定期業務",
+    "categoryId": "business-operations",
+    "categoryName": "業務効率化",
     "packageName": "@sakupla/routine-task-loop",
     "componentName": "RoutineTaskLoopPage",
     "content": {
@@ -354,6 +366,8 @@
     "description": "1枚の画像からOGP・SNS・favicon向けサイズをブラウザ内で一括作成します。",
     "href": "/tools/image-resizer",
     "badge": "画像変換",
+    "categoryId": "web-design",
+    "categoryName": "Web制作・改善",
     "packageName": "@sakupla/image-resizer",
     "componentName": "ImageResizerPage",
     "content": {
@@ -410,6 +424,8 @@
     "description": "商品CSVの列名や値の不備を行ごとに診断し、修正版CSVをブラウザ内で作成します。",
     "href": "/tools/shopify-csv-checker",
     "badge": "EC運営",
+    "categoryId": "commerce-data",
+    "categoryName": "EC・CSV",
     "packageName": "@sakupla/shopify-csv-checker",
     "componentName": "ShopifyCsvCheckerPage",
     "content": {
@@ -466,6 +482,8 @@
     "description": "計測用UTMリンクを命名チェック付きで作成し、QRコードとして保存できます。",
     "href": "/tools/utm-link-builder",
     "badge": "アクセス解析",
+    "categoryId": "web-design",
+    "categoryName": "Web制作・改善",
     "packageName": "@sakupla/utm-link-builder",
     "componentName": "UtmLinkBuilderPage",
     "content": {
@@ -522,6 +540,8 @@
     "description": "作業時間と時給から、いままでにかかった工数コストをリアルタイム表示します。",
     "href": "/tools/focus-cost-timer",
     "badge": "時間管理",
+    "categoryId": "business-operations",
+    "categoryName": "業務効率化",
     "packageName": "@sakupla/focus-cost-timer",
     "componentName": "FocusCostTimerPage",
     "content": {
@@ -578,6 +598,8 @@
     "description": "文字色と背景色の見やすさを判定し、WCAG基準を満たす近似色を提案します。",
     "href": "/tools/contrast-color-fixer",
     "badge": "Web制作",
+    "categoryId": "web-design",
+    "categoryName": "Web制作・改善",
     "packageName": "@sakupla/contrast-color-fixer",
     "componentName": "ContrastColorFixerPage",
     "content": {
@@ -634,6 +656,8 @@
     "description": "変更前・変更後のCSVを商品コードやIDで照合し、追加・削除・変更された行とセルを確認できます。",
     "href": "/tools/csv-diff-checker",
     "badge": "データ整理",
+    "categoryId": "commerce-data",
+    "categoryName": "EC・CSV",
     "packageName": "@sakupla/csv-diff-checker",
     "componentName": "CsvDiffCheckerPage",
     "content": {
@@ -690,6 +714,8 @@
     "description": "メール件名とプリヘッダーがPC・スマホの受信箱でどう見えるかを送信前に確認できます。",
     "href": "/tools/email-subject-previewer",
     "badge": "メール運用",
+    "categoryId": "content-marketing",
+    "categoryName": "発信・集客",
     "packageName": "@sakupla/email-subject-previewer",
     "componentName": "EmailSubjectPreviewerPage",
     "content": {
@@ -746,6 +772,8 @@
     "description": "住所・取引年月日・登録番号・税率別金額を記載した見積書や請求書を作成し、PDF保存できます。",
     "href": "/tools/invoice-pdf-generator",
     "badge": "請求業務",
+    "categoryId": "business-operations",
+    "categoryName": "業務効率化",
     "packageName": "@sakupla/invoice-pdf-generator",
     "componentName": "InvoicePdfGeneratorPage",
     "content": {
@@ -802,6 +830,8 @@
     "description": "商品フィードの必須項目、価格、在庫、GTINなどをアップロード前に診断します。",
     "href": "/tools/merchant-feed-checker",
     "badge": "EC広告",
+    "categoryId": "commerce-data",
+    "categoryName": "EC・CSV",
     "packageName": "@sakupla/merchant-feed-checker",
     "componentName": "MerchantFeedCheckerPage",
     "content": {
@@ -858,6 +888,8 @@
     "description": "旧URLと新URLの対応表を読み込み、転送漏れや重複、自己転送などを事前確認します。",
     "href": "/tools/redirect-map-checker",
     "badge": "SEO",
+    "categoryId": "web-design",
+    "categoryName": "Web制作・改善",
     "packageName": "@sakupla/redirect-map-checker",
     "componentName": "RedirectMapCheckerPage",
     "content": {
@@ -914,6 +946,8 @@
     "description": "CSVの文字コードを判定し、日本語の表示を確認しながらExcelで開きやすいUTF-8へ変換します。",
     "href": "/tools/csv-encoding-fixer",
     "badge": "データ整理",
+    "categoryId": "commerce-data",
+    "categoryName": "EC・CSV",
     "packageName": "@sakupla/csv-encoding-fixer",
     "componentName": "CsvEncodingFixerPage",
     "content": {
@@ -970,6 +1004,8 @@
     "description": "字幕ファイルの形式エラーを確認し、全体の時間ずれと字幕ごとの時刻をブラウザ内で修正します。",
     "href": "/tools/subtitle-timing-fixer",
     "badge": "動画字幕",
+    "categoryId": "content-marketing",
+    "categoryName": "発信・集客",
     "packageName": "@sakupla/subtitle-timing-fixer",
     "componentName": "SubtitleTimingFixerPage",
     "content": {
@@ -1030,6 +1066,8 @@
     "description": "時刻と見出しを並べ、YouTube概要欄へ貼れるチャプター形式を公式条件に沿って作成します。",
     "href": "/tools/youtube-chapter-maker",
     "badge": "動画運用",
+    "categoryId": "content-marketing",
+    "categoryName": "発信・集客",
     "packageName": "@sakupla/youtube-chapter-maker",
     "componentName": "YoutubeChapterMakerPage",
     "content": {
@@ -1086,6 +1124,8 @@
     "description": "土日・日本の祝日・任意休業日を除外し、指定営業日後または前の期限を計算します。",
     "href": "/tools/business-day-calculator",
     "badge": "業務計算",
+    "categoryId": "business-operations",
+    "categoryName": "業務効率化",
     "packageName": "@sakupla/business-day-calculator",
     "componentName": "BusinessDayCalculatorPage",
     "content": {

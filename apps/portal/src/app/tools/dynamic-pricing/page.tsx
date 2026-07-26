@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DynamicPricingPage } from "@sakupla/dynamic-pricing";
-import { ToolGuide, ToolStructuredData } from "@sakupla/shared-ui";
+import { ToolStructuredData } from "@sakupla/shared-ui";
+import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
 import { notFound } from "next/navigation";
 import { getToolBySlug, isToolPublished } from "@/data/apps";
 import { siteUrl } from "@/lib/site";
@@ -36,7 +37,7 @@ export default function Page() {
         content={tool.content}
       />
       <DynamicPricingPage />
-      <ToolGuide title={tool.title} content={tool.content} />
+      <ToolGuideWithRelated tool={tool} />
     </>
   );
 }

@@ -12,9 +12,25 @@ export type ToolGuideContent = {
 export type ToolGuideProps = {
   title: string;
   content: ToolGuideContent;
+  category?: {
+    name: string;
+    href: string;
+    badgeClass: string;
+  };
+  relatedTools?: Array<{
+    title: string;
+    description: string;
+    href: string;
+    slug: string;
+  }>;
 };
 
-export function ToolGuide({ title, content }: ToolGuideProps) {
+export function ToolGuide({
+  title,
+  content,
+  category,
+  relatedTools = [],
+}: ToolGuideProps) {
   return (
     <article
       className="mx-auto max-w-5xl px-4 pb-12 pt-8 sm:px-6 sm:pb-20 lg:px-8"
@@ -119,6 +135,60 @@ export function ToolGuide({ title, content }: ToolGuideProps) {
           ))}
         </div>
       </section>
+
+      {category && relatedTools.length > 0 && (
+        <section className="mt-14" aria-labelledby="related-tools-title">
+          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+            <div>
+              <span
+                className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ring-1 ring-inset ${category.badgeClass}`}
+              >
+                {category.name}
+              </span>
+              <h3
+                id="related-tools-title"
+                className="mt-3 text-2xl font-black text-slate-950"
+              >
+                次に使える関連ツール
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-slate-500">
+                同じ目的の作業を続けて進められる無料ツールです。
+              </p>
+            </div>
+            <Link
+              href={category.href}
+              data-analytics-event="select_content"
+              data-analytics-content-type="category_from_tool"
+              data-analytics-item-id={category.href.split("/").at(-1)}
+              className="text-sm font-bold text-blue-700 hover:text-blue-900"
+            >
+              {category.name}をすべて見る →
+            </Link>
+          </div>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            {relatedTools.map((tool) => (
+              <Link
+                key={tool.slug}
+                href={tool.href}
+                data-analytics-event="select_content"
+                data-analytics-content-type="related_tool"
+                data-analytics-item-id={tool.slug}
+                className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md"
+              >
+                <h4 className="font-bold leading-6 text-slate-950 group-hover:text-blue-700">
+                  {tool.title}
+                </h4>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  {tool.description}
+                </p>
+                <span className="mt-4 inline-flex text-sm font-bold text-blue-700">
+                  無料で使う <span aria-hidden="true">→</span>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <aside className="mt-14 flex flex-col items-start justify-between gap-5 rounded-3xl bg-slate-950 p-6 text-white sm:flex-row sm:items-center sm:p-8">
         <div>
