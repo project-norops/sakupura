@@ -10,19 +10,19 @@ const tool = getToolBySlug("invoice-pdf-generator");
 export const metadata: Metadata = {
   title: "見積書・請求書PDF作成ツール",
   description:
-    "見積書から請求書へ内容を引き継ぎ、税率別計算とPDF保存までブラウザ内で完結します。",
+    "住所・取引年月日・登録番号・税率別金額を記載した見積書や請求書を作成し、PDF保存できます。",
   alternates: { canonical: "/tools/invoice-pdf-generator" },
   openGraph: {
     title: "見積書・請求書PDF作成ツール",
     description:
-      "見積書から請求書へ内容を引き継ぎ、税率別計算とPDF保存までブラウザ内で完結します。",
+      "住所・取引年月日・登録番号・税率別金額を記載した見積書や請求書を作成し、PDF保存できます。",
     url: "/tools/invoice-pdf-generator",
   },
   twitter: {
     card: "summary",
     title: "見積書・請求書PDF作成ツール",
     description:
-      "見積書から請求書へ内容を引き継ぎ、税率別計算とPDF保存までブラウザ内で完結します。",
+      "住所・取引年月日・登録番号・税率別金額を記載した見積書や請求書を作成し、PDF保存できます。",
   },
 };
 

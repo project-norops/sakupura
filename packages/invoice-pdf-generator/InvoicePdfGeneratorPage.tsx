@@ -11,9 +11,16 @@ import {
 export function InvoicePdfGeneratorPage() {
   const [kind, setKind] = useState<"estimate" | "invoice">("estimate");
   const [issuer, setIssuer] = useState("サクプラデザイン");
+  const [issuerAddress, setIssuerAddress] =
+    useState("東京都千代田区丸の内1-1-1");
   const [recipient, setRecipient] = useState("株式会社サンプル");
+  const [recipientAddress, setRecipientAddress] =
+    useState("東京都新宿区西新宿1-1-1");
   const [registration, setRegistration] = useState("T1234567890123");
   const [issueDate, setIssueDate] = useState(
+    new Date().toISOString().slice(0, 10),
+  );
+  const [transactionDate, setTransactionDate] = useState(
     new Date().toISOString().slice(0, 10),
   );
   const [dueDate, setDueDate] = useState("");
@@ -28,6 +35,24 @@ export function InvoicePdfGeneratorPage() {
     },
   ]);
   const totals = useMemo(() => calculateInvoice(lines), [lines]);
+  const invoiceChecks = useMemo(
+    () => [
+      { label: "発行者の名称", valid: Boolean(issuer.trim()) },
+      {
+        label: "登録番号（T＋13桁）",
+        valid: /^T\d{13}$/.test(registration.trim()),
+      },
+      { label: "取引年月日", valid: Boolean(transactionDate) },
+      { label: "取引先の名称", valid: Boolean(recipient.trim()) },
+      {
+        label: "取引内容",
+        valid:
+          lines.length > 0 && lines.every((line) => line.description.trim()),
+      },
+    ],
+    [issuer, lines, recipient, registration, transactionDate],
+  );
+  const invoiceReady = invoiceChecks.every((check) => check.valid);
   const update = (id: string, patch: Partial<InvoiceLine>) =>
     setLines((items) =>
       items.map((item) => (item.id === id ? { ...item, ...patch } : item)),
@@ -54,7 +79,7 @@ export function InvoicePdfGeneratorPage() {
             見積書・請求書PDF作成ツール
           </h1>
           <p className="mt-4 max-w-3xl leading-7 text-slate-600">
-            明細を入力して見積書・請求書を作り、ブラウザの印刷機能からPDF保存できます。入力内容はサーバーへ送信しません。
+            名称・住所・取引年月日・登録番号・明細を入力して見積書や請求書を作り、ブラウザの印刷機能からPDF保存できます。請求書ではインボイスの標準的な記載事項をチェックでき、入力内容はサーバーへ送信しません。
           </p>
         </div>
         <div className="mt-8 grid gap-8 xl:grid-cols-[.9fr_1.1fr] print:block">
@@ -67,6 +92,7 @@ export function InvoicePdfGeneratorPage() {
               ].map(([value, label]) => (
                 <button
                   key={value}
+                  type="button"
                   onClick={() => setKind(value as typeof kind)}
                   aria-pressed={kind === value}
                   className={`rounded-xl border px-4 py-3 font-bold ${kind === value ? "border-blue-600 bg-blue-50 text-blue-700" : "border-slate-300"}`}
@@ -78,9 +104,12 @@ export function InvoicePdfGeneratorPage() {
             <div className="grid gap-3 sm:grid-cols-2">
               {[
                 ["宛先", recipient, setRecipient],
+                ["宛先住所", recipientAddress, setRecipientAddress],
                 ["発行者", issuer, setIssuer],
+                ["発行者住所", issuerAddress, setIssuerAddress],
                 ["登録番号", registration, setRegistration],
                 ["発行日", issueDate, setIssueDate],
+                ["取引年月日", transactionDate, setTransactionDate],
                 [
                   kind === "estimate" ? "見積有効期限" : "支払期限",
                   dueDate,
@@ -209,6 +238,9 @@ export function InvoicePdfGeneratorPage() {
                   <p className="border-b border-slate-900 pb-1 text-xl font-bold">
                     {recipient || "宛先未入力"} 御中
                   </p>
+                  <p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-600">
+                    {recipientAddress || "宛先住所未入力"}
+                  </p>
                 </div>
                 <div className="text-right text-sm leading-6">
                   <p>
@@ -218,6 +250,9 @@ export function InvoicePdfGeneratorPage() {
                   </p>
                   <p>発行日 {issueDate}</p>
                   <strong>{issuer || "発行者未入力"}</strong>
+                  <p className="whitespace-pre-line">
+                    {issuerAddress || "発行者住所未入力"}
+                  </p>
                   <p>{registration}</p>
                 </div>
               </div>
@@ -227,6 +262,7 @@ export function InvoicePdfGeneratorPage() {
                   {kind === "estimate" ? "お見積り" : "ご請求"}
                   申し上げます。
                 </p>
+                <p className="mt-2 text-sm">取引年月日：{transactionDate}</p>
                 <p className="mt-5 border-b-2 border-slate-900 pb-2 text-2xl font-black">
                   合計 {formatYen(totals.total)}
                 </p>
@@ -252,7 +288,11 @@ export function InvoicePdfGeneratorPage() {
                         {formatYen(line.unitPrice)}
                       </td>
                       <td className="border p-2 text-right">
-                        {line.taxRate ? `${line.taxRate}%` : `対象外`}
+                        {line.taxRate === 8
+                          ? "8%（軽減税率）"
+                          : line.taxRate === 10
+                            ? "10%"
+                            : "対象外"}
                       </td>
                       <td className="border p-2 text-right">
                         {formatYen(line.quantity * line.unitPrice)}
@@ -270,12 +310,46 @@ export function InvoicePdfGeneratorPage() {
                   <span>消費税</span>
                   <strong>{formatYen(totals.tax)}</strong>
                 </p>
+                {([10, 8] as const).map(
+                  (rate) =>
+                    totals.taxableByRate[rate] > 0 && (
+                      <div
+                        key={rate}
+                        className="border-t border-dashed pt-1 text-xs leading-5 text-slate-600"
+                      >
+                        <p className="flex justify-between">
+                          <span>
+                            {rate}%対象（税抜）
+                            {rate === 8 ? "※" : ""}
+                          </span>
+                          <strong>
+                            {formatYen(totals.taxableByRate[rate])}
+                          </strong>
+                        </p>
+                        <p className="flex justify-between">
+                          <span>{rate}%消費税</span>
+                          <strong>{formatYen(totals.taxByRate[rate])}</strong>
+                        </p>
+                      </div>
+                    ),
+                )}
+                {totals.taxableByRate[0] > 0 && (
+                  <p className="flex justify-between border-t border-dashed pt-1 text-xs text-slate-600">
+                    <span>対象外</span>
+                    <strong>{formatYen(totals.taxableByRate[0])}</strong>
+                  </p>
+                )}
                 <p className="flex justify-between border-t pt-2 text-lg">
                   <span>合計</span>
                   <strong>{formatYen(totals.total)}</strong>
                 </p>
               </div>
               <div className="invoice-terms">
+                {totals.taxableByRate[8] > 0 && (
+                  <p className="mt-5 text-xs text-slate-600">
+                    ※は軽減税率対象品目です。
+                  </p>
+                )}
                 {dueDate && (
                   <p className="mt-8 text-sm font-bold">
                     {kind === "estimate" ? "見積有効期限" : "支払期限"}：
@@ -287,17 +361,54 @@ export function InvoicePdfGeneratorPage() {
                 </p>
               </div>
             </article>
+            {kind === "invoice" && (
+              <div className="mt-4 rounded-2xl border border-slate-200 p-4 print:hidden">
+                <strong className="text-sm text-slate-900">
+                  インボイス記載チェック
+                </strong>
+                <ul className="mt-2 grid gap-2 text-sm sm:grid-cols-2">
+                  {invoiceChecks.map((check) => (
+                    <li
+                      key={check.label}
+                      className={
+                        check.valid ? "text-emerald-700" : "text-rose-700"
+                      }
+                    >
+                      {check.valid ? "✓" : "要確認："} {check.label}
+                    </li>
+                  ))}
+                  <li className="text-emerald-700">
+                    ✓ 税率ごとの対価・適用税率・消費税額
+                  </li>
+                </ul>
+                <p className="mt-2 text-xs leading-5 text-slate-500">
+                  住所は適格請求書の法定必須項目ではありませんが、取引先確認用として記載できます。
+                </p>
+              </div>
+            )}
             <button
               type="button"
               onClick={() => window.print()}
+              disabled={kind === "invoice" && !invoiceReady}
               data-analytics-event="tool_run"
               data-analytics-tool-id="invoice-pdf-generator"
-              className="mt-4 w-full rounded-full bg-blue-600 px-5 py-4 font-black text-white hover:bg-blue-700 print:hidden"
+              className="mt-4 w-full rounded-full bg-blue-600 px-5 py-4 font-black text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40 print:hidden"
             >
               印刷画面を開いてPDF保存
             </button>
             <p className="mt-2 text-xs leading-5 text-slate-500 print:hidden">
-              PDFには見積書・請求書部分だけが含まれます。明細が複数ページになる場合は表の見出しを各ページに繰り返し、明細行の途中では改ページしません。税額は明細ごとに切り捨てて計算します。
+              PDFには見積書・請求書部分だけが含まれます。明細が複数ページになる場合は表の見出しを各ページに繰り返し、明細行の途中では改ページしません。消費税の端数は一つの書類につき税率ごとに1回切り捨てます。
+            </p>
+            <p className="mt-2 text-xs leading-5 text-slate-500 print:hidden">
+              <a
+                href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shohi/6625.htm"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-blue-700 underline"
+              >
+                国税庁「適格請求書等の記載事項」
+              </a>
+              （確認日：2026年7月26日）を基準にしています。制度適合を保証するものではないため、発行前に自社の運用と最新情報を確認してください。
             </p>
           </section>
         </div>

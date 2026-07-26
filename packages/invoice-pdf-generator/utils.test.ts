@@ -14,6 +14,14 @@ describe("invoice utilities", () => {
         { id: "1", description: "A", quantity: 1, unitPrice: 1000, taxRate: 0 },
       ]).total,
     ).toBe(1000));
+  test("rounds tax once for each rate on the whole invoice", () => {
+    const result = calculateInvoice([
+      { id: "1", description: "A", quantity: 1, unitPrice: 5, taxRate: 10 },
+      { id: "2", description: "B", quantity: 1, unitPrice: 5, taxRate: 10 },
+    ]);
+    expect(result.taxByRate[10]).toBe(1);
+    expect(result.taxableByRate[10]).toBe(10);
+  });
   test("creates deterministic document number", () =>
     expect(nextDocumentNumber("INV", new Date(2026, 6, 26))).toBe(
       "INV-20260726-001",

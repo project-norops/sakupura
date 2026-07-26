@@ -7,17 +7,21 @@ export type InvoiceLine = {
 };
 
 export function calculateInvoice(lines: InvoiceLine[]) {
-  const subtotal = lines.reduce(
-    (sum, line) => sum + line.quantity * line.unitPrice,
-    0,
-  );
-  const taxByRate = { 10: 0, 8: 0, 0: 0 } as Record<10 | 8 | 0, number>;
+  const taxableByRate = { 10: 0, 8: 0, 0: 0 } as Record<10 | 8 | 0, number>;
   for (const line of lines)
-    taxByRate[line.taxRate] += Math.floor(
-      (line.quantity * line.unitPrice * line.taxRate) / 100,
-    );
+    taxableByRate[line.taxRate] += line.quantity * line.unitPrice;
+  const subtotal = taxableByRate[10] + taxableByRate[8] + taxableByRate[0];
+  const taxByRate = { 10: 0, 8: 0, 0: 0 } as Record<10 | 8 | 0, number>;
+  taxByRate[10] = Math.floor((taxableByRate[10] * 10) / 100);
+  taxByRate[8] = Math.floor((taxableByRate[8] * 8) / 100);
   const tax = taxByRate[10] + taxByRate[8];
-  return { subtotal, taxByRate, tax, total: subtotal + tax };
+  return {
+    subtotal,
+    taxableByRate,
+    taxByRate,
+    tax,
+    total: subtotal + tax,
+  };
 }
 
 export function nextDocumentNumber(prefix: "EST" | "INV", date = new Date()) {
