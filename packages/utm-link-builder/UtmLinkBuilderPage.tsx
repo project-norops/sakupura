@@ -4,6 +4,7 @@ import QRCode from "qrcode";
 import { useEffect, useMemo, useState } from "react";
 import {
   buildUtmUrl,
+  normalizeUtmValue,
   utmWarnings,
   validateDestination,
   type UtmInput,
@@ -129,26 +130,49 @@ export function UtmLinkBuilderPage() {
             )}
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="mt-4 block text-sm font-bold text-slate-700">
-                流入元 utm_source <span className="text-rose-600">必須</span>
+                流入元（utm_source） <span className="text-rose-600">必須</span>
                 <input
                   value={input.source}
                   onChange={(event) => update("source", event.target.value)}
                   placeholder="x"
                   className={field}
                 />
+                <span className="mt-1 block text-xs font-normal leading-5 text-slate-500">
+                  どこから来たか。例：x、google、newsletter
+                </span>
+                {input.source &&
+                  normalizeUtmValue(input.source) !== input.source && (
+                    <span className="mt-1 block text-xs font-normal text-blue-700">
+                      生成時：
+                      {normalizeUtmValue(input.source) ||
+                        "使用できる半角英数字がありません"}
+                    </span>
+                  )}
               </label>
               <label className="mt-4 block text-sm font-bold text-slate-700">
-                媒体 utm_medium <span className="text-rose-600">必須</span>
+                配信手段（utm_medium）{" "}
+                <span className="text-rose-600">必須</span>
                 <input
                   value={input.medium}
                   onChange={(event) => update("medium", event.target.value)}
                   placeholder="social"
                   className={field}
                 />
+                <span className="mt-1 block text-xs font-normal leading-5 text-slate-500">
+                  どの手段で届けたか。例：social、email、cpc、qr
+                </span>
+                {input.medium &&
+                  normalizeUtmValue(input.medium) !== input.medium && (
+                    <span className="mt-1 block text-xs font-normal text-blue-700">
+                      生成時：
+                      {normalizeUtmValue(input.medium) ||
+                        "使用できる半角英数字がありません"}
+                    </span>
+                  )}
               </label>
             </div>
             <label className="mt-4 block text-sm font-bold text-slate-700">
-              キャンペーン名 utm_campaign{" "}
+              キャンペーン名（utm_campaign）{" "}
               <span className="text-rose-600">必須</span>
               <input
                 value={input.campaign}
@@ -156,7 +180,21 @@ export function UtmLinkBuilderPage() {
                 placeholder="summer_sale_2026"
                 className={field}
               />
+              <span className="mt-1 block text-xs font-normal leading-5 text-slate-500">
+                どの施策かをまとめる名前。例：new_tool_launch、summer_sale_2026
+              </span>
+              {input.campaign &&
+                normalizeUtmValue(input.campaign) !== input.campaign && (
+                  <span className="mt-1 block text-xs font-normal text-blue-700">
+                    生成時：
+                    {normalizeUtmValue(input.campaign) ||
+                      "使用できる半角英数字がありません"}
+                  </span>
+                )}
             </label>
+            <p className="mt-4 rounded-xl bg-blue-50 p-3 text-xs leading-5 text-blue-950">
+              GA4上でキャンペーンの集計がばらつくのを防ぐため、このツールでは流入元・配信手段・キャンペーン名を必須にしています。
+            </p>
             <details className="mt-4 rounded-xl border border-slate-200 p-4">
               <summary className="cursor-pointer text-sm font-bold text-slate-700">
                 任意項目を追加
@@ -244,8 +282,33 @@ export function UtmLinkBuilderPage() {
               <br />
               リンク生成とQRコード作成はブラウザ内で完結します。サクプラのアクセス解析にも入力URLやキャンペーン名は送りません。
             </div>
+            <div className="mt-4 rounded-2xl border border-slate-200 p-4 text-sm leading-6 text-slate-600">
+              <strong className="text-slate-900">入力に迷ったとき</strong>
+              <br />
+              <a
+                href="https://support.google.com/analytics/answer/10917952?hl=ja"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-blue-700 underline underline-offset-2"
+              >
+                Google Analytics公式：カスタムURLでキャンペーンを計測する
+              </a>
+              <br />
+              <a
+                href="https://ga-dev-tools.google/campaign-url-builder/?web=1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-blue-700 underline underline-offset-2"
+              >
+                Google公式 Campaign URL Builder
+              </a>
+            </div>
           </section>
         </div>
+        <p className="mt-8 border-t border-slate-200 pt-5 text-xs leading-5 text-slate-500">
+          本ツールはGoogleの公式ツールではなく、Googleとの提携・承認関係はありません。入力内容や生成したキャンペーン情報をGoogle
+          Analyticsへ送信する機能はありません。
+        </p>
       </section>
     </main>
   );

@@ -102,6 +102,7 @@ export function compliance(ratio: number) {
   return {
     normalAA: ratio >= 4.5,
     largeAA: ratio >= 3,
+    uiAA: ratio >= 3,
     normalAAA: ratio >= 7,
     largeAAA: ratio >= 4.5,
   };

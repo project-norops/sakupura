@@ -5,17 +5,36 @@ import { useEffect, useMemo, useState } from "react";
 import {
   IMAGE_PRESETS,
   calculateSourceRect,
+  outputScale,
   outputFilename,
   validateImageFile,
+  type CropPosition,
 } from "./utils";
 
 type LoadedImage = { file: File; url: string; element: HTMLImageElement };
+
+const CROP_POSITIONS: {
+  value: CropPosition;
+  label: string;
+  objectPosition: string;
+}[] = [
+  { value: "top-left", label: "左上", objectPosition: "left top" },
+  { value: "top", label: "上", objectPosition: "center top" },
+  { value: "top-right", label: "右上", objectPosition: "right top" },
+  { value: "left", label: "左", objectPosition: "left center" },
+  { value: "center", label: "中央", objectPosition: "center center" },
+  { value: "right", label: "右", objectPosition: "right center" },
+  { value: "bottom-left", label: "左下", objectPosition: "left bottom" },
+  { value: "bottom", label: "下", objectPosition: "center bottom" },
+  { value: "bottom-right", label: "右下", objectPosition: "right bottom" },
+];
 
 function canvasBlob(
   image: HTMLImageElement,
   preset: (typeof IMAGE_PRESETS)[number],
   mode: "cover" | "contain",
   background: string,
+  position: CropPosition,
 ): Promise<Blob> {
   const canvas = document.createElement("canvas");
   canvas.width = preset.width;
@@ -31,6 +50,7 @@ function canvasBlob(
     preset.width,
     preset.height,
     mode,
+    position,
   );
   context.drawImage(
     image,
@@ -61,6 +81,7 @@ export function ImageResizerPage() {
     IMAGE_PRESETS.map((preset) => preset.id),
   );
   const [mode, setMode] = useState<"cover" | "contain">("cover");
+  const [position, setPosition] = useState<CropPosition>("center");
   const [background, setBackground] = useState("#ffffff");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
@@ -108,7 +129,7 @@ export function ImageResizerPage() {
       for (const preset of presets)
         zip.file(
           outputFilename(loaded.file.name, preset),
-          await canvasBlob(loaded.element, preset, mode, background),
+          await canvasBlob(loaded.element, preset, mode, background, position),
         );
       const blob = await zip.generateAsync({ type: "blob" });
       const url = URL.createObjectURL(blob);
@@ -183,33 +204,73 @@ export function ImageResizerPage() {
             )}
             <fieldset className="mt-5">
               <legend className="text-sm font-bold text-slate-700">
-                切り抜き方法
+                画像の収め方
               </legend>
-              <div className="mt-2 grid grid-cols-2 gap-2">
+              <div className="mt-2 grid gap-2 sm:grid-cols-2">
                 {[
-                  ["cover", "中央で切り抜く"],
-                  ["contain", "全体を収める"],
-                ].map(([value, label]) => (
+                  [
+                    "cover",
+                    "枠いっぱいに切り抜く",
+                    "縦横比を保って拡大・縮小し、はみ出した部分を切り抜きます。",
+                  ],
+                  [
+                    "contain",
+                    "余白を付けて全体表示",
+                    "縦横比を保って拡大・縮小し、画像全体を指定サイズへ収めます。",
+                  ],
+                ].map(([value, label, description]) => (
                   <button
                     key={value}
                     type="button"
                     onClick={() => setMode(value as typeof mode)}
-                    className={`rounded-xl border px-3 py-3 text-sm font-bold ${mode === value ? "border-blue-600 bg-blue-50 text-blue-700" : "border-slate-300"}`}
+                    className={`rounded-xl border px-3 py-3 text-left text-sm ${mode === value ? "border-blue-600 bg-blue-50 text-blue-700" : "border-slate-300 text-slate-700"}`}
                   >
-                    {label}
+                    <strong className="block">{label}</strong>
+                    <span className="mt-1 block text-xs font-normal leading-5">
+                      {description}
+                    </span>
                   </button>
                 ))}
               </div>
             </fieldset>
-            <label className="mt-4 flex items-center justify-between rounded-xl border border-slate-200 p-3 text-sm font-bold text-slate-700">
-              余白の色
-              <input
-                type="color"
-                value={background}
-                onChange={(event) => setBackground(event.target.value)}
-                className="h-10 w-14 cursor-pointer rounded border-0"
-              />
-            </label>
+            {mode === "cover" ? (
+              <fieldset className="mt-4">
+                <legend className="text-sm font-bold text-slate-700">
+                  切り抜き位置
+                </legend>
+                <p className="mt-1 text-xs leading-5 text-slate-500">
+                  残したい被写体がある方向を選びます。すべての出力サイズへ共通で適用されます。
+                </p>
+                <div className="mt-2 grid grid-cols-3 gap-2">
+                  {CROP_POSITIONS.map((item) => (
+                    <button
+                      key={item.value}
+                      type="button"
+                      onClick={() => setPosition(item.value)}
+                      aria-pressed={position === item.value}
+                      className={`rounded-lg border px-2 py-2 text-xs font-bold ${position === item.value ? "border-blue-600 bg-blue-50 text-blue-700" : "border-slate-300 text-slate-600"}`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+            ) : (
+              <label className="mt-4 flex items-center justify-between rounded-xl border border-slate-200 p-3 text-sm font-bold text-slate-700">
+                余白の色
+                <span className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-normal uppercase">
+                    {background}
+                  </span>
+                  <input
+                    type="color"
+                    value={background}
+                    onChange={(event) => setBackground(event.target.value)}
+                    className="h-10 w-14 cursor-pointer rounded border-0"
+                  />
+                </span>
+              </label>
+            )}
           </section>
           <section>
             <h2 className="text-xl font-black text-slate-950">
@@ -221,6 +282,29 @@ export function ImageResizerPage() {
                   key={preset.id}
                   className={`cursor-pointer rounded-2xl border p-4 ${selected.includes(preset.id) ? "border-blue-500 bg-blue-50" : "border-slate-200"}`}
                 >
+                  {loaded && (
+                    <div
+                      className="mb-3 overflow-hidden rounded-xl border border-slate-200"
+                      style={{
+                        aspectRatio: `${preset.width} / ${preset.height}`,
+                        backgroundColor: background,
+                      }}
+                    >
+                      {/* Local object URLs are previewed without Next image optimization. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={loaded.url}
+                        alt={`${preset.label}の出力プレビュー`}
+                        className="h-full w-full"
+                        style={{
+                          objectFit: mode,
+                          objectPosition: CROP_POSITIONS.find(
+                            (item) => item.value === position,
+                          )?.objectPosition,
+                        }}
+                      />
+                    </div>
+                  )}
                   <span className="flex items-start gap-3">
                     <input
                       type="checkbox"
@@ -246,6 +330,21 @@ export function ImageResizerPage() {
                 </label>
               ))}
             </div>
+            {loaded &&
+              presets.some(
+                (preset) =>
+                  outputScale(
+                    loaded.element.naturalWidth,
+                    loaded.element.naturalHeight,
+                    preset.width,
+                    preset.height,
+                    mode,
+                  ) > 1,
+              ) && (
+                <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm font-bold leading-6 text-amber-900">
+                  一部の出力は元画像より拡大されるため、ぼやけて見える場合があります。上のプレビューで確認してください。
+                </p>
+              )}
             <button
               type="button"
               disabled={!loaded || presets.length === 0 || busy}

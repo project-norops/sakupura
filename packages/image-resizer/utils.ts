@@ -1,4 +1,14 @@
 export type ImageFormat = "png" | "jpeg" | "webp";
+export type CropPosition =
+  | "top-left"
+  | "top"
+  | "top-right"
+  | "left"
+  | "center"
+  | "right"
+  | "bottom-left"
+  | "bottom"
+  | "bottom-right";
 
 export type ImagePreset = {
   id: string;
@@ -73,6 +83,7 @@ export function calculateSourceRect(
   targetWidth: number,
   targetHeight: number,
   mode: "cover" | "contain",
+  position: CropPosition = "center",
 ) {
   if (mode === "contain") {
     const scale = Math.min(
@@ -94,10 +105,22 @@ export function calculateSourceRect(
   }
   const sourceRatio = sourceWidth / sourceHeight;
   const targetRatio = targetWidth / targetHeight;
+  const horizontal =
+    position.endsWith("left") || position === "left"
+      ? 0
+      : position.endsWith("right") || position === "right"
+        ? 1
+        : 0.5;
+  const vertical =
+    position.startsWith("top") || position === "top"
+      ? 0
+      : position.startsWith("bottom") || position === "bottom"
+        ? 1
+        : 0.5;
   if (sourceRatio > targetRatio) {
     const sw = sourceHeight * targetRatio;
     return {
-      sx: (sourceWidth - sw) / 2,
+      sx: (sourceWidth - sw) * horizontal,
       sy: 0,
       sw,
       sh: sourceHeight,
@@ -110,7 +133,7 @@ export function calculateSourceRect(
   const sh = sourceWidth / targetRatio;
   return {
     sx: 0,
-    sy: (sourceHeight - sh) / 2,
+    sy: (sourceHeight - sh) * vertical,
     sw: sourceWidth,
     sh,
     dx: 0,
@@ -118,6 +141,17 @@ export function calculateSourceRect(
     dw: targetWidth,
     dh: targetHeight,
   };
+}
+
+export function outputScale(
+  sourceWidth: number,
+  sourceHeight: number,
+  targetWidth: number,
+  targetHeight: number,
+  mode: "cover" | "contain",
+): number {
+  const scales = [targetWidth / sourceWidth, targetHeight / sourceHeight];
+  return mode === "cover" ? Math.max(...scales) : Math.min(...scales);
 }
 
 export function validateImageFile(

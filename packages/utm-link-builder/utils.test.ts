@@ -32,4 +32,14 @@ describe("utm link utilities", () => {
       }).length,
     ).toBeGreaterThan(1);
   });
+  test("rejects a required value that normalizes to empty", () => {
+    expect(() =>
+      buildUtmUrl({
+        url: "https://example.com",
+        source: "Ｘ",
+        medium: "ソーシャル",
+        campaign: "新商品",
+      }),
+    ).toThrow("半角英数字");
+  });
 });

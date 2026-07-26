@@ -9,6 +9,14 @@ import {
 } from "./utils";
 
 const STORAGE_KEY = "focus-cost-timer:sessions";
+const DRAFT_KEY = "focus-cost-timer:active";
+
+type TimerDraft = {
+  task: string;
+  hourlyRate: number;
+  elapsedBeforeStart: number;
+  startedAt: number | null;
+};
 
 export function FocusCostTimerPage() {
   const [task, setTask] = useState("記事の構成を作る");
@@ -29,6 +37,20 @@ export function FocusCostTimerPage() {
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) setSessions(JSON.parse(saved));
+        const draft = localStorage.getItem(DRAFT_KEY);
+        if (draft) {
+          const parsed = JSON.parse(draft) as TimerDraft;
+          const base = Math.max(0, parsed.elapsedBeforeStart || 0);
+          const restored = parsed.startedAt
+            ? base + Math.max(0, Date.now() - parsed.startedAt)
+            : base;
+          setTask(parsed.task || "記事の構成を作る");
+          setHourlyRate(Math.max(0, parsed.hourlyRate || 0));
+          setElapsedMs(restored);
+          elapsedBeforeStart.current = base;
+          startedAt.current = parsed.startedAt;
+          setRunning(Boolean(parsed.startedAt));
+        }
       } catch {
         /* unavailable */
       }
@@ -45,11 +67,44 @@ export function FocusCostTimerPage() {
     }
   }, [sessions, loaded]);
   useEffect(() => {
+    if (!loaded || running) return;
+    try {
+      const draft: TimerDraft = {
+        task,
+        hourlyRate,
+        elapsedBeforeStart: elapsedMs,
+        startedAt: null,
+      };
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    } catch {
+      /* unavailable */
+    }
+  }, [elapsedMs, hourlyRate, loaded, running, task]);
+  useEffect(() => {
+    if (!loaded) return;
+    const saveRunningDraft = () => {
+      if (!running || startedAt.current === null) return;
+      try {
+        const draft: TimerDraft = {
+          task,
+          hourlyRate,
+          elapsedBeforeStart: elapsedBeforeStart.current,
+          startedAt: startedAt.current,
+        };
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+      } catch {
+        /* unavailable */
+      }
+    };
+    window.addEventListener("pagehide", saveRunningDraft);
+    return () => window.removeEventListener("pagehide", saveRunningDraft);
+  }, [hourlyRate, loaded, running, task]);
+  useEffect(() => {
     if (!running) return;
     const update = () => {
       if (startedAt.current !== null)
         setElapsedMs(
-          elapsedBeforeStart.current + performance.now() - startedAt.current,
+          elapsedBeforeStart.current + Date.now() - startedAt.current,
         );
     };
     update();
@@ -59,24 +114,47 @@ export function FocusCostTimerPage() {
 
   const start = () => {
     if (running) return;
-    startedAt.current = performance.now();
+    startedAt.current = Date.now();
     elapsedBeforeStart.current = elapsedMs;
     setRunning(true);
+    try {
+      localStorage.setItem(
+        DRAFT_KEY,
+        JSON.stringify({
+          task,
+          hourlyRate,
+          elapsedBeforeStart: elapsedMs,
+          startedAt: startedAt.current,
+        } satisfies TimerDraft),
+      );
+    } catch {
+      /* unavailable */
+    }
   };
   const pause = () => {
     if (!running || startedAt.current === null) return;
-    const next =
-      elapsedBeforeStart.current + performance.now() - startedAt.current;
+    const next = elapsedBeforeStart.current + Date.now() - startedAt.current;
     setElapsedMs(next);
     elapsedBeforeStart.current = next;
     startedAt.current = null;
     setRunning(false);
   };
-  const reset = () => {
+  const reset = (force = false) => {
+    if (
+      !force &&
+      elapsedMs >= 1000 &&
+      !window.confirm("計測中の時間を記録せずリセットしますか？")
+    )
+      return;
     setRunning(false);
     startedAt.current = null;
     elapsedBeforeStart.current = 0;
     setElapsedMs(0);
+    try {
+      localStorage.removeItem(DRAFT_KEY);
+    } catch {
+      /* unavailable */
+    }
   };
   const finish = () => {
     if (elapsedMs < 1000 || !task.trim()) return;
@@ -92,7 +170,7 @@ export function FocusCostTimerPage() {
         ...items,
       ].slice(0, 20),
     );
-    reset();
+    reset(true);
   };
   const download = () => {
     const blob = new Blob(["\uFEFF", sessionCsv(sessions)], {
@@ -147,6 +225,7 @@ export function FocusCostTimerPage() {
             </label>
             <p className="mt-3 text-xs leading-5 text-slate-500">
               実際の報酬だけでなく、自分の時間をいくらとして管理するかを入力できます。
+              計測状態と履歴はこの端末のブラウザ内に保存され、再読み込み後も復元されます。
             </p>
           </section>
           <section>
@@ -194,7 +273,7 @@ export function FocusCostTimerPage() {
             </div>
             <button
               type="button"
-              onClick={reset}
+              onClick={() => reset()}
               disabled={!elapsedMs}
               className="mt-3 w-full rounded-full px-5 py-2 text-sm font-bold text-slate-500 disabled:opacity-30"
             >

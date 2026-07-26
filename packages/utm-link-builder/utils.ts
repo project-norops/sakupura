@@ -33,7 +33,14 @@ export function buildUtmUrl(input: UtmInput, normalize = true): string {
   const destinationError = validateDestination(input.url);
   if (destinationError) throw new Error(destinationError);
   if (!input.source.trim() || !input.medium.trim() || !input.campaign.trim())
-    throw new Error("流入元・媒体・キャンペーン名は必須です。");
+    throw new Error("流入元・配信手段・キャンペーン名は必須です。");
+  if (
+    normalize &&
+    [input.source, input.medium, input.campaign].some(
+      (value) => !normalizeUtmValue(value),
+    )
+  )
+    throw new Error("必須項目には半角英数字を含む名前を入力してください。");
   const url = new URL(input.url);
   const values: Record<string, string | undefined> = {
     utm_source: input.source,
@@ -56,7 +63,7 @@ export function utmWarnings(input: UtmInput): string[] {
   const warnings: string[] = [];
   for (const [label, value] of [
     ["流入元", input.source],
-    ["媒体", input.medium],
+    ["配信手段", input.medium],
     ["キャンペーン名", input.campaign],
   ] as const) {
     if (/[A-ZＡ-Ｚ]/.test(value))

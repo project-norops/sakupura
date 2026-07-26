@@ -1,6 +1,7 @@
 import {
   IMAGE_PRESETS,
   calculateSourceRect,
+  outputScale,
   outputFilename,
   validateImageFile,
 } from "./utils";
@@ -29,6 +30,18 @@ describe("image resizer utilities", () => {
       dw: 500,
       dh: 250,
     });
+  });
+  test("aligns a cover crop to the selected edge", () => {
+    expect(calculateSourceRect(2000, 1000, 500, 500, "cover", "right").sx).toBe(
+      1000,
+    );
+    expect(
+      calculateSourceRect(1000, 2000, 500, 500, "cover", "bottom").sy,
+    ).toBe(1000);
+  });
+  test("reports when an output is enlarged", () => {
+    expect(outputScale(600, 315, 1200, 630, "cover")).toBe(2);
+    expect(outputScale(2000, 1000, 500, 500, "contain")).toBe(0.25);
   });
   test("creates a safe output filename", () => {
     expect(outputFilename("商品 写真.JPG", IMAGE_PRESETS[0])).toBe(

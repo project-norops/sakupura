@@ -8,6 +8,7 @@ import {
   serializeCsv,
   type CsvIssue,
   type CsvTable,
+  type ImportMode,
 } from "./utils";
 
 const SAMPLE = `Handle,Title,Variant Price,Variant Compare At Price,Variant SKU,Image Src,Published,Status
@@ -18,9 +19,10 @@ export function ShopifyCsvCheckerPage() {
   const [table, setTable] = useState<CsvTable | null>(null);
   const [fileName, setFileName] = useState("products.csv");
   const [error, setError] = useState("");
+  const [mode, setMode] = useState<ImportMode>("new");
   const issues = useMemo(
-    () => (table ? diagnoseShopifyCsv(table) : []),
-    [table],
+    () => (table ? diagnoseShopifyCsv(table, mode) : []),
+    [table, mode],
   );
   const counts = useMemo(
     () =>
@@ -80,13 +82,37 @@ export function ShopifyCsvCheckerPage() {
           EC運営
         </p>
         <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-          Shopify商品CSV診断・修正ツール
+          Shopify向け商品CSV診断・修正ツール
         </h1>
         <p className="mt-4 max-w-3xl leading-7 text-slate-600">
           Shopifyへ読み込む前に、必須列、価格、SKU、画像URL、公開状態を行番号付きで確認します。CSVはサーバーへ送信せず、ブラウザ内だけで診断します。
         </p>
         <div className="mt-8 grid gap-8 lg:grid-cols-[.8fr_1.2fr]">
           <section>
+            <fieldset>
+              <legend className="text-sm font-bold text-slate-700">
+                CSVの用途
+              </legend>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                {[
+                  ["new", "新規商品を登録"],
+                  ["update", "既存商品を更新"],
+                ].map(([value, label]) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setMode(value as ImportMode)}
+                    aria-pressed={mode === value}
+                    className={`rounded-xl border px-3 py-3 text-sm font-bold ${mode === value ? "border-blue-600 bg-blue-50 text-blue-700" : "border-slate-300 text-slate-700"}`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <p className="mt-2 text-xs leading-5 text-slate-500">
+                用途によってShopifyが必要とする列が異なるため、先に選択してください。
+              </p>
+            </fieldset>
             <h2 className="text-xl font-black text-slate-950">
               1. 商品CSVを読み込む
             </h2>
@@ -126,6 +152,21 @@ export function ShopifyCsvCheckerPage() {
               <strong>診断対象</strong>
               <br />
               初期版はShopify商品CSV向けです。インポート成功や販売情報の正確性を保証するものではありません。
+            </div>
+            <div className="mt-4 rounded-2xl border border-slate-200 p-4 text-sm leading-6 text-slate-600">
+              <strong className="text-slate-900">公式仕様を確認する</strong>
+              <br />
+              <a
+                href="https://help.shopify.com/ja/manual/products/import-export/using-csv"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-blue-700 underline underline-offset-2"
+              >
+                Shopify公式：商品CSVの仕様
+              </a>
+              <p className="mt-2 text-xs leading-5 text-slate-500">
+                仕様確認日：2026年7月26日
+              </p>
             </div>
           </section>
           <section>
@@ -212,6 +253,11 @@ export function ShopifyCsvCheckerPage() {
             )}
           </section>
         </div>
+        <p className="mt-8 border-t border-slate-200 pt-5 text-xs leading-5 text-slate-500">
+          本ツールはShopify
+          Inc.の公式ツールではなく、同社との提携・承認関係はありません。ShopifyはShopify
+          Inc.の商標です。診断結果はインポートの成功を保証しません。
+        </p>
       </section>
     </main>
   );

@@ -67,6 +67,7 @@ function ComplianceBadge({
 export function ContrastColorFixerPage() {
   const [foreground, setForeground] = useState("#64748b");
   const [background, setBackground] = useState("#ffffff");
+  const [copied, setCopied] = useState("");
   const ratio = useMemo(
     () => contrastRatio(foreground, background),
     [foreground, background],
@@ -80,7 +81,11 @@ export function ContrastColorFixerPage() {
     () => nearestPassingColor(foreground, background, 7),
     [foreground, background],
   );
-  const copy = (value: string) => navigator.clipboard.writeText(value);
+  const copy = async (value: string, label: string) => {
+    await navigator.clipboard.writeText(value);
+    setCopied(label);
+    window.setTimeout(() => setCopied(""), 1600);
+  };
   const css = `--text-color: ${result.normalAA ? foreground : aaSuggestion};\n--background-color: ${background};`;
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
@@ -134,6 +139,9 @@ export function ContrastColorFixerPage() {
               <ComplianceBadge pass={result.largeAA}>
                 大きな文字 AA（3以上）
               </ComplianceBadge>
+              <ComplianceBadge pass={result.uiAA}>
+                UI部品 AA（3以上）
+              </ComplianceBadge>
               <ComplianceBadge pass={result.normalAAA}>
                 通常文字 AAA（7以上）
               </ComplianceBadge>
@@ -141,6 +149,9 @@ export function ContrastColorFixerPage() {
                 大きな文字 AAA（4.5以上）
               </ComplianceBadge>
             </div>
+            <p className="mt-3 text-xs leading-5 text-slate-500">
+              大きな文字は目安として24px以上、または約18.7px以上の太字です。UI部品は入力欄やボタンの境界など、操作に必要な部分を指します。
+            </p>
           </section>
           <section>
             <h2 className="text-xl font-black text-slate-950">
@@ -184,6 +195,15 @@ export function ContrastColorFixerPage() {
                     {aaSuggestion} を適用
                   </button>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => copy(aaSuggestion, "改善色")}
+                  className="mt-2 w-full rounded-full border border-blue-300 px-4 py-2 text-sm font-bold text-blue-800"
+                >
+                  {copied === "改善色"
+                    ? "コピーしました"
+                    : `${aaSuggestion} をコピー`}
+                </button>
                 {contrastRatio(aaaSuggestion, background) >= 7 && (
                   <button
                     type="button"
@@ -204,10 +224,10 @@ export function ContrastColorFixerPage() {
                 <strong className="text-sm text-slate-800">CSS変数</strong>
                 <button
                   type="button"
-                  onClick={() => copy(css)}
+                  onClick={() => copy(css, "CSS")}
                   className="rounded-full border border-slate-300 px-3 py-1 text-xs font-bold"
                 >
-                  コピー
+                  {copied === "CSS" ? "コピーしました" : "コピー"}
                 </button>
               </div>
               <pre className="mt-2 overflow-x-auto text-xs leading-6 text-slate-600">
@@ -216,6 +236,16 @@ export function ContrastColorFixerPage() {
             </div>
             <p className="mt-4 text-xs leading-5 text-slate-500">
               この判定は配色のコントラストだけを確認します。文字サイズ、太さ、フォーカス表示、色だけに依存しない情報設計などは別途確認してください。
+              詳細は
+              <a
+                href="https://www.w3.org/WAI/WCAG22/quickref/#contrast-minimum"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-blue-700 underline underline-offset-2"
+              >
+                W3CのWCAG 2.2クイックリファレンス
+              </a>
+              を参照してください。
             </p>
           </section>
         </div>
