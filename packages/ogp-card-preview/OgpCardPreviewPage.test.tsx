@@ -16,6 +16,10 @@ test("loads the sample, generates tags, and copies them", async () => {
   fireEvent.click(
     screen.getByRole("button", { name: "操作サンプルを読み込む" }),
   );
+  expect(
+    screen.getByRole("img", { name: "操作サンプル画像のカードプレビュー" }),
+  ).toBeInTheDocument();
+  expect(screen.getByText("表示中：操作サンプル画像")).toBeInTheDocument();
   fireEvent.click(
     screen.getByRole("button", { name: "プレビューとタグを作成" }),
   );

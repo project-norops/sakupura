@@ -1,7 +1,7 @@
 "use client";
 
 import { PremiumInterestCards } from "@sakupla/shared-ui/PremiumInterestCards";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   diagnoseHead,
   generateMetaTags,
@@ -30,6 +30,9 @@ const sample: OgpInput = {
   imageAlt: "サクプラのツール紹介画像",
   siteName: "サクプラ",
 };
+const SAMPLE_IMAGE_PREVIEW = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#123a8c"/><stop offset="0.55" stop-color="#087fb4"/><stop offset="1" stop-color="#16a085"/></linearGradient></defs><rect width="1200" height="630" fill="url(#g)"/><circle cx="980" cy="110" r="220" fill="#fff" opacity=".12"/><circle cx="170" cy="540" r="270" fill="#fff" opacity=".08"/><path d="M600 150l42 116 116 42-116 42-42 116-42-116-116-42 116-42z" fill="#fff"/><circle cx="600" cy="308" r="170" fill="none" stroke="#fff" stroke-width="5" opacity=".3"/></svg>`,
+)}`;
 
 export function OgpCardPreviewPage() {
   const [input, setInput] = useState<OgpInput>(empty);
@@ -38,7 +41,18 @@ export function OgpCardPreviewPage() {
   const [issues, setIssues] = useState<HeadIssue[]>([]);
   const [warnings, setWarnings] = useState<string[]>([]);
   const [error, setError] = useState("");
+  const [imageError, setImageError] = useState("");
+  const [imagePreviewUrl, setImagePreviewUrl] = useState("");
+  const [imagePreviewName, setImagePreviewName] = useState("");
   const [copied, setCopied] = useState(false);
+  useEffect(
+    () => () => {
+      if (imagePreviewUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(imagePreviewUrl);
+      }
+    },
+    [imagePreviewUrl],
+  );
   const update = (key: keyof OgpInput, value: string) => {
     setInput({ ...input, [key]: value });
     setTags("");
@@ -61,6 +75,23 @@ export function OgpCardPreviewPage() {
   const copy = async () => {
     await navigator.clipboard.writeText(tags);
     setCopied(true);
+  };
+  const loadPreviewImage = (file?: File) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setImageError("画像ファイルを選択してください。");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setImageError("プレビュー用画像は10MB以下を選択してください。");
+      return;
+    }
+    if (imagePreviewUrl.startsWith("blob:")) {
+      URL.revokeObjectURL(imagePreviewUrl);
+    }
+    setImagePreviewUrl(URL.createObjectURL(file));
+    setImagePreviewName(file.name);
+    setImageError("");
   };
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
@@ -104,6 +135,12 @@ export function OgpCardPreviewPage() {
             setHead(generateMetaTags(sample));
             setTags("");
             setError("");
+            setImageError("");
+            if (imagePreviewUrl.startsWith("blob:")) {
+              URL.revokeObjectURL(imagePreviewUrl);
+            }
+            setImagePreviewUrl(SAMPLE_IMAGE_PREVIEW);
+            setImagePreviewName("操作サンプル画像");
           }}
         >
           操作サンプルを読み込む
@@ -199,6 +236,31 @@ export function OgpCardPreviewPage() {
                   />
                 </label>
               </div>
+              <label className="rounded-xl border border-dashed border-slate-300 p-4 text-sm font-bold">
+                プレビュー用画像（任意）
+                <span className="mt-1 block font-normal leading-5 text-slate-500">
+                  画像URLへはアクセスしません。実画像を確認したい場合だけ、端末内の画像を選択してください。画像は外部送信されません。
+                </span>
+                <input
+                  aria-label="プレビュー用画像"
+                  className="mt-3 block w-full font-normal"
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) =>
+                    loadPreviewImage(event.target.files?.[0])
+                  }
+                />
+                {imagePreviewName && (
+                  <span className="mt-2 block font-normal text-emerald-700">
+                    表示中：{imagePreviewName}
+                  </span>
+                )}
+              </label>
+              {imageError && (
+                <p role="alert" className="text-sm font-bold text-red-700">
+                  {imageError}
+                </p>
+              )}
               <label className="text-sm font-bold">
                 既存head断片（任意）
                 <textarea
@@ -228,19 +290,28 @@ export function OgpCardPreviewPage() {
               汎用シェアカード見本
             </h2>
             <div className="mt-4 overflow-hidden rounded-2xl border bg-white shadow-sm">
-              <div className="grid aspect-[1200/630] place-items-center bg-gradient-to-br from-blue-700 via-cyan-600 to-emerald-400 p-6 text-center text-white">
-                <div>
-                  <p className="text-xs font-bold opacity-80">
-                    画像は取得せず、指定寸法の領域を表示
-                  </p>
-                  <p className="mt-2 break-all text-sm">
-                    {input.imageUrl || "画像URL"}
-                  </p>
-                  <p className="mt-2 text-xs">
-                    {input.imageWidth || "-"} × {input.imageHeight || "-"} px
-                  </p>
+              {imagePreviewUrl ? (
+                <div
+                  role="img"
+                  aria-label={`${imagePreviewName || "選択した画像"}のカードプレビュー`}
+                  className="aspect-[1200/630] bg-slate-100 bg-cover bg-center"
+                  style={{ backgroundImage: `url(${imagePreviewUrl})` }}
+                />
+              ) : (
+                <div className="grid aspect-[1200/630] place-items-center border-b border-dashed border-slate-300 bg-slate-50 p-6 text-center text-slate-500">
+                  <div>
+                    <span aria-hidden="true" className="text-4xl">
+                      ▧
+                    </span>
+                    <p className="mt-3 font-bold text-slate-700">
+                      プレビュー画像は未選択です
+                    </p>
+                    <p className="mt-1 text-xs">
+                      端末内の画像を選ぶと、ここに表示します
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="p-4">
                 <p className="truncate text-xs uppercase text-slate-500">
                   {host(input.url) || "example.com"}
@@ -253,6 +324,11 @@ export function OgpCardPreviewPage() {
                 </p>
               </div>
             </div>
+            <p className="mt-3 rounded-xl bg-slate-50 p-3 text-xs leading-5 text-slate-600">
+              {imagePreviewUrl
+                ? "選択したプレビュー用画像をブラウザ内で表示しています。生成タグには上で入力した画像URLを使用します。"
+                : "画像URLは安全のため自動取得しません。実画像を確認する場合は「プレビュー用画像」から端末内の画像を選択してください。"}
+            </p>
             <p className="mt-3 text-xs leading-5 text-slate-500">
               これは各SNSの完全再現ではありません。実表示は取得時点、キャッシュ、サービス仕様で変わります。
             </p>
