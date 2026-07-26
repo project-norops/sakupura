@@ -18,6 +18,20 @@ beforeEach(() => {
 
 test("offers source and target CSV downloads", () => {
   render(<CsvColumnMapperPage />);
+  const quickStart = screen.getByRole("region", {
+    name: "かんたん操作手順",
+  });
+  expect(
+    within(quickStart).getByText("変換元CSVを選ぶ"),
+  ).toBeInTheDocument();
+  expect(
+    within(quickStart).getByText("プレビューして変換CSVを保存する"),
+  ).toBeInTheDocument();
+  expect(
+    within(quickStart).getByText(
+      "初めての場合は「操作サンプルを読み込む」で、手順3から試せます。",
+    ),
+  ).toBeInTheDocument();
   fireEvent.click(
     screen.getByRole("button", { name: "変換元サンプルCSVを保存" }),
   );

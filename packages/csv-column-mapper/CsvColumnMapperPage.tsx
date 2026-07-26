@@ -152,6 +152,36 @@ export function CsvColumnMapperPage() {
           元CSVの列を取込先テンプレートへ対応付け、出力列の名称と順番を整えます。不要列を除外し、公開状態などの固定値を加えた結果を保存前に確認できます。ファイル内容は端末内だけで処理し、外部へ送信しません。
         </p>
 
+        <section
+          className="mt-6 rounded-2xl border border-blue-200 bg-blue-50 p-4 sm:p-5"
+          aria-labelledby="quick-start-heading"
+        >
+          <h2
+            id="quick-start-heading"
+            className="text-lg font-black text-slate-950"
+          >
+            かんたん操作手順
+          </h2>
+          <ol className="mt-3 grid gap-3 text-sm leading-6 text-slate-700 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              ["1", "変換元CSVを選ぶ"],
+              ["2", "取込先テンプレートCSVを選ぶ"],
+              ["3", "出力列の対応と除外列を確認する"],
+              ["4", "プレビューして変換CSVを保存する"],
+            ].map(([number, text]) => (
+              <li key={number} className="flex items-start gap-3">
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-blue-700 text-xs font-black text-white">
+                  {number}
+                </span>
+                <span className="font-bold">{text}</span>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-3 text-xs leading-5 text-slate-600">
+            初めての場合は「操作サンプルを読み込む」で、手順3から試せます。
+          </p>
+        </section>
+
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           <FileCard
             number="1"
