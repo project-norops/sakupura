@@ -34,13 +34,19 @@ export function EmailSubjectPreviewerPage() {
         <p className="mt-4 max-w-3xl leading-7 text-slate-600">
           メールを送る前に、件名とプリヘッダーがPC・スマホの受信箱でどこまで見えるかを確認します。送信機能やAIは使用しません。
         </p>
+        <div className="mt-5 max-w-3xl rounded-2xl bg-blue-50 p-4 text-sm leading-6 text-blue-950">
+          <strong>プリヘッダーとは？</strong>
+          <p className="mt-1">
+            受信箱で件名の横や下に表示される短い補足文です。専用の文を設定していないメールでは、メール本文の書き出し部分が自動で表示されることがあります。開封前に内容やメリットを伝える用途で使います。
+          </p>
+        </div>
         <div className="mt-8 grid gap-8 lg:grid-cols-[.8fr_1.2fr]">
-          <section className="space-y-4">
+          <section className="min-w-0 space-y-4">
             <h2 className="text-xl font-black">1. 表示内容を入力</h2>
             {[
               ["差出人名", sender, setSender],
               ["メール件名", subject, setSubject],
-              ["プリヘッダー", preheader, setPreheader],
+              ["プリヘッダー（受信箱に出る補足文）", preheader, setPreheader],
             ].map(([label, value, setter]) => (
               <label
                 key={label as string}
@@ -74,7 +80,7 @@ export function EmailSubjectPreviewerPage() {
               </div>
             )}
           </section>
-          <section>
+          <section className="min-w-0">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 className="text-xl font-black">2. 受信箱プレビュー</h2>
               <div className="flex rounded-full bg-slate-100 p-1">
@@ -94,7 +100,7 @@ export function EmailSubjectPreviewerPage() {
               表示幅は端末、文字サイズ、受信アプリ、差出人名などで変わるため目安です。
             </p>
             <div
-              className={`mx-auto mt-5 space-y-4 ${device === "mobile" ? "max-w-sm" : "max-w-2xl"}`}
+              className={`mx-auto mt-5 min-w-0 space-y-4 ${device === "mobile" ? "max-w-sm" : "max-w-2xl"}`}
             >
               {cards.map((name) => (
                 <article

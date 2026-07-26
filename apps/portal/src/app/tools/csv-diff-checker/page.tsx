@@ -10,19 +10,19 @@ const tool = getToolBySlug("csv-diff-checker");
 export const metadata: Metadata = {
   title: "CSV差分比較・変更抽出ツール",
   description:
-    "2つのCSVをキー列で比較し、追加・削除・変更された行とセルをブラウザ内で確認できます。",
+    "変更前・変更後のCSVを商品コードやIDで照合し、追加・削除・変更された行とセルを確認できます。",
   alternates: { canonical: "/tools/csv-diff-checker" },
   openGraph: {
     title: "CSV差分比較・変更抽出ツール",
     description:
-      "2つのCSVをキー列で比較し、追加・削除・変更された行とセルをブラウザ内で確認できます。",
+      "変更前・変更後のCSVを商品コードやIDで照合し、追加・削除・変更された行とセルを確認できます。",
     url: "/tools/csv-diff-checker",
   },
   twitter: {
     card: "summary",
     title: "CSV差分比較・変更抽出ツール",
     description:
-      "2つのCSVをキー列で比較し、追加・削除・変更された行とセルをブラウザ内で確認できます。",
+      "変更前・変更後のCSVを商品コードやIDで照合し、追加・削除・変更された行とセルを確認できます。",
   },
 };
 

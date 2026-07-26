@@ -9,6 +9,8 @@ import {
   type DetectedEncoding,
 } from "./utils";
 
+const SAMPLE = "商品名,価格,在庫\r\n帆布トート,2980,10\r\nマグカップ,1800,8";
+
 export function CsvEncodingFixerPage() {
   const [text, setText] = useState("");
   const [detected, setDetected] = useState<DetectedEncoding | null>(null);
@@ -54,10 +56,21 @@ export function CsvEncodingFixerPage() {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
   const sample = () => {
-    setText("商品名,価格,在庫\r\n帆布トート,2980,10\r\nマグカップ,1800,8");
+    setText(SAMPLE);
     setDetected("utf-8");
     setSelected("utf-8");
     setError("");
+  };
+  const downloadSample = () => {
+    const blob = new Blob(["\uFEFF", SAMPLE], {
+      type: "text/csv;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "csv-encoding-sample.csv";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
@@ -69,9 +82,19 @@ export function CsvEncodingFixerPage() {
           CSV文字化け修復・文字コード変換
         </h1>
         <p className="mt-4 max-w-3xl leading-7 text-slate-600">
-          UTF-8とShift_JIS（Windows-31J）のCSVをブラウザ内で読み分け、内容を確認してExcelで開きやすいUTF-8
+          ExcelでCSVを開いたら日本語が「縺薙ｓ」などに文字化けした、ECや業務システムから出力したCSVを別のソフトで正しく開けない、といった場合に使います。UTF-8とShift_JIS（Windows-31J）を読み分け、内容を確認してExcelで開きやすいUTF-8
           BOM付きCSVへ変換します。
         </p>
+        <div className="mt-5 max-w-3xl rounded-2xl bg-blue-50 p-4 text-sm leading-6 text-blue-950">
+          <strong>主な利用例</strong>
+          <ul className="mt-1 list-disc space-y-1 pl-5">
+            <li>ダウンロードした商品CSVをExcelで開くと日本語が文字化けした</li>
+            <li>
+              Shift_JIS指定の取込先へ渡す前に、元CSVの文字コードを確認したい
+            </li>
+            <li>Windows版Excelで開きやすいBOM付きUTF-8へ保存し直したい</li>
+          </ul>
+        </div>
         <div className="mt-8 grid gap-8 lg:grid-cols-[.75fr_1.25fr]">
           <section>
             <h2 className="text-xl font-black">1. CSVを読み込む</h2>
@@ -97,6 +120,18 @@ export function CsvEncodingFixerPage() {
             >
               サンプルで試す
             </button>
+            <button
+              type="button"
+              onClick={downloadSample}
+              data-analytics-event="tool_run"
+              data-analytics-tool-id="csv-encoding-fixer"
+              className="mt-2 w-full rounded-full border border-slate-300 px-5 py-3 text-sm font-bold"
+            >
+              確認用サンプルCSVを保存
+            </button>
+            <p className="mt-2 text-xs leading-5 text-slate-500">
+              このツールは列名や並び順の指定がありません。文字化けを直したい手元のCSVをそのまま選べます。
+            </p>
             {detected && (
               <div className="mt-5 rounded-2xl bg-blue-50 p-4 text-sm text-blue-950">
                 <strong>

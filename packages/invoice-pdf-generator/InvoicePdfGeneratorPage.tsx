@@ -36,7 +36,7 @@ export function InvoicePdfGeneratorPage() {
     setLines((items) => [
       ...items,
       {
-        id: crypto.randomUUID(),
+        id: `line-${Date.now()}-${items.length}`,
         description: "",
         quantity: 1,
         unitPrice: 0,
@@ -197,11 +197,14 @@ export function InvoicePdfGeneratorPage() {
             <div className="print:hidden">
               <h2 className="text-xl font-black">2. 内容を確認してPDF保存</h2>
             </div>
-            <article className="mt-4 min-h-[720px] rounded-2xl border border-slate-300 bg-white p-6 text-slate-950 print:mt-0 print:min-h-0 print:border-0 sm:p-10">
-              <h2 className="text-center text-3xl font-black tracking-widest">
+            <article
+              id="invoice-print-area"
+              className="mt-4 min-h-[720px] rounded-2xl border border-slate-300 bg-white p-6 text-slate-950 print:mt-0 print:min-h-0 print:border-0 print:p-0 sm:p-10"
+            >
+              <h2 className="invoice-keep-together text-center text-3xl font-black tracking-widest">
                 {kind === "estimate" ? "御見積書" : "請求書"}
               </h2>
-              <div className="mt-8 flex justify-between gap-6">
+              <div className="invoice-keep-together mt-8 flex justify-between gap-6">
                 <div>
                   <p className="border-b border-slate-900 pb-1 text-xl font-bold">
                     {recipient || "宛先未入力"} 御中
@@ -218,14 +221,17 @@ export function InvoicePdfGeneratorPage() {
                   <p>{registration}</p>
                 </div>
               </div>
-              <p className="mt-10 text-sm">
-                下記のとおり{kind === "estimate" ? "お見積り" : "ご請求"}
-                申し上げます。
-              </p>
-              <p className="mt-5 border-b-2 border-slate-900 pb-2 text-2xl font-black">
-                合計 {formatYen(totals.total)}
-              </p>
-              <table className="mt-8 w-full border-collapse text-sm">
+              <div className="invoice-keep-together">
+                <p className="mt-10 text-sm">
+                  下記のとおり
+                  {kind === "estimate" ? "お見積り" : "ご請求"}
+                  申し上げます。
+                </p>
+                <p className="mt-5 border-b-2 border-slate-900 pb-2 text-2xl font-black">
+                  合計 {formatYen(totals.total)}
+                </p>
+              </div>
+              <table className="invoice-lines mt-8 w-full border-collapse text-sm">
                 <thead>
                   <tr className="bg-slate-100">
                     <th className="border p-2 text-left">内容</th>
@@ -255,7 +261,7 @@ export function InvoicePdfGeneratorPage() {
                   ))}
                 </tbody>
               </table>
-              <div className="ml-auto mt-5 max-w-xs space-y-1 text-sm">
+              <div className="invoice-summary ml-auto mt-5 max-w-xs space-y-1 text-sm">
                 <p className="flex justify-between">
                   <span>小計</span>
                   <strong>{formatYen(totals.subtotal)}</strong>
@@ -269,14 +275,17 @@ export function InvoicePdfGeneratorPage() {
                   <strong>{formatYen(totals.total)}</strong>
                 </p>
               </div>
-              {dueDate && (
-                <p className="mt-8 text-sm font-bold">
-                  {kind === "estimate" ? "見積有効期限" : "支払期限"}：{dueDate}
+              <div className="invoice-terms">
+                {dueDate && (
+                  <p className="mt-8 text-sm font-bold">
+                    {kind === "estimate" ? "見積有効期限" : "支払期限"}：
+                    {dueDate}
+                  </p>
+                )}
+                <p className="mt-3 whitespace-pre-wrap text-sm text-slate-600">
+                  {note}
                 </p>
-              )}
-              <p className="mt-3 whitespace-pre-wrap text-sm text-slate-600">
-                {note}
-              </p>
+              </div>
             </article>
             <button
               type="button"
@@ -288,11 +297,75 @@ export function InvoicePdfGeneratorPage() {
               印刷画面を開いてPDF保存
             </button>
             <p className="mt-2 text-xs leading-5 text-slate-500 print:hidden">
-              税額は明細ごとに切り捨てて計算します。制度適合や税務上の正確性を保証するものではありません。
+              PDFには見積書・請求書部分だけが含まれます。明細が複数ページになる場合は表の見出しを各ページに繰り返し、明細行の途中では改ページしません。税額は明細ごとに切り捨てて計算します。
             </p>
           </section>
         </div>
       </section>
+      <style>{`
+        @media print {
+          @page {
+            size: A4 portrait;
+            margin: 12mm;
+          }
+
+          html,
+          body {
+            background: #fff !important;
+          }
+
+          body * {
+            visibility: hidden !important;
+          }
+
+          #invoice-print-area,
+          #invoice-print-area * {
+            visibility: visible !important;
+          }
+
+          #invoice-print-area {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            color: #0f172a !important;
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+          }
+
+          #invoice-print-area .invoice-keep-together,
+          #invoice-print-area .invoice-summary,
+          #invoice-print-area .invoice-terms {
+            break-inside: avoid;
+            page-break-inside: avoid;
+          }
+
+          #invoice-print-area .invoice-lines {
+            break-inside: auto;
+            page-break-inside: auto;
+          }
+
+          #invoice-print-area .invoice-lines thead {
+            display: table-header-group;
+          }
+
+          #invoice-print-area .invoice-lines tr {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            page-break-after: auto;
+          }
+
+          #invoice-print-area .invoice-lines th,
+          #invoice-print-area .invoice-lines td {
+            padding: 5px !important;
+          }
+        }
+      `}</style>
     </main>
   );
 }

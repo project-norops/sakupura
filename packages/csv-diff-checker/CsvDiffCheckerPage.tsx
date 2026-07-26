@@ -6,6 +6,18 @@ import { compareCsv, parseCsv, serializeDiff, type CsvTable } from "./utils";
 const BEFORE = `sku,title,price,stock\nA-001,トートバッグ,2800,12\nA-002,マグカップ,1800,8\nA-003,ポーチ,1200,5`;
 const AFTER = `sku,title,price,stock\nA-001,トートバッグ,2980,10\nA-002,マグカップ,1800,8\nA-004,ボトル,2200,6`;
 
+function downloadCsv(content: string, fileName: string) {
+  const blob = new Blob(["\uFEFF", content], {
+    type: "text/csv;charset=utf-8",
+  });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = fileName;
+  anchor.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 export function CsvDiffCheckerPage() {
   const [before, setBefore] = useState<CsvTable | null>(null);
   const [after, setAfter] = useState<CsvTable | null>(null);
@@ -81,7 +93,7 @@ export function CsvDiffCheckerPage() {
           CSV差分比較・変更抽出ツール
         </h1>
         <p className="mt-4 max-w-3xl leading-7 text-slate-600">
-          新旧2つのCSVをキー列で照合し、追加・削除・変更された行とセルだけを表示します。ファイルは外部送信しません。
+          商品一覧や会員名簿などの変更前・変更後CSVを比べ、追加・削除された行と、書き換わったセルを見つけます。SKUや会員IDのような「同じデータを見分ける列」を使うため、行の並び順が変わっていても比較できます。ファイルは外部送信しません。
         </p>
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {[
@@ -124,14 +136,40 @@ export function CsvDiffCheckerPage() {
         >
           サンプルで比較する
         </button>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => downloadCsv(BEFORE, "csv-diff-before-template.csv")}
+            data-analytics-event="tool_run"
+            data-analytics-tool-id="csv-diff-checker"
+            className="rounded-full border border-slate-300 px-4 py-3 text-sm font-bold text-slate-700 hover:border-blue-400"
+          >
+            変更前テンプレートCSVを保存
+          </button>
+          <button
+            type="button"
+            onClick={() => downloadCsv(AFTER, "csv-diff-after-template.csv")}
+            data-analytics-event="tool_run"
+            data-analytics-tool-id="csv-diff-checker"
+            className="rounded-full border border-slate-300 px-4 py-3 text-sm font-bold text-slate-700 hover:border-blue-400"
+          >
+            変更後テンプレートCSVを保存
+          </button>
+        </div>
+        <p className="mt-2 text-xs leading-5 text-slate-500">
+          テンプレートの列名は一例です。2つのCSVで共通する列名を使い、SKU・商品コード・会員IDなど重複しない値を入れてください。
+        </p>
         {before && after && (
           <div className="mt-6">
             <label
               className="text-sm font-bold text-slate-700"
               htmlFor="diff-key"
             >
-              行を照合するキー列
+              同じ行を見分ける列（SKU・商品コード・会員IDなど）
             </label>
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              変更前と変更後で同じ商品・同じ人を結び付ける、重複しない番号の列を選びます。例：SKUが「A-001」同士なら同じ商品として比較します。
+            </p>
             <select
               id="diff-key"
               value={keyField}

@@ -104,7 +104,7 @@ export function diagnoseFeed(table: FeedTable): FeedIssue[] {
         row: line,
         field: "availability",
         severity: "error",
-        message: "Googleが定義する在庫状況の値ではありません。",
+        message: `「${row.availability.trim()}」は使用できません。availabilityには in_stock（在庫あり）、out_of_stock（在庫なし）、preorder（予約注文）、backorder（取り寄せ）のいずれかを半角英字で入力してください。`,
       });
     for (const field of ["link", "image_link"])
       if (row[field]) {

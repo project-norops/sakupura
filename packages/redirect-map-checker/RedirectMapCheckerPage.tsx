@@ -8,6 +8,7 @@ import {
   type RedirectRow,
 } from "./utils";
 const SAMPLE = `old_url,new_url\nhttps://old.example.com/about,https://new.example.com/company\nhttps://old.example.com/service,https://new.example.com/services\nhttps://old.example.com/contact,https://old.example.com/contact\nhttps://old.example.com/about,https://new.example.com/about-us`;
+const TEMPLATE = `old_url,new_url\nhttps://old.example.com/about,https://new.example.com/company\nhttps://old.example.com/contact,https://new.example.com/contact`;
 
 export function RedirectMapCheckerPage() {
   const [rows, setRows] = useState<RedirectRow[]>([]);
@@ -42,6 +43,17 @@ export function RedirectMapCheckerPage() {
     const a = document.createElement("a");
     a.href = url;
     a.download = "redirect-map-reviewed.csv";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+  const downloadTemplate = () => {
+    const blob = new Blob(["\uFEFF", TEMPLATE], {
+      type: "text/csv;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "redirect-map-template.csv";
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
@@ -82,6 +94,18 @@ export function RedirectMapCheckerPage() {
             >
               問題入りサンプルで試す
             </button>
+            <button
+              type="button"
+              onClick={downloadTemplate}
+              data-analytics-event="tool_run"
+              data-analytics-tool-id="redirect-map-checker"
+              className="mt-2 w-full rounded-full border border-slate-300 px-5 py-3 text-sm font-bold"
+            >
+              入力用テンプレートCSVを保存
+            </button>
+            <p className="mt-2 text-xs leading-5 text-slate-500">
+              old_url列に移転前のURL、new_url列に対応する移転後のURLを1行ずつ入力します。
+            </p>
             {error && (
               <p
                 role="alert"

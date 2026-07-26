@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { diagnoseFeed, parseFeed, type FeedTable } from "./utils";
 
 const SAMPLE = `id,title,description,link,image_link,availability,price,gtin,brand\nSKU-001,帆布トートバッグ,軽くて丈夫なトートバッグ,https://example.com/products/bag,https://example.com/images/bag.jpg,in_stock,2980 JPY,4901234567894,Sample\nSKU-002,,説明,invalid-url,https://example.com/a.jpg,available,1980,12345,Sample`;
+const TEMPLATE = `id,title,description,link,image_link,availability,price,gtin,brand\nSKU-001,商品名,商品の説明,https://example.com/products/item,https://example.com/images/item.jpg,in_stock,2980 JPY,4901234567894,ブランド名`;
 
 export function MerchantFeedCheckerPage() {
   const [table, setTable] = useState<FeedTable | null>(null);
@@ -29,6 +30,17 @@ export function MerchantFeedCheckerPage() {
       return;
     }
     inspect(await file.text());
+  };
+  const downloadTemplate = () => {
+    const blob = new Blob(["\uFEFF", TEMPLATE], {
+      type: "text/csv;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "merchant-product-feed-template.csv";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
   const errors = issues.filter((i) => i.severity === "error").length;
   const warnings = issues.length - errors;
@@ -69,6 +81,18 @@ export function MerchantFeedCheckerPage() {
             >
               問題入りサンプルで試す
             </button>
+            <button
+              type="button"
+              onClick={downloadTemplate}
+              data-analytics-event="tool_run"
+              data-analytics-tool-id="merchant-feed-checker"
+              className="mt-2 w-full rounded-full border border-slate-300 px-5 py-3 text-sm font-bold"
+            >
+              商品フィード用テンプレートCSVを保存
+            </button>
+            <p className="mt-2 text-xs leading-5 text-slate-500">
+              テンプレートには初期診断で使う主要属性と、入力形式の例を1商品分入れています。実際の商品情報へ置き換えてください。
+            </p>
             {error && (
               <p
                 role="alert"
