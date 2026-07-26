@@ -574,4 +574,5 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 公開後7日・14日・28日の検索表示、利用完了、結果利用、関連ツール遷移、再訪を比較し、25・40・60・80・100ツール到達時にポートフォリオを再評価する方針を`PRODUCT_RESEARCH.md`と`ROADMAP.md`へ反映。
 - `ROADMAP.md`のカテゴリー・関連ツール導線を「プレビュー実装済み」から「本番公開済み」へ修正し、実装予定形の記述を完了形へ同期した。
 - `npm run check`: passed（構成検査420項目、コンテンツ20ツール、Jest 36 suites・239 tests、リリース8 tests、全Lint、portal＋dynamic-pricing build）。
-- 企画・運用方針と公開記録の文書更新のみで、アプリ実装や追加デプロイは実施していない。
+- 文書同期はPR #13、merge commit `5a4be626c927ad42415f52ae5d396c484eee86a3`で`main`へ統合。統合後のVercel Production deployment `dpl_FEncw28ou5YWfq1yHg7qqbsWhkPc`がReadyとなり、`www.norops.jp`と`norops.jp`へ反映されたことを確認。
+- 企画・運用方針と公開記録の文書更新のみで、アプリ機能の変更や手動デプロイは実施していない。
