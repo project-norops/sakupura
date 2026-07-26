@@ -576,3 +576,12 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - `npm run check`: passed（構成検査420項目、コンテンツ20ツール、Jest 36 suites・239 tests、リリース8 tests、全Lint、portal＋dynamic-pricing build）。
 - 文書同期はPR #13、merge commit `5a4be626c927ad42415f52ae5d396c484eee86a3`で`main`へ統合。統合後のVercel Production deployment `dpl_FEncw28ou5YWfq1yHg7qqbsWhkPc`がReadyとなり、`www.norops.jp`と`norops.jp`へ反映されたことを確認。
 - 企画・運用方針と公開記録の文書更新のみで、アプリ機能の変更や手動デプロイは実施していない。
+
+## 2026-07-27（次期候補10案の調査・上位5案採用）
+
+- 既存20ツールとの機能・検索意図・カテゴリー重複を照合し、新規候補10案を`PRODUCT_RESEARCH.md`の100点基準で評価。
+- 75点以上の「CSV列マッピング・変換テンプレート」「CSV重複・表記ゆれクリーナー」「予定CSV・ICS一括変換」「robots.txt・sitemap.xml事前チェック」「OGP・SNSシェアカードプレビュー／タグ作成」を採用。
+- 構造化データJSON-LD、EXIF削除、PDF結合・分割、JSON・CSV相互変換、世界時間比較は、競合、重複、差別化または課金接続の不足により条件付き保留または保留とした。
+- 検索ボリューム実数は未確認と明記し、Google Search Central、Google Calendar、IETF RFC 5545、Open Graph protocol、CIPA Exif、OpenRefine、Flatfile、Adobe、Smallpdf等の公式情報を2026-07-27に確認。
+- 採用5案を`PRODUCT_PLAN.md`の企画ID 23〜27、評価結果を`ROADMAP.md`へ反映。実装は「サクプラ 開発・リリース」タスクへ移管し、この企画タスクでは開始しない。
+- `npm run check`: passed（構成検査420項目、コンテンツ20ツール、Jest 36 suites・239 tests、リリース8 tests、全Lint、portal＋dynamic-pricing build）。
