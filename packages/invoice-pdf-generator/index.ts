@@ -1,0 +1,1 @@
+export { InvoicePdfGeneratorPage } from "./InvoicePdfGeneratorPage";

@@ -1,0 +1,1 @@
+export { MerchantFeedCheckerPage } from "./MerchantFeedCheckerPage";
