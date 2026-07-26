@@ -9,13 +9,18 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@sakupla/contrast-color-fixer": "file:../../packages/contrast-color-fixer",
     "@sakupla/dynamic-pricing": "file:../../packages/dynamic-pricing",
     "@sakupla/email-signature-generator": "file:../../packages/email-signature-generator",
+    "@sakupla/focus-cost-timer": "file:../../packages/focus-cost-timer",
+    "@sakupla/image-resizer": "file:../../packages/image-resizer",
     "@sakupla/lp-structure-builder": "file:../../packages/lp-structure-builder",
     "@sakupla/review-reply-builder": "file:../../packages/review-reply-builder",
     "@sakupla/routine-task-loop": "file:../../packages/routine-task-loop",
     "@sakupla/shared-ui": "file:../../packages/shared-ui",
+    "@sakupla/shopify-csv-checker": "file:../../packages/shopify-csv-checker",
     "@sakupla/social-text-formatter": "file:../../packages/social-text-formatter",
+    "@sakupla/utm-link-builder": "file:../../packages/utm-link-builder",
     "next": "16.2.11",
     "react": "19.2.4",
     "react-dom": "19.2.4"

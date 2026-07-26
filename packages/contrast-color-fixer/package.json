@@ -1,0 +1,17 @@
+{
+  "name": "@sakupla/contrast-color-fixer",
+  "version": "0.1.0",
+  "private": true,
+  "sideEffects": false,
+  "main": "index.ts",
+  "types": "index.ts",
+  "exports": {
+    ".": {
+      "import": "./index.ts",
+      "default": "./index.ts"
+    }
+  },
+  "peerDependencies": {
+    "react": "19.2.4"
+  }
+}
