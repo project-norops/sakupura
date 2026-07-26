@@ -14,6 +14,15 @@ describe("AnalyticsEvents", () => {
     ).not.toThrow();
   });
 
+  it("gtagの送信失敗でUI処理を停止しない", () => {
+    window.gtag = jest.fn(() => {
+      throw new Error("blocked");
+    });
+    expect(() =>
+      trackAnalyticsEvent("tool_run", { tool_id: "sample" }),
+    ).not.toThrow();
+  });
+
   it("宣言されたクリックイベントと許可パラメータを送信する", () => {
     window.gtag = jest.fn();
     const { getByRole } = render(
@@ -47,5 +56,47 @@ describe("AnalyticsEvents", () => {
     expect(window.gtag).toHaveBeenCalledWith("event", "tool_run", {
       tool_id: "sample-tool",
     });
+  });
+
+  it("有料候補イベントは許可済み固定値だけを送信する", () => {
+    window.gtag = jest.fn();
+    trackAnalyticsEvent("premium_interest_confirm", {
+      tool_id: "csv-column-mapper",
+      feature_id: "mapping_rule_save",
+      placement: "result_after",
+    });
+
+    expect(window.gtag).toHaveBeenCalledWith(
+      "event",
+      "premium_interest_confirm",
+      {
+        tool_id: "csv-column-mapper",
+        feature_id: "mapping_rule_save",
+        placement: "result_after",
+      },
+    );
+  });
+
+  it.each([
+    {
+      tool_id: "csv-column-mapper",
+      feature_id: "unknown_feature",
+      placement: "result_after",
+    },
+    {
+      tool_id: "csv-column-mapper",
+      feature_id: "mapping_rule_save",
+      placement: "before_result",
+    },
+    {
+      tool_id: "csv-column-mapper",
+      feature_id: "mapping_rule_save",
+      placement: "result_after",
+      input_value: "送信禁止",
+    },
+  ])("有料候補イベントの未許可値や追加値を拒否する", (parameters) => {
+    window.gtag = jest.fn();
+    trackAnalyticsEvent("premium_interest_open", parameters);
+    expect(window.gtag).not.toHaveBeenCalled();
   });
 });

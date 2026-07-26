@@ -1,5 +1,5 @@
 {
-  "name": "@sakupla/shared-ui",
+  "name": "@sakupla/csv-column-mapper",
   "version": "0.1.0",
   "private": true,
   "sideEffects": false,
@@ -9,15 +9,9 @@
     ".": {
       "import": "./index.ts",
       "default": "./index.ts"
-    },
-    "./PremiumInterestCards": {
-      "import": "./PremiumInterestCards.tsx",
-      "default": "./PremiumInterestCards.tsx"
     }
   },
   "peerDependencies": {
-    "next": "16.2.11",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react": "19.2.4"
   }
 }
