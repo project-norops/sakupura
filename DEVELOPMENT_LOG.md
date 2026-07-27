@@ -858,6 +858,15 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 台帳032は`status: scheduled`、`publishAt: 2026-07-30T09:00:00+09:00`のため、本番`/tools/free-shipping-threshold-calculator`がHTTP 404で非公開を維持していることを確認した。台帳031は`draft`のままである。
 - `published`への変更、予約公開workflowの手動実行、X告知は行っていない。
 
+## 2026-07-27（台帳035 SNSコンテンツカレンダー 実装）
+
+- 承認済みの台帳035を公式ジェネレーターで`packages/social-content-calendar`と`/tools/social-content-calendar`へ追加し、`draft`、`publishAt: null`、`announceOnX: false`を維持した。
+- 投稿日、媒体、テーマ、目的、素材状態、CTA、投稿メモを整理し、投稿予定数、未入力・素材準備中の要確認件数、媒体別の内訳を確認できるようにした。投稿の追加・削除・複製と、ドラッグに依存しない上下ボタンでの並べ替えを用意した。
+- 小規模店舗の1週間サンプル、3ステップ、CTAと素材状態の説明を追加した。計画は表計算用CSVとカレンダー用ICSへ保存でき、ICSは終日予定として出力する。SNS API、自動投稿、認証、バックエンド、端末内自動保存は追加していない。
+- CSVの引用符処理、ICSのエスケープと日付、並べ替え、要確認件数、画面サンプル、複製・追加、キーボード操作可能なボタンを自動テストで確認した。構成641件、コンテンツ33ツール、Jest 64 suites・340 tests、release 8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+- 入力したテーマ、CTA、投稿メモなどはGA4へ送らない。正常な計画がある場合に「カレンダーの端末保存」「複数ブランドの管理」の匿名関心度テストを表示する。
+- 本番公開、main統合、予約公開、X告知は行っていない。ユーザーレビュー用のPreviewを経て、明示承認後に公開判断する。
+
 ## 2026-07-27（台帳034 稼働・売上キャパシティ計画 実装）
 
 - 承認済みの台帳034を公式ジェネレーターで`packages/freelance-capacity-planner`と`/tools/freelance-capacity-planner`へ追加し、`draft`、`publishAt: null`、`announceOnX: false`を維持した。
@@ -886,4 +895,10 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 
 - ユーザーレビュー承認済みの台帳034を最新mainへ統合し、`status: scheduled`、`publishAt: 2026-07-31T09:00:00+09:00`へ変更した。
 - 台帳033の実装・予約記録と台帳034の実装を両方保持し、サービス台帳、portal依存関係、lockfile、関心度計測許可値の競合を解消した。
+- `announceOnX: false`を維持する。予約公開workflowが期限到来後に品質検査と本番確認を完了するまでは非公開とする。
+
+## 2026-07-28（台帳035 予約公開準備）
+
+- ユーザーレビュー承認済みの台帳035を最新mainへ統合し、`status: scheduled`、`publishAt: 2026-07-31T15:00:00+09:00`へ変更した。
+- 台帳033・034の実装と予約記録、台帳035の実装をすべて保持し、サービス台帳、portal依存関係、lockfile、関心度計測許可値の競合を解消した。
 - `announceOnX: false`を維持する。予約公開workflowが期限到来後に品質検査と本番確認を完了するまでは非公開とする。
