@@ -7,7 +7,7 @@
 - 正常な結果表示後に`inventory_profile_save`と`multi_sku_inventory`の匿名関心度候補を表示し、入力値・在庫数・結果はGA4を含む外部へ送らない。X告知は`announceOnX: false`とした。
 - `npm run check`は構成607件、コンテンツ31ツール、Jest 60 suites・329 tests、リリース8 tests、全Lint、portal・dynamic-pricing buildに合格した。
 - PCと375px幅のローカル実画面でサンプル入力、計算結果（安全在庫9個、発注点16個、参考発注量18個）、説明・有料候補、横スクロールなしを確認した。Vercel Previewは成功したがURLはVercelログイン保護対象のため、未認証ブラウザでは画面を再確認できなかった。
-- Draft PR #31で品質CIとVercel Previewの成功を確認後、`status: scheduled`、`publishAt: 2026-07-30T09:00:00+09:00`へ変更した。ID29〜32の予約枠には変更を加えていない。
+- Draft PR #31で品質CIとVercel Previewの成功を確認した。初回の予約設定が既存OGPプレビューへ誤適用され、ID36が一時的に本番表示されたため、既存OGPを公開状態へ復元し、ID36へ`status: scheduled`、`publishAt: 2026-07-30T09:00:00+09:00`を正しく設定する修正を追加した。ID29〜32の予約枠には変更を加えていない。
 
 ## 2026-07-27（企画ID 33・35・36・37・39 採用承認）
 
