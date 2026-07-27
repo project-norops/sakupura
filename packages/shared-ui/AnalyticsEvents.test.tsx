@@ -169,6 +169,21 @@ describe("AnalyticsEvents", () => {
     );
   });
 
+  it("CSV縦横変換の固定feature_idだけを許可する", () => {
+    window.gtag = jest.fn();
+    trackAnalyticsEvent("premium_interest_open", {
+      tool_id: "csv-pivot-reshape",
+      feature_id: "reshape_recipe_save",
+      placement: "result_after",
+    });
+
+    expect(window.gtag).toHaveBeenCalledWith("event", "premium_interest_open", {
+      tool_id: "csv-pivot-reshape",
+      feature_id: "reshape_recipe_save",
+      placement: "result_after",
+    });
+  });
+
   it.each([
     {
       tool_id: "csv-column-mapper",
