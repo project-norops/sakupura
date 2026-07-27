@@ -23,6 +23,7 @@
     "@sakupla/invoice-pdf-generator": "file:../../packages/invoice-pdf-generator",
     "@sakupla/lp-structure-builder": "file:../../packages/lp-structure-builder",
     "@sakupla/merchant-feed-checker": "file:../../packages/merchant-feed-checker",
+    "@sakupla/ogp-card-preview": "file:../../packages/ogp-card-preview",
     "@sakupla/redirect-map-checker": "file:../../packages/redirect-map-checker",
     "@sakupla/review-reply-builder": "file:../../packages/review-reply-builder",
     "@sakupla/robots-sitemap-checker": "file:../../packages/robots-sitemap-checker",
