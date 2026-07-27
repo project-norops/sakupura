@@ -1924,8 +1924,8 @@
       ]
     },
     "releasePost": "翌週のシフト、売上予測と人数の釣り合いを先に確認。無料の「人時売上・シフト採算シミュレーター」で、時間帯ごとの人時売上・人件費率と自社目標との差を比較できます。登録不要、ブラウザ内で計算します。",
-    "status": "draft",
-    "publishAt": null,
+    "status": "scheduled",
+    "publishAt": "2026-07-30T15:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
   }
