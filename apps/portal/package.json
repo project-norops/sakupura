@@ -16,6 +16,7 @@
     "@sakupla/csv-diff-checker": "file:../../packages/csv-diff-checker",
     "@sakupla/csv-duplicate-cleaner": "file:../../packages/csv-duplicate-cleaner",
     "@sakupla/csv-encoding-fixer": "file:../../packages/csv-encoding-fixer",
+    "@sakupla/csv-joiner": "file:../../packages/csv-joiner",
     "@sakupla/csv-rule-validator": "file:../../packages/csv-rule-validator",
     "@sakupla/dynamic-pricing": "file:../../packages/dynamic-pricing",
     "@sakupla/email-signature-generator": "file:../../packages/email-signature-generator",

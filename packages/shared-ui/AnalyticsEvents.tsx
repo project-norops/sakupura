@@ -12,6 +12,7 @@ export const premiumInterestFeatures = {
   "robots-sitemap-checker": ["project_save", "live_url_check"],
   "ogp-card-preview": ["brand_preset_save", "bulk_page_audit"],
   "csv-rule-validator": ["validation_rule_save", "batch_validation"],
+  "csv-joiner": ["join_recipe_save", "multi_file_join"],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;
