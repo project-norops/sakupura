@@ -1344,8 +1344,8 @@
       ]
     },
     "releasePost": "OGP・SNS向けのカード見本とmetaタグを作れるプレビューを追加しました。タイトル・説明・画像情報からタグを生成し、貼り付けたhead断片の不足もブラウザ内で確認できます。登録不要・URL先への接続なしです。",
-    "status": "scheduled",
-    "publishAt": "2026-07-30T09:00:00+09:00",
+    "status": "published",
+    "publishAt": "2026-07-27T15:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
   },
@@ -1808,8 +1808,8 @@
       ]
     },
     "releasePost": "在庫が何個になったら発注するか、感覚だけで決めていませんか？ 毎週の平均・最大販売数、納期、現在庫、発注残から、安全在庫と発注点をブラウザ内で計算できます。式と発注前の確認事項も表示します。",
-    "status": "published",
-    "publishAt": "2026-07-27T15:00:00+09:00",
+    "status": "scheduled",
+    "publishAt": "2026-07-30T09:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
   }
