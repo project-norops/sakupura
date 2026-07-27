@@ -21,6 +21,7 @@ export const premiumInterestFeatures = {
     "shipping_scenario_save",
     "multi_region_shipping",
   ],
+  "freelance-capacity-planner": ["capacity_plan_save", "multi_month_capacity"],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;

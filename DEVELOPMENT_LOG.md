@@ -857,3 +857,12 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - Vercel Production deployment `dpl_7UJwn3Xc1A7NdmNX1p9xYnqkehfJ`がReadyとなり、本番トップのHTTP 200を確認した。
 - 台帳032は`status: scheduled`、`publishAt: 2026-07-30T09:00:00+09:00`のため、本番`/tools/free-shipping-threshold-calculator`がHTTP 404で非公開を維持していることを確認した。台帳031は`draft`のままである。
 - `published`への変更、予約公開workflowの手動実行、X告知は行っていない。
+
+## 2026-07-27（台帳034 稼働・売上キャパシティ計画 実装）
+
+- 承認済みの台帳034を公式ジェネレーターで`packages/freelance-capacity-planner`と`/tools/freelance-capacity-planner`へ追加し、`draft`、`publishAt: null`、`announceOnX: false`を維持した。
+- 計画月の平日数から、平日の休日、1日の稼働時間、営業・経理などの非請求時間を差し引き、既存案件後の残り時間、稼働率、売上見込み、売上目標との差をブラウザ内で計算できるようにした。案件の追加・削除と、個人事業の現実的なサンプルを用意した。
+- 非エンジニア向けに「来月、新規案件を受けられるか」という用途、3ステップ、時間・円・%の単位、非請求時間の意味、残り時間の読み方を表示した。祝日は自動判定しないこと、予備時間を別に確保すること、受注・収入・納期達成を保証せず長時間労働を勧めないことを明記した。
+- 正常な計算後だけ「月次計画の保存」「複数月の見通し」の匿名関心度テストを表示する。案件名、報酬、稼働条件、計算結果はGA4へ送信しない。
+- 平日数、キャパシティ、稼働率、残り時間、売上差、画面サンプル、案件追加・削除、異常入力を自動テストで確認した。構成641件、コンテンツ33ツール、Jest 64 suites・339 tests、release 8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+- 本番公開、main統合、予約公開、X告知、外部API、認証、バックエンド、メール収集は行っていない。ユーザーレビュー用のPreviewを経て、明示承認後に公開判断する。
