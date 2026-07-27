@@ -16,9 +16,10 @@ export const premiumInterestFeatures = {
   "har-sanitizer": ["redaction_profile_save", "batch_har_sanitize"],
   "pwa-manifest-checker": ["project_manifest_save", "icon_pack_export"],
   "csv-pivot-reshape": ["reshape_recipe_save", "batch_reshape"],
-  "reorder-point-calculator": [
-    "inventory_profile_save",
-    "multi_sku_inventory",
+  "reorder-point-calculator": ["inventory_profile_save", "multi_sku_inventory"],
+  "free-shipping-threshold-calculator": [
+    "shipping_scenario_save",
+    "multi_region_shipping",
   ],
 } as const;
 
