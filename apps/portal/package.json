@@ -14,6 +14,7 @@
     "@sakupla/contrast-color-fixer": "file:../../packages/contrast-color-fixer",
     "@sakupla/csv-column-mapper": "file:../../packages/csv-column-mapper",
     "@sakupla/csv-diff-checker": "file:../../packages/csv-diff-checker",
+    "@sakupla/csv-duplicate-cleaner": "file:../../packages/csv-duplicate-cleaner",
     "@sakupla/csv-encoding-fixer": "file:../../packages/csv-encoding-fixer",
     "@sakupla/dynamic-pricing": "file:../../packages/dynamic-pricing",
     "@sakupla/email-signature-generator": "file:../../packages/email-signature-generator",
