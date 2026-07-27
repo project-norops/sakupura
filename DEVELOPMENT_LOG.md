@@ -916,3 +916,9 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 既存の1日2本の予約枠を変更せず、次の空き枠である2026-08-01 09:00 JSTへ割り当て、`status: scheduled`、`publishAt: 2026-08-01T09:00:00+09:00`へ変更した。
 - `announceOnX: false`、`announcedAt: null`を維持する。予約公開workflowの手動実行、`published`への変更、X告知は行わず、期限到来後の全品質検査と本番確認まで公開URLは404を維持する。
 - 構成675件、コンテンツ35ツール、全Jest 68 suites・350 tests、release 8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+
+## 2026-07-28（台帳031 main統合・予約状態確認）
+
+- PR #47のGitHub Actions `validate`とVercel Previewが成功した後、merge commit `1e0091a8c7751a4b27f96cbad52ca57b165efc64`でmainへ統合した。
+- Vercel Production deployment `dpl_EsCjTKDoeCtgLrsyaeWFk3xwx25j`がReadyで、本番トップが表示できることを確認した。予約時刻前の`/tools/reorder-point-calculator`は404で非公開を維持している。
+- 台帳031は`status: scheduled`、`publishAt: 2026-08-01T09:00:00+09:00`、`announceOnX: false`、`announcedAt: null`である。予約公開workflowの手動実行、`published`への変更、X告知は行っていない。
