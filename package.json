@@ -46,8 +46,10 @@
     "lint:business-day-calculator": "eslint packages/business-day-calculator",
     "lint:csv-column-mapper": "eslint packages/csv-column-mapper",
     "lint:ogp-card-preview": "eslint packages/ogp-card-preview",
+    "lint:robots-sitemap-checker": "eslint packages/robots-sitemap-checker",
+    "lint:calendar-csv-ics-converter": "eslint packages/calendar-csv-ics-converter",
     "dev": "npx concurrently \"npm run dev:portal\" \"npm run dev:dynamic-pricing\"",
-    "lint": "npm run lint:portal && npm run lint:dynamic-pricing && npm run lint:social-text-formatter && npm run lint:email-signature-generator && npm run lint:review-reply-builder && npm run lint:lp-structure-builder && npm run lint:routine-task-loop && npm run lint:image-resizer && npm run lint:shopify-csv-checker && npm run lint:utm-link-builder && npm run lint:focus-cost-timer && npm run lint:contrast-color-fixer && npm run lint:csv-diff-checker && npm run lint:email-subject-previewer && npm run lint:invoice-pdf-generator && npm run lint:merchant-feed-checker && npm run lint:redirect-map-checker && npm run lint:csv-encoding-fixer && npm run lint:subtitle-timing-fixer && npm run lint:youtube-chapter-maker && npm run lint:business-day-calculator && npm run lint:csv-column-mapper && npm run lint:ogp-card-preview",
+    "lint": "npm run lint:portal && npm run lint:dynamic-pricing && npm run lint:social-text-formatter && npm run lint:email-signature-generator && npm run lint:review-reply-builder && npm run lint:lp-structure-builder && npm run lint:routine-task-loop && npm run lint:image-resizer && npm run lint:shopify-csv-checker && npm run lint:utm-link-builder && npm run lint:focus-cost-timer && npm run lint:contrast-color-fixer && npm run lint:csv-diff-checker && npm run lint:email-subject-previewer && npm run lint:invoice-pdf-generator && npm run lint:merchant-feed-checker && npm run lint:redirect-map-checker && npm run lint:csv-encoding-fixer && npm run lint:subtitle-timing-fixer && npm run lint:youtube-chapter-maker && npm run lint:business-day-calculator && npm run lint:csv-column-mapper && npm run lint:calendar-csv-ics-converter && npm run lint:robots-sitemap-checker && npm run lint:ogp-card-preview",
     "build": "npm run build:portal && npm run build:dynamic-pricing"
   },
   "devDependencies": {
