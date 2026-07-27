@@ -135,6 +135,8 @@ PR #37をmerge commit `98b0d03495885bcd6599dd39a23bf0dc1ae2851e`でmainへ統合
 
 台帳031「発注点・安全在庫計算」は、Vercel Previewでのユーザーレビューが完了した。既存の台帳033〜035までの予約枠を変更せず、次の空き枠である2026-08-01 09:00 JSTへ予約する。`status: scheduled`、`publishAt: 2026-08-01T09:00:00+09:00`、`announceOnX: false`とし、予約公開workflowが期限到来後に全品質検査と本番確認を完了するまでは非公開を維持する。
 
+PR #47をmerge commit `1e0091a8c7751a4b27f96cbad52ca57b165efc64`でmainへ統合した。Vercel Production deployment `dpl_EsCjTKDoeCtgLrsyaeWFk3xwx25j`はReadyで、本番トップは表示可能、予約時刻前の`/tools/reorder-point-calculator`は404で非公開を維持している。
+
 ## 2026-07-27：企画ID 28 CSVルール検証・データ品質チェック（本番公開済み）
 
 企画ID 28を本番公開し、サービス台帳上の公開ツールは26本となった。企画ID 29〜32は承認済みの順番で開発・本番公開を続ける。
