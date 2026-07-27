@@ -712,3 +712,11 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 自動テストでCSV解析、型候補、必須・型・値域・文字数・許可値・重複、監査列、エラー一覧、CSV直列化、画面上のサンプル検証、2種類の保存Blob、有料候補の表示条件、GA4許可値を確認した。全品質ゲートは構成522件、コンテンツ26ツール、Jest 50 suites・290 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
 - ローカル実画面でサンプル4行・5列から8件の具体的指摘、実CSV 2行・5列から必須・数値・日付・許可値の4件、結果CSV・エラー一覧の保存導線、関心度ダイアログの初期フォーカス・Escape・復帰を確認した。375px幅は表示幅360px・横スクロールなし、ブラウザーエラーなしだった。
 - 本番公開、X告知、外部API、認証、バックエンド、フォーム・メール収集は追加していない。Draft PRとVercelプレビュー成功後、追加承認に基づき本番公開まで進める。
+
+## 2026-07-27（企画ID 28 本番公開）
+
+- Draft PR #24のGitHub Actions `validate`とVercelプレビューが成功し、プレビューの`/tools/csv-rule-validator`で指摘例入りサンプルから8件の指摘とブラウザーエラーなしを確認した。
+- PR #24をmerge commit `f9ddbd9136e758ddd24cb4b8503072afe054d88e`でmainへ統合した。
+- Vercel Production deployment `dpl_45JMq54U1EwxW99cnRWAqe9iu6o3`がReadyとなり、`www.norops.jp`、`norops.jp`、`100apps-portal.vercel.app`へ反映された。
+- 本番でサンプル4行・5列の読込、必須・数値・日付・値域・文字数・許可値・重複を含む8件の指摘、検証結果CSV・エラー一覧の保存導線、検証ルール保存・複数ファイル一括検証の関心度候補を確認した。画面エラーはなかった。
+- サービス台帳上の公開ツールは26本となった。X告知、外部API、認証、バックエンド、フォーム・メール収集は行っていない。
