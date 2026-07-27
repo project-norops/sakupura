@@ -664,3 +664,12 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 冒頭説明を、CSVの列割り当てやICSという仕組みから説明する文章ではなく、「CSVで管理している予定表をGoogleカレンダーやAppleカレンダーへまとめて取り込める形にできる」という利用者の目的から始まる文章へ変更した。
 - 続けて、件名・開始・終了などの列を選び、日時の間違いを確認して保存する流れと、ブラウザ内処理であることを平易に説明した。
 - ツール台帳と検索・SNS向けdescriptionも同じ意味の文章へ統一した。
+
+## 2026-07-27（企画ID 25〜27 本番公開）
+
+- 人間レビュー承認後、PR #19をmerge commit `61134a6beba128f7608ff397ae8e535f808a02d3`、PR #20を`903638a09a59ff9f2e6aa61f0d5bd3816c5e1c0f`、PR #21を`577d3b65b0f8b8dd1c4abb7f802c386a7480c9aa`でmainへ順番に統合した。
+- 共通の`tools.json`、依存関係、lint設定、作業記録の競合は、企画ID 25〜27と既存ツールをすべて保持して解消した。公開台帳IDは予定CSV・ICS一括変換を022、robots.txt・sitemap.xml事前チェックを023、OGP・SNSシェアカードプレビューを024とした。
+- 3ツール統合状態の`npm run check`は構成488件、コンテンツ24ツール、Jest 45 suites・275 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+- Vercel Production deployment `dpl_3e4EEhXK2mEvS6WABxeCy5J9DvVG`がReadyとなり、`www.norops.jp`、`norops.jp`、`100apps-portal.vercel.app`へ反映された。
+- 本番の`/tools/calendar-csv-ics-converter`で利用者向け冒頭説明、`/tools/robots-sitemap-checker`で指摘例入りサンプルからURL 5件・Disallow 1件・指摘3件、`/tools/ogp-card-preview`で図形サンプル画像の実描画を確認した。3画面ともブラウザーエラーはなかった。
+- サービス台帳上の公開ツールは24本。企画ID 24は未公開のまま次の開発対象として維持し、X告知、有料機能本体、Google Indexing API、外部API、認証、バックエンド追加は行っていない。
