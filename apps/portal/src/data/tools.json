@@ -1234,7 +1234,7 @@
     "announcedAt": null
   },
   {
-    "id": "022-csv-duplicate-cleaner",
+    "id": "025-csv-duplicate-cleaner",
     "slug": "csv-duplicate-cleaner",
     "title": "CSV重複・表記ゆれクリーナー",
     "description": "CSVの重複行と表記ゆれ候補を見つけ、残す行を確認して整理済みCSVと除外行CSVを保存します。",
@@ -1288,6 +1288,180 @@
     "releasePost": "顧客・商品CSVの重複と表記ゆれ候補を整理する「CSV重複・表記ゆれクリーナー」を追加しました。残す行を確認し、元行番号付きの整理済みCSVと除外行CSVを端末内で作成できます。登録不要・外部送信なしです。",
     "status": "published",
     "publishAt": "2026-07-27T07:00:00+09:00",
+    "announceOnX": false,
+    "announcedAt": null
+  },
+  {
+    "id": "024-ogp-card-preview",
+    "slug": "ogp-card-preview",
+    "title": "OGP・SNSシェアカードプレビュー／タグ作成",
+    "description": "タイトル・説明・画像情報からシェアカード見本とOGP・X向けタグを作り、head断片の不足も公開前に確認します。",
+    "href": "/tools/ogp-card-preview",
+    "badge": "発信・集客",
+    "categoryId": "content-marketing",
+    "categoryName": "発信・集客",
+    "packageName": "@sakupla/ogp-card-preview",
+    "componentName": "OgpCardPreviewPage",
+    "content": {
+      "summary": "OGP・SNSシェアカードプレビュー／タグ作成は、Webページのタイトル、説明、URL、画像URL・寸法・代替説明を入力し、汎用的なシェアカード見本とOpen Graph・X向けmetaタグを作る無料ツールです。貼り付けたhead断片から基本タグの不足や空のcontentも確認できます。SNSごとのタグを手作業で並べる手間を減らし、公開前に文言、画像比率、URL、代替説明をまとめて確認できます。入力URLの先へアクセスせず、内容はブラウザ内だけで処理します。",
+      "audience": "Web制作者、広報・SNS担当者、ブロガー、LPや記事を公開する個人事業主に向いています。新しいページのOGPタグを作るとき、既存head断片の不足を確認するとき、タイトルと説明がカード内でどうまとまるかを制作担当者間で共有したい場面で利用できます。",
+      "features": [
+        {
+          "title": "入力と同時にカード構成を確認",
+          "description": "タイトル、説明、ページURL、画像URL、画像寸法、代替説明、サイト名を1画面で入力し、汎用的な1200:630比率のカード見本へ反映します。画像URLは自動取得せず、端末内の画像を任意で選ぶとブラウザ内だけで実画像の見本を確認できます。"
+        },
+        {
+          "title": "Open Graph・X向けタグを一括作成",
+          "description": "og:type、title、description、url、image、画像幅・高さ・代替説明、site_nameと、summary_large_imageを使うX向けタグをHTMLエスケープして生成し、まとめてコピーできます。"
+        },
+        {
+          "title": "既存head断片の不足を静的診断",
+          "description": "貼り付けたmetaタグからog:title、description、url、imageの不足をエラー、画像寸法・代替説明・twitter:cardの不足を警告として表示します。実URLや画像へアクセスせず、入力内容・生成結果を外部送信しません。"
+        }
+      ],
+      "steps": [
+        "ページのタイトル、説明、絶対URL、画像の絶対URL・幅・高さ・代替説明を入力します。既存ページを確認する場合は、HTMLのhead断片も任意で貼り付けます。",
+        "汎用シェアカード見本で文言と画像領域を確認し、「プレビューとタグを作成」を押します。URL形式、寸法、長い文言、代替説明の注意とhead断片の不足を確認します。",
+        "生成タグをコピーしてサイトのテンプレートへ反映します。公開後は各SNSの公式デバッガーや実際の共有画面で取得結果を確認し、キャッシュが残る場合は各サービスの手順に従ってください。"
+      ],
+      "notes": [
+        "初期版は利用者が入力した情報と貼り付けたhead断片だけを静的に処理します。URL先、画像、公開済みHTMLを取得せず、外部API、複数ページ監査、ブランドプリセット、キャッシュ更新は行いません。",
+        "カード見本は特定SNSの完全再現ではありません。各サービスの表示、文字省略、画像切り抜き、取得時点、キャッシュ、推奨寸法は変更される場合があります。The Open Graph protocolとXの最新公式資料、公開後の実表示を確認してください。"
+      ],
+      "faq": [
+        {
+          "question": "入力した画像URLの画像を取得しますか？",
+          "answer": "取得しません。外部送信や意図しないアクセスを避けるため、画像URLからの自動読込は行いません。実画像の見本を確認したい場合は、端末内の画像をプレビュー用に選択できます。選択画像はブラウザ内だけで表示され、生成タグには入力した画像URLを使用します。"
+        },
+        {
+          "question": "既存ページのURLだけでタグを診断できますか？",
+          "answer": "できません。初期版は実URLへアクセスしないため、ページのhead断片をコピーして任意入力欄へ貼り付けてください。入力した断片はブラウザ内だけで解析し、サーバーや外部サービスへ送信しません。"
+        },
+        {
+          "question": "見本どおりにXやSNSで表示されますか？",
+          "answer": "保証されません。見本はタイトル、説明、ドメイン、画像領域の一般的な構成を確認するためのものです。サービスごとの取得仕様、キャッシュ、文字数、画像処理で変わるため、公開後に実際の共有表示と公式デバッガーを確認してください。"
+        }
+      ]
+    },
+    "releasePost": "OGP・SNS向けのカード見本とmetaタグを作れるプレビューを追加しました。タイトル・説明・画像情報からタグを生成し、貼り付けたhead断片の不足もブラウザ内で確認できます。登録不要・URL先への接続なしです。",
+    "status": "published",
+    "publishAt": "2026-07-27T15:00:00+09:00",
+    "announceOnX": false,
+    "announcedAt": null
+  },
+  {
+    "id": "023-robots-sitemap-checker",
+    "slug": "robots-sitemap-checker",
+    "title": "robots.txt・sitemap.xml事前チェック",
+    "description": "公開前のrobots.txtとsitemap.xmlを静的に照合し、構文・URL・重複・ホスト整合の注意点を行番号付きで確認します。",
+    "href": "/tools/robots-sitemap-checker",
+    "badge": "Web制作・改善",
+    "categoryId": "web-design",
+    "categoryName": "Web制作・改善",
+    "packageName": "@sakupla/robots-sitemap-checker",
+    "componentName": "RobotsSitemapCheckerPage",
+    "content": {
+      "summary": "robots.txt・sitemap.xml事前チェックは、サイト公開や移転の前に2つの設計ファイルを貼り付け、基本構文、絶対URL、重複URL、想定ホストとの違い、Disallow対象がサイトマップに含まれる候補を行番号付きで確認する無料ツールです。robots.txtとsitemap.xmlを別々に目視する手間を減らし、指摘一覧をコピーして制作・SEO担当者間で確認できます。入力内容はブラウザ内だけで静的に処理し、記載URLへアクセスしません。",
+      "audience": "Web制作会社、SEO担当者、サイト移転や公開前の確認を行う開発者・運営者に向いています。robots.txtとsitemap.xmlの配置前に、ホスト名や除外パスの食い違い、重複、書式の初歩的な見落としを共同確認したい場面で利用できます。",
+      "features": [
+        {
+          "title": "2ファイルを行番号付きで静的診断",
+          "description": "robots.txtのUser-agent、Allow、Disallow、Sitemapなどの基本構文と、sitemap.xmlのurlset／sitemapindex、locの絶対URL、重複、50,000件上限を確認します。指摘元と行番号を一覧表示します。"
+        },
+        {
+          "title": "ホストとDisallow候補を照合",
+          "description": "想定サイトURL、robots.txtのSitemap URL、sitemap.xml内のURLホストを比べます。サイトマップURLのパスがDisallow指定に含まれる可能性も候補として表示し、公開前の意図確認を助けます。"
+        },
+        {
+          "title": "実URLへ接続せずレポートを共有",
+          "description": "貼り付けまたは各10MB以下のファイル読込をブラウザ内だけで処理し、外部URLや検索エンジンへリクエストしません。診断件数と指摘をテキストでコピーできます。"
+        }
+      ],
+      "steps": [
+        "確認対象の想定サイトURLを入力します。robots.txtとsitemap.xmlを貼り付けるか、公開前のテキストファイルをそれぞれ読み込みます。初めての場合は操作サンプルを利用できます。",
+        "2ファイルを診断し、エラー、警告、確認済みの区分、対象ファイル、行番号を確認します。ホスト違いとDisallow該当は意図した設定か元ファイルと照合してください。",
+        "必要な修正を設計ファイルへ反映して再診断し、診断レポートをコピーして関係者と共有します。公開後は検索エンジンの公式テスターや実URLの応答も別途確認してください。"
+      ],
+      "notes": [
+        "初期版は貼り付け内容または各10MB以下のrobots.txt・sitemap.xmlを静的に確認します。実URLへの接続、HTTPステータス確認、robots.txtの取得、サイトマップ階層の巡回、クロール、インデックス登録、Google Indexing APIは行いません。",
+        "robots.txtは検索結果からの除外を保証するnoindexの代替ではありません。ワイルドカードやクローラー固有解釈は候補確認に留まり、クロール・インデックス結果を保証しません。Google Search Centralなど対象検索エンジンの最新公式情報も確認してください。"
+      ],
+      "faq": [
+        {
+          "question": "入力したURLへアクセスしますか？",
+          "answer": "アクセスしません。貼り付けた文字列と読み込んだファイルだけをブラウザ内で確認します。公開済みURLのHTTP応答、リダイレクト、実際に配信されるrobots.txtやsitemap.xmlは別途確認してください。"
+        },
+        {
+          "question": "Disallowとサイトマップの警告は必ず問題ですか？",
+          "answer": "必ずしも問題ではありません。本ツールはサイトマップURLのパスがDisallowの先頭パターンに一致する候補を示します。ワイルドカード、User-agentグループ、検索エンジン固有の解釈、意図した除外かどうかを元設定と公式仕様で確認してください。"
+        },
+        {
+          "question": "診断に指摘がなければインデックスされますか？",
+          "answer": "保証されません。本ツールは公開前ファイルの基本的な静的確認だけを行います。公開後の取得可否、HTTP応答、canonical、noindex、コンテンツ品質、検索エンジンの判断などは別の確認が必要です。"
+        }
+      ]
+    },
+    "releasePost": "公開前のrobots.txtとsitemap.xmlをまとめて確認できる事前チェックツールを追加しました。構文、URL、重複、ホスト、Disallow候補を行番号付きで静的診断します。登録不要・実URLへの接続なしです。",
+    "status": "published",
+    "publishAt": "2026-07-27T14:00:00+09:00",
+    "announceOnX": false,
+    "announcedAt": null
+  },
+  {
+    "id": "022-calendar-csv-ics-converter",
+    "slug": "calendar-csv-ics-converter",
+    "title": "予定CSV・ICS一括変換",
+    "description": "CSVで管理している予定表を、GoogleカレンダーやAppleカレンダーへまとめて取り込めるICSファイルに変換します。",
+    "href": "/tools/calendar-csv-ics-converter",
+    "badge": "業務効率化",
+    "categoryId": "business-operations",
+    "categoryName": "業務効率化",
+    "packageName": "@sakupla/calendar-csv-ics-converter",
+    "componentName": "CalendarCsvIcsConverterPage",
+    "content": {
+      "summary": "予定CSV・ICS一括変換は、表計算で管理している講座、イベント、店舗、学校、チームの予定を、カレンダーへ読み込めるiCalendar（ICS）形式にまとめる無料ツールです。日本語列名のCSVを読み込み、件名、開始、終了、終日、場所、説明、タイムゾーンの列を割り当てます。日付形式や開始・終了の前後関係を元行番号付きで検証し、エラーがない予定だけを1つのICSファイルとしてブラウザ内で作成できます。予定を1件ずつ手入力する前に、入力形式と変換内容を一覧で確認できます。",
+      "audience": "講座やイベントの運営者、学校・店舗・チームの予定を表計算で管理する担当者、複数の予定をGoogle CalendarやApple Calendarへ登録したいバックオフィス担当者に向いています。カレンダー同期や招待送信ではなく、自分で確認した予定ファイルを一括インポートしたい場面で利用できます。",
+      "features": [
+        {
+          "title": "日本語CSVの列を柔軟に割り当て",
+          "description": "件名、開始、終了の必須列に加え、終日、場所、説明、タイムゾーンを任意の列名から選べます。よく使う日本語・英語列名は候補を表示しますが、利用者が割り当てを確認してから検証します。"
+        },
+        {
+          "title": "元行番号付きで形式エラーを確認",
+          "description": "通常予定はYYYY-MM-DD HH:mm、終日予定はYYYY-MM-DDとして確認し、空の件名、不正な日時、終了が開始以前の予定、タイムゾーン形式を行ごとに表示します。エラーが残る間はICS保存を停止します。"
+        },
+        {
+          "title": "端末内で標準ICSを一括作成",
+          "description": "最大10MBのUTF-8 CSVをブラウザ内だけで処理し、RFC 5545を基準に複数予定を1つのICSへ変換します。入力ファイルや予定内容をサーバー、外部API、カレンダーサービスへ送信しません。"
+        }
+      ],
+      "steps": [
+        "列名と入力例を含むサンプルまたはテンプレートを保存して形式を確認し、見出し行と1行以上の予定を含むUTF-8 CSVを読み込みます。",
+        "件名、開始、終了、終日、場所、説明、タイムゾーンへ使う列を選び、予定を検証します。元行番号とエラー内容を見て、必要なら元CSVを修正して読み込み直します。",
+        "全予定が「変換できます」になったことを確認し、ICSファイルを保存します。少量の予定でカレンダーへ試験インポートし、日時、終日、タイムゾーン、説明の表示を確認してください。"
+      ],
+      "notes": [
+        "初期版はUTF-8・10MB以下のカンマ区切りCSVからICSへの変換が対象です。通常予定はYYYY-MM-DD HH:mm、終日は開始日と終了日をYYYY-MM-DDで入力します。ICSからCSVへの逆変換、繰り返し予定、招待送信、カレンダー同期、外部API連携は行いません。",
+        "生成形式はRFC 5545とGoogle Calendarのインポート案内を基準にしますが、各カレンダーの表示、タイムゾーン解釈、既存予定との重複を保証しません。元CSVを保管し、公式手順を確認して少量から試してください。"
+      ],
+      "faq": [
+        {
+          "question": "開始と終了はどの形式で入力しますか？",
+          "answer": "時刻付き予定は2026-08-03 09:00のようにYYYY-MM-DD HH:mmで入力します。終日列を「はい」「true」「1」「終日」のいずれかにした予定は、開始と終了をYYYY-MM-DDで入力してください。終日の終了日はiCalendarの仕様上、予定に含めない翌日を指定します。"
+        },
+        {
+          "question": "CSVや予定内容は外部へ送られますか？",
+          "answer": "送られません。CSVの読込、検証、ICS生成はブラウザ内だけで行い、ファイル内容や生成結果をサクプラ、Google、Appleなどへ送信しません。保存したICSは利用者自身がカレンダーへインポートします。"
+        },
+        {
+          "question": "ICSを読み込めば必ず同じ表示になりますか？",
+          "answer": "保証できません。カレンダー製品の仕様、既定タイムゾーン、インポート時の設定によって表示が変わる場合があります。まず数件だけのCSVで試し、日時、終日、場所、説明を確認してから本番データを読み込んでください。"
+        }
+      ]
+    },
+    "releasePost": "表計算の予定をまとめてICSへ変換できる「予定CSV・ICS一括変換」を追加しました。日本語CSVの列を割り当て、日時や終日設定を行ごとに確認してからブラウザ内で保存できます。登録不要・ファイルの外部送信なしです。",
+    "status": "published",
+    "publishAt": "2026-07-27T13:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
   }

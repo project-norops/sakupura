@@ -637,3 +637,56 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 公開投稿の作成画面へ直接送らず、`rel="noopener noreferrer"`と新しいタブで開くことを伝えるアクセシブルな名称を設定した。正式な個別サポートやDM受付を保証する表現、GA4イベント、フォーム、メール収集、外部バックエンドは追加していない。
 - フッター内へ「Xの公開投稿には個人情報・機密情報を書かないでください。」という注意を表示し、既存のプライバシー・免責・トップリンクを保持した。
 - 共通フッターの自動テストを追加し、既存3リンク、XプロフィールURL、安全属性、注意文を確認した。全品質ゲートとVercelプレビュー、キーボード操作、375px表示は追補後に再確認する。
+## 2026-07-27（企画ID 27 OGP・SNSシェアカードプレビュー／タグ作成 プレビュー実装）
+
+- 承認済み企画ID 27を`npm run create:tool`で生成し、`packages/ogp-card-preview`と`/tools/ogp-card-preview`へプレビュー実装した。ブランチ内だけ`published`とし、`announceOnX: false`を維持した。
+- タイトル、説明、ページURL、画像URL・幅・高さ・代替説明、サイト名から汎用カード見本とOpen Graph・X向けmetaタグを生成する。HTML特殊文字をエスケープし、タグをまとめてコピーできるようにした。
+- 貼り付けたhead断片からog:title、og:description、og:url、og:imageの不足／空欄をエラー、画像寸法・代替説明・twitter:cardの不足を警告として静的診断する。URL先や画像へアクセスせず、入力内容・生成結果を外部送信しない。
+- 操作サンプル、The Open Graph protocolとX Cards markupの公式リンク、固有の対象者・説明・利用例・注意・FAQ・関連ツール導線を追加。正常な結果後に「ブランドプリセット保存」「複数ページ一括監査」の匿名関心度テストを表示する。
+- 自動テスト6件でURL・寸法・長文・代替説明の検証、HTMLエスケープ、タグ生成、head不足／完全断片、画面上の生成・コピー、入力エラー停止を確認した。`npm run check`は構成454件、コンテンツ22ツール、Jest 41 suites・264 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+- ローカル本番相当画面でサンプル反映、og:titleを含むタグ生成、head診断成功、コピー導線、関心度候補2件を確認した。375px幅で表示幅360px・横スクロールなしを確認した。
+- 本番公開、X告知、有料機能本体、外部API、認証、バックエンドは追加していない。Vercelプレビューで人間レビュー後に本番公開可否を判断する。
+
+## 2026-07-27（企画ID 26 robots.txt・sitemap.xml事前チェック プレビュー実装）
+
+- 承認済み企画ID 26を`npm run create:tool`で生成し、`packages/robots-sitemap-checker`と`/tools/robots-sitemap-checker`へプレビュー実装した。ブランチ内だけ`published`とし、`announceOnX: false`を維持した。
+- robots.txtとsitemap.xmlの貼り付け／各10MB以下のファイル読込、User-agent・Allow・Disallow・Sitemapの基本構文、urlset／sitemapindex、loc絶対URL、重複、50,000件上限、想定ホスト、Disallow該当候補を行番号付きで静的診断する。
+- 診断レポートのコピー、操作サンプル、Google Search CentralとSitemaps XML protocolの公式リンク、固有の対象者・説明・利用例・注意・FAQ・関連ツール導線を追加した。実URLへ接続せず、Google Indexing API、クロール、インデックス保証、外部APIは追加していない。
+- 正常な診断結果後に「案件保存」「実URL一括確認」の匿名関心度テストを表示する。ツール固有の入力URL、ファイル内容、診断結果はGA4へ送らない。
+- 自動テスト5件で基本ペア、構文、重複、ホスト、Disallow候補、相対URL、ルート要素、行番号、レポートコピー、両入力必須を確認した。`npm run check`は構成454件、コンテンツ22ツール、Jest 41 suites・263 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+- ローカル本番相当画面でサンプル2 URL・Disallow 1件・指摘0件、レポートコピー導線、関心度候補2件を確認した。375px幅で表示幅360px・横スクロールなしを確認した。
+- 本番公開、X告知、有料機能本体、認証、バックエンドは追加していない。Vercelプレビューで人間レビュー後に本番公開可否を判断する。
+
+### 2026-07-27 レビュー反映
+
+- 指摘0件になる正常サンプルは機能説明に不向きだったため、「指摘例入りサンプル」へ変更した。
+- サイトマップ内の重複URL、想定ホストと異なるURL、robots.txtのDisallow対象候補の3種類が、行番号付きの指摘一覧へ実際に表示される構成にした。
+- 画面テストもURL 5件・Disallow 1件・指摘3件と、3種類の具体的な指摘文を確認する内容へ更新した。
+## 2026-07-27（企画ID 25 予定CSV・ICS一括変換 プレビュー実装）
+
+- 承認済み企画ID 25を`npm run create:tool`で生成し、`packages/calendar-csv-ics-converter`と`/tools/calendar-csv-ics-converter`へプレビュー実装した。ブランチ内だけ`published`とし、`announceOnX: false`を維持した。
+- UTF-8・10MB以下の予定CSV読込、日本語・英語列名の候補表示、件名・開始・終了・終日・場所・説明・タイムゾーンの明示割り当て、元行番号付き検証、RFC 5545形式のICS保存をブラウザ内処理で実装した。
+- 通常予定の`YYYY-MM-DD HH:mm`、終日予定の`YYYY-MM-DD`、空の件名、実在しない日時、終了が開始以前、タイムゾーン形式を検証し、エラーが残る間は保存を停止する。招待送信、同期、外部API、繰り返し予定本体は追加していない。
+- 列名と入力例付きのサンプル／テンプレートCSV、RFC 5545とGoogle Calendar公式案内、固有の対象者・説明・利用例・注意・FAQ・関連ツール導線を追加。正常な結果後に「変換プリセット保存」「繰り返し予定」の匿名関心度テストを表示する。
+- 自動テスト6件でCSV解析、列候補、通常予定・終日予定、エラー、ICS主要行、画面上のサンプル検証、保存Blob生成、必須列停止を確認した。`npm run check`は構成454件、コンテンツ22ツール、Jest 41 suites・264 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+- ローカル本番相当画面でサンプル2件、7列の自動割り当て、エラー0件、ICS保存有効化、関心度候補2件を確認した。375px幅で表示幅360px・横スクロールなしを確認した。
+- 本番公開、X告知、有料機能本体、外部API、認証、バックエンドは追加していない。Vercelプレビューで人間レビュー後に本番公開可否を判断する。
+
+### 2026-07-27 レビュー反映
+
+- 画像URLと寸法をグラデーション上へ文字表示する見本は、想定画像とエラー表示の区別が分かりにくかったため廃止した。
+- 画像未選択時は中立色の「プレビュー画像は未選択です」を表示し、画像URLを自動取得しない理由と次の操作をカード外へ明記した。
+- 端末内の画像を任意で選び、外部送信せずブラウザ内だけでカードの実画像を確認できるようにした。操作サンプルでは説明文ではなく図形のサンプル画像を表示する。
+- Vercelプレビューの実画面確認で、背景画像指定ではサンプル画像が描画されず中立色の枠だけになることを検出した。Blob URL／data URLを通常の画像要素で表示するよう修正し、`src`が設定される自動テストを追加して全品質ゲートを再実行した。
+- 冒頭説明を、CSVの列割り当てやICSという仕組みから説明する文章ではなく、「CSVで管理している予定表をGoogleカレンダーやAppleカレンダーへまとめて取り込める形にできる」という利用者の目的から始まる文章へ変更した。
+- 続けて、件名・開始・終了などの列を選び、日時の間違いを確認して保存する流れと、ブラウザ内処理であることを平易に説明した。
+- ツール台帳と検索・SNS向けdescriptionも同じ意味の文章へ統一した。
+
+## 2026-07-27（企画ID 25〜27 本番公開）
+
+- 人間レビュー承認後、PR #19をmerge commit `61134a6beba128f7608ff397ae8e535f808a02d3`、PR #20を`903638a09a59ff9f2e6aa61f0d5bd3816c5e1c0f`、PR #21を`577d3b65b0f8b8dd1c4abb7f802c386a7480c9aa`でmainへ順番に統合した。
+- 共通の`tools.json`、依存関係、lint設定、作業記録の競合は、企画ID 25〜27と既存ツールをすべて保持して解消した。公開台帳IDは予定CSV・ICS一括変換を022、robots.txt・sitemap.xml事前チェックを023、OGP・SNSシェアカードプレビューを024とした。
+- 3ツール統合状態の`npm run check`は構成488件、コンテンツ24ツール、Jest 45 suites・275 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+- Vercel Production deployment `dpl_3e4EEhXK2mEvS6WABxeCy5J9DvVG`がReadyとなり、`www.norops.jp`、`norops.jp`、`100apps-portal.vercel.app`へ反映された。
+- 本番の`/tools/calendar-csv-ics-converter`で利用者向け冒頭説明、`/tools/robots-sitemap-checker`で指摘例入りサンプルからURL 5件・Disallow 1件・指摘3件、`/tools/ogp-card-preview`で図形サンプル画像の実描画を確認した。3画面ともブラウザーエラーはなかった。
+- サービス台帳上の公開ツールは24本。企画ID 24は未公開のまま次の開発対象として維持し、X告知、有料機能本体、Google Indexing API、外部API、認証、バックエンド追加は行っていない。
