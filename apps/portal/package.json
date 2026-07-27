@@ -27,6 +27,7 @@
     "@sakupla/har-sanitizer": "file:../../packages/har-sanitizer",
     "@sakupla/image-resizer": "file:../../packages/image-resizer",
     "@sakupla/invoice-pdf-generator": "file:../../packages/invoice-pdf-generator",
+    "@sakupla/labor-sales-planner": "file:../../packages/labor-sales-planner",
     "@sakupla/lp-structure-builder": "file:../../packages/lp-structure-builder",
     "@sakupla/merchant-feed-checker": "file:../../packages/merchant-feed-checker",
     "@sakupla/ogp-card-preview": "file:../../packages/ogp-card-preview",

@@ -21,6 +21,7 @@ export const premiumInterestFeatures = {
     "shipping_scenario_save",
     "multi_region_shipping",
   ],
+  "labor-sales-planner": ["shift_template_save", "multi_store_labor_compare"],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;
