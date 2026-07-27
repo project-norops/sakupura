@@ -291,11 +291,12 @@ export function OgpCardPreviewPage() {
             </h2>
             <div className="mt-4 overflow-hidden rounded-2xl border bg-white shadow-sm">
               {imagePreviewUrl ? (
-                <div
-                  role="img"
-                  aria-label={`${imagePreviewName || "選択した画像"}のカードプレビュー`}
-                  className="aspect-[1200/630] bg-slate-100 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${imagePreviewUrl})` }}
+                // Blob URL と data URL は Next/Image の最適化対象外で、端末内だけで表示する。
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={imagePreviewUrl}
+                  alt={`${imagePreviewName || "選択した画像"}のカードプレビュー`}
+                  className="aspect-[1200/630] w-full bg-slate-100 object-cover"
                 />
               ) : (
                 <div className="grid aspect-[1200/630] place-items-center border-b border-dashed border-slate-300 bg-slate-50 p-6 text-center text-slate-500">

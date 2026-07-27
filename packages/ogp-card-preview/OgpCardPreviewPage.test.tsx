@@ -18,7 +18,7 @@ test("loads the sample, generates tags, and copies them", async () => {
   );
   expect(
     screen.getByRole("img", { name: "操作サンプル画像のカードプレビュー" }),
-  ).toBeInTheDocument();
+  ).toHaveAttribute("src", expect.stringContaining("data:image/svg+xml"));
   expect(screen.getByText("表示中：操作サンプル画像")).toBeInTheDocument();
   fireEvent.click(
     screen.getByRole("button", { name: "プレビューとタグを作成" }),
