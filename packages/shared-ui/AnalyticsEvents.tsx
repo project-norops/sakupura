@@ -8,12 +8,10 @@ type AnalyticsParameters = Record<string, AnalyticsValue | undefined>;
 export const premiumInterestFeatures = {
   "csv-column-mapper": ["mapping_rule_save", "batch_files"],
   "csv-duplicate-cleaner": ["cleaning_rule_save", "batch_files"],
-  "calendar-csv-ics-converter": [
-    "conversion_preset_save",
-    "recurring_events",
-  ],
+  "calendar-csv-ics-converter": ["conversion_preset_save", "recurring_events"],
   "robots-sitemap-checker": ["project_save", "live_url_check"],
   "ogp-card-preview": ["brand_preset_save", "bulk_page_audit"],
+  "csv-rule-validator": ["validation_rule_save", "batch_validation"],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;
@@ -55,9 +53,11 @@ function isAllowedPremiumInterestEvent(
     return false;
   }
 
-  return (premiumInterestFeatures[toolId as PremiumInterestToolId] as readonly string[]).includes(
-    featureId,
-  );
+  return (
+    premiumInterestFeatures[
+      toolId as PremiumInterestToolId
+    ] as readonly string[]
+  ).includes(featureId);
 }
 
 declare global {

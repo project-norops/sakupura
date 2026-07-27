@@ -77,6 +77,41 @@ describe("AnalyticsEvents", () => {
     );
   });
 
+  it("CSVルール検証の固定feature_idだけを許可する", () => {
+    window.gtag = jest.fn();
+    trackAnalyticsEvent("premium_interest_open", {
+      tool_id: "csv-rule-validator",
+      feature_id: "validation_rule_save",
+      placement: "result_after",
+    });
+    trackAnalyticsEvent("premium_interest_confirm", {
+      tool_id: "csv-rule-validator",
+      feature_id: "batch_validation",
+      placement: "result_after",
+    });
+
+    expect(window.gtag).toHaveBeenNthCalledWith(
+      1,
+      "event",
+      "premium_interest_open",
+      {
+        tool_id: "csv-rule-validator",
+        feature_id: "validation_rule_save",
+        placement: "result_after",
+      },
+    );
+    expect(window.gtag).toHaveBeenNthCalledWith(
+      2,
+      "event",
+      "premium_interest_confirm",
+      {
+        tool_id: "csv-rule-validator",
+        feature_id: "batch_validation",
+        placement: "result_after",
+      },
+    );
+  });
+
   it.each([
     {
       tool_id: "csv-column-mapper",
