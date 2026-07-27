@@ -757,3 +757,4 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 自動テストでHAR形式、ヘッダー・Cookie・クエリ・JSON本文の検出、伏せ字、選択した候補だけの匿名化、URL同期、残存候補、元データ非破壊、画面上のサンプル・未選択停止・保存、有料候補、GA4許可値を確認した。全品質ゲートは構成556件、コンテンツ28ツール、Jest 54 suites・304 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
 - ローカル実画面でサンプル1リクエストから5候補・5件匿名化・残存0件、実HAR 2リクエストからクエリとJSON本文の2候補、不正HARエラー、未選択時の停止、監査表と保存導線を確認した。関心度ダイアログの初期フォーカス・Escape・復帰、375px幅で表示幅360px・横スクロールなし、ブラウザーエラーなしを確認した。
 - 本番公開、X告知、外部API、認証、バックエンド、フォーム・メール収集は追加していない。Draft PRとVercelプレビュー成功後、ROADMAPに従って2026-07-28 15:00 JSTの予約公開へ切り替える。
+- Draft PR #27のGitHub Actions `validate`とVercel Preview deployment `dpl_DvykBQEtMKPXnU4SuqdfLHer4aLY`が成功した。プレビューでサンプル5候補をすべて選択し、5件匿名化・残存0件・ブラウザーエラーなしを再確認して、`status: scheduled`、`publishAt: 2026-07-28T15:00:00+09:00`へ切り替えた。
