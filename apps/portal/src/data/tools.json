@@ -1234,6 +1234,64 @@
     "announcedAt": null
   },
   {
+    "id": "023-robots-sitemap-checker",
+    "slug": "robots-sitemap-checker",
+    "title": "robots.txt・sitemap.xml事前チェック",
+    "description": "公開前のrobots.txtとsitemap.xmlを静的に照合し、構文・URL・重複・ホスト整合の注意点を行番号付きで確認します。",
+    "href": "/tools/robots-sitemap-checker",
+    "badge": "Web制作・改善",
+    "categoryId": "web-design",
+    "categoryName": "Web制作・改善",
+    "packageName": "@sakupla/robots-sitemap-checker",
+    "componentName": "RobotsSitemapCheckerPage",
+    "content": {
+      "summary": "robots.txt・sitemap.xml事前チェックは、サイト公開や移転の前に2つの設計ファイルを貼り付け、基本構文、絶対URL、重複URL、想定ホストとの違い、Disallow対象がサイトマップに含まれる候補を行番号付きで確認する無料ツールです。robots.txtとsitemap.xmlを別々に目視する手間を減らし、指摘一覧をコピーして制作・SEO担当者間で確認できます。入力内容はブラウザ内だけで静的に処理し、記載URLへアクセスしません。",
+      "audience": "Web制作会社、SEO担当者、サイト移転や公開前の確認を行う開発者・運営者に向いています。robots.txtとsitemap.xmlの配置前に、ホスト名や除外パスの食い違い、重複、書式の初歩的な見落としを共同確認したい場面で利用できます。",
+      "features": [
+        {
+          "title": "2ファイルを行番号付きで静的診断",
+          "description": "robots.txtのUser-agent、Allow、Disallow、Sitemapなどの基本構文と、sitemap.xmlのurlset／sitemapindex、locの絶対URL、重複、50,000件上限を確認します。指摘元と行番号を一覧表示します。"
+        },
+        {
+          "title": "ホストとDisallow候補を照合",
+          "description": "想定サイトURL、robots.txtのSitemap URL、sitemap.xml内のURLホストを比べます。サイトマップURLのパスがDisallow指定に含まれる可能性も候補として表示し、公開前の意図確認を助けます。"
+        },
+        {
+          "title": "実URLへ接続せずレポートを共有",
+          "description": "貼り付けまたは各10MB以下のファイル読込をブラウザ内だけで処理し、外部URLや検索エンジンへリクエストしません。診断件数と指摘をテキストでコピーできます。"
+        }
+      ],
+      "steps": [
+        "確認対象の想定サイトURLを入力します。robots.txtとsitemap.xmlを貼り付けるか、公開前のテキストファイルをそれぞれ読み込みます。初めての場合は操作サンプルを利用できます。",
+        "2ファイルを診断し、エラー、警告、確認済みの区分、対象ファイル、行番号を確認します。ホスト違いとDisallow該当は意図した設定か元ファイルと照合してください。",
+        "必要な修正を設計ファイルへ反映して再診断し、診断レポートをコピーして関係者と共有します。公開後は検索エンジンの公式テスターや実URLの応答も別途確認してください。"
+      ],
+      "notes": [
+        "初期版は貼り付け内容または各10MB以下のrobots.txt・sitemap.xmlを静的に確認します。実URLへの接続、HTTPステータス確認、robots.txtの取得、サイトマップ階層の巡回、クロール、インデックス登録、Google Indexing APIは行いません。",
+        "robots.txtは検索結果からの除外を保証するnoindexの代替ではありません。ワイルドカードやクローラー固有解釈は候補確認に留まり、クロール・インデックス結果を保証しません。Google Search Centralなど対象検索エンジンの最新公式情報も確認してください。"
+      ],
+      "faq": [
+        {
+          "question": "入力したURLへアクセスしますか？",
+          "answer": "アクセスしません。貼り付けた文字列と読み込んだファイルだけをブラウザ内で確認します。公開済みURLのHTTP応答、リダイレクト、実際に配信されるrobots.txtやsitemap.xmlは別途確認してください。"
+        },
+        {
+          "question": "Disallowとサイトマップの警告は必ず問題ですか？",
+          "answer": "必ずしも問題ではありません。本ツールはサイトマップURLのパスがDisallowの先頭パターンに一致する候補を示します。ワイルドカード、User-agentグループ、検索エンジン固有の解釈、意図した除外かどうかを元設定と公式仕様で確認してください。"
+        },
+        {
+          "question": "診断に指摘がなければインデックスされますか？",
+          "answer": "保証されません。本ツールは公開前ファイルの基本的な静的確認だけを行います。公開後の取得可否、HTTP応答、canonical、noindex、コンテンツ品質、検索エンジンの判断などは別の確認が必要です。"
+        }
+      ]
+    },
+    "releasePost": "公開前のrobots.txtとsitemap.xmlをまとめて確認できる事前チェックツールを追加しました。構文、URL、重複、ホスト、Disallow候補を行番号付きで静的診断します。登録不要・実URLへの接続なしです。",
+    "status": "published",
+    "publishAt": "2026-07-27T14:00:00+09:00",
+    "announceOnX": false,
+    "announcedAt": null
+  },
+  {
     "id": "022-calendar-csv-ics-converter",
     "slug": "calendar-csv-ics-converter",
     "title": "予定CSV・ICS一括変換",

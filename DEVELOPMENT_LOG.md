@@ -620,6 +620,21 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 本番の`/tools/csv-column-mapper`でHTTP表示、ページ冒頭の4ステップ、サンプルCSV読込後の2行・6列表示、取込先4列、列割当画面を確認した。
 - サービス台帳上の公開ツールは21本。X告知、外部API、認証、バックエンド追加は行っていない。
 
+## 2026-07-27（企画ID 26 robots.txt・sitemap.xml事前チェック プレビュー実装）
+
+- 承認済み企画ID 26を`npm run create:tool`で生成し、`packages/robots-sitemap-checker`と`/tools/robots-sitemap-checker`へプレビュー実装した。ブランチ内だけ`published`とし、`announceOnX: false`を維持した。
+- robots.txtとsitemap.xmlの貼り付け／各10MB以下のファイル読込、User-agent・Allow・Disallow・Sitemapの基本構文、urlset／sitemapindex、loc絶対URL、重複、50,000件上限、想定ホスト、Disallow該当候補を行番号付きで静的診断する。
+- 診断レポートのコピー、操作サンプル、Google Search CentralとSitemaps XML protocolの公式リンク、固有の対象者・説明・利用例・注意・FAQ・関連ツール導線を追加した。実URLへ接続せず、Google Indexing API、クロール、インデックス保証、外部APIは追加していない。
+- 正常な診断結果後に「案件保存」「実URL一括確認」の匿名関心度テストを表示する。ツール固有の入力URL、ファイル内容、診断結果はGA4へ送らない。
+- 自動テスト5件で基本ペア、構文、重複、ホスト、Disallow候補、相対URL、ルート要素、行番号、レポートコピー、両入力必須を確認した。`npm run check`は構成454件、コンテンツ22ツール、Jest 41 suites・263 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+- ローカル本番相当画面でサンプル2 URL・Disallow 1件・指摘0件、レポートコピー導線、関心度候補2件を確認した。375px幅で表示幅360px・横スクロールなしを確認した。
+- 本番公開、X告知、有料機能本体、認証、バックエンドは追加していない。Vercelプレビューで人間レビュー後に本番公開可否を判断する。
+
+### 2026-07-27 レビュー反映
+
+- 指摘0件になる正常サンプルは機能説明に不向きだったため、「指摘例入りサンプル」へ変更した。
+- サイトマップ内の重複URL、想定ホストと異なるURL、robots.txtのDisallow対象候補の3種類が、行番号付きの指摘一覧へ実際に表示される構成にした。
+- 画面テストもURL 5件・Disallow 1件・指摘3件と、3種類の具体的な指摘文を確認する内容へ更新した。
 ## 2026-07-27（企画ID 25 予定CSV・ICS一括変換 プレビュー実装）
 
 - 承認済み企画ID 25を`npm run create:tool`で生成し、`packages/calendar-csv-ics-converter`と`/tools/calendar-csv-ics-converter`へプレビュー実装した。ブランチ内だけ`published`とし、`announceOnX: false`を維持した。

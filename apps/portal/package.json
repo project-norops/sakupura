@@ -25,6 +25,7 @@
     "@sakupla/merchant-feed-checker": "file:../../packages/merchant-feed-checker",
     "@sakupla/redirect-map-checker": "file:../../packages/redirect-map-checker",
     "@sakupla/review-reply-builder": "file:../../packages/review-reply-builder",
+    "@sakupla/robots-sitemap-checker": "file:../../packages/robots-sitemap-checker",
     "@sakupla/routine-task-loop": "file:../../packages/routine-task-loop",
     "@sakupla/shared-ui": "file:../../packages/shared-ui",
     "@sakupla/shopify-csv-checker": "file:../../packages/shopify-csv-checker",
