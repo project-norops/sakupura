@@ -1924,8 +1924,8 @@
       ]
     },
     "releasePost": "来月、この新規案件を受けても大丈夫？ 無料の「稼働・売上キャパシティ計画」で、休日・非請求時間・既存案件を差し引いた残り時間、稼働率、売上見込みを確認できます。登録不要、ブラウザ内で計算します。",
-    "status": "draft",
-    "publishAt": null,
+    "status": "published",
+    "publishAt": "2026-07-27T00:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
   }
