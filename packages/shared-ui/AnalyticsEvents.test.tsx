@@ -150,6 +150,25 @@ describe("AnalyticsEvents", () => {
     );
   });
 
+  it("PWA事前チェックの固定feature_idだけを許可する", () => {
+    window.gtag = jest.fn();
+    trackAnalyticsEvent("premium_interest_confirm", {
+      tool_id: "pwa-manifest-checker",
+      feature_id: "project_manifest_save",
+      placement: "result_after",
+    });
+
+    expect(window.gtag).toHaveBeenCalledWith(
+      "event",
+      "premium_interest_confirm",
+      {
+        tool_id: "pwa-manifest-checker",
+        feature_id: "project_manifest_save",
+        placement: "result_after",
+      },
+    );
+  });
+
   it.each([
     {
       tool_id: "csv-column-mapper",
