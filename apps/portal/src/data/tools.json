@@ -1924,8 +1924,8 @@
       ]
     },
     "releasePost": "SNS投稿のテーマ、素材、CTAが当日まで決まらない悩みを整理。無料の「SNSコンテンツカレンダー」で1週間・1か月の予定と準備状況をまとめ、CSV・ICSで保存できます。自動投稿や外部送信は行いません。",
-    "status": "draft",
-    "publishAt": null,
+    "status": "published",
+    "publishAt": "2026-07-27T00:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
   }
