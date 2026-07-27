@@ -738,3 +738,4 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 自動テストでCSV解析・直列化、left join／inner join、未一致・重複・同名列、4種類のサンプル／テンプレート保存、画面上の結合と2種類の出力保存、有料候補の表示条件、GA4許可値を確認した。全品質ゲートは構成539件、コンテンツ27ツール、Jest 52 suites・297 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
 - ローカル実画面でサンプルから基準3行・参照4行を結合して4行、一致2行・基準未一致1行・参照未使用1行・重複増加1行となることを確認した。別の実CSVでは2行の結合結果、一致1行・左右未一致各1行を確認し、追加列未選択時は保存前にエラーを表示した。
 - 関心度ダイアログの初期フォーカス・Escape・フォーカス復帰を確認した。375px幅は表示幅360px・横スクロールなしで、ブラウザーエラーはなかった。本番公開、X告知、外部API、認証、バックエンド、フォーム・メール収集は追加していない。
+- Draft PR #26のGitHub Actions `validate`とVercel Preview deployment `dpl_57UXcKjYMyoT78fADAmH6zXiLr4X`が成功した。プレビューでサンプルから4行の結合結果と重複キーの元行3・4、ブラウザーエラーなしを再確認し、ROADMAPの公開枠に従って`status: scheduled`、`publishAt: 2026-07-28T09:00:00+09:00`へ切り替えた。

@@ -1576,8 +1576,8 @@
       ]
     },
     "releasePost": "注文CSVへ商品名や単価を追加できる「CSV結合・VLOOKUP代替」を公開しました。左右のキーと追加列を選び、未一致や重複による行数増加を確認して結合CSVを端末内で作成できます。登録不要・外部送信なしです。",
-    "status": "published",
-    "publishAt": "2026-07-27T13:30:00+09:00",
+    "status": "scheduled",
+    "publishAt": "2026-07-28T09:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
   }
