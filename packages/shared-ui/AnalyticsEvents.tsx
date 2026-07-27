@@ -22,6 +22,7 @@ export const premiumInterestFeatures = {
     "multi_region_shipping",
   ],
   "freelance-capacity-planner": ["capacity_plan_save", "multi_month_capacity"],
+  "labor-sales-planner": ["shift_template_save", "multi_store_labor_compare"],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;
