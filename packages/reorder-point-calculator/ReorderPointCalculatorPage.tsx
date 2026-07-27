@@ -119,7 +119,7 @@ export function ReorderPointCalculatorPage() {
         </section>
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[.9fr_1.1fr]">
-          <form onSubmit={runCalculation} noValidate>
+          <form onSubmit={runCalculation} noValidate className="min-w-0">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 className="text-xl font-black text-slate-950">商品条件</h2>
               <button
@@ -136,7 +136,7 @@ export function ReorderPointCalculatorPage() {
               販売数は「個／週」、納期は「日」で入力します。初期値は毎週10個売れる商品のサンプルです。
             </p>
 
-            <fieldset className="mt-5 grid gap-4 sm:grid-cols-2">
+            <fieldset className="mt-5 grid min-w-0 gap-4 sm:grid-cols-2">
               <legend className="sr-only">販売数と納期</legend>
               <NumberField label="平均販売数" unit="個／週" value={inputs.averageWeeklySales} onChange={(value) => update("averageWeeklySales", value)} />
               <NumberField label="最大販売数" unit="個／週" value={inputs.maximumWeeklySales} onChange={(value) => update("maximumWeeklySales", value)} />
@@ -160,7 +160,7 @@ export function ReorderPointCalculatorPage() {
             </button>
           </form>
 
-          <section aria-live="polite" aria-label="計算結果">
+          <section aria-live="polite" aria-label="計算結果" className="min-w-0">
             <h2 className="text-xl font-black text-slate-950">計算結果</h2>
             {!result ? (
               <div className="mt-4 rounded-2xl bg-slate-50 p-7 text-center text-slate-500">
