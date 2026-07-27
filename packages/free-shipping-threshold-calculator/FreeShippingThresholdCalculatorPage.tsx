@@ -118,24 +118,32 @@ export function FreeShippingThresholdCalculatorPage() {
           aria-label="かんたん操作手順"
           className="mt-6 rounded-2xl border border-blue-100 bg-blue-50 p-4 sm:p-5"
         >
-          <h2 className="font-black text-slate-950">3ステップで比較</h2>
+          <h2 className="font-black text-slate-950">
+            何を入力し、何を見て判断するツールか
+          </h2>
           <ol className="mt-3 grid gap-3 text-sm leading-6 text-slate-700 sm:grid-cols-3">
-            <li>
-              <strong>1. 現在の注文</strong>
+            <li className="rounded-xl bg-white p-4">
+              <strong className="text-blue-700">1. 入力するもの</strong>
               <br />
-              注文額・粗利率・送料・決済費率を入力
+              現在の平均注文額・粗利率・送料・決済費率と、試したい送料無料ライン・増えると想定する購入額
             </li>
-            <li>
-              <strong>2. 候補を設定</strong>
+            <li className="rounded-xl bg-white p-4">
+              <strong className="text-blue-700">2. 算出されるもの</strong>
               <br />
-              送料無料ラインと見込む追加購入額を入力
+              想定注文額、ラインへの到達・不足額、送料無料後の1注文当たり利益、現在との利益差
             </li>
-            <li>
-              <strong>3. 利益差を確認</strong>
+            <li className="rounded-xl bg-white p-4">
+              <strong className="text-blue-700">3. 判断できること</strong>
               <br />
-              未達額と注文当たり利益を比べる
+              想定どおり追加購入された場合に、送料を店舗負担しても1注文当たり利益を維持できるか
             </li>
           </ol>
+          <p className="mt-3 text-sm leading-6 text-slate-700">
+            例：平均注文3,000円の店舗で「4,000円以上送料無料」を試し、追加購入を1,000円と想定すると、4,000円到達時の利益が現在より増えるか減るかを比較できます。
+          </p>
+          <p className="mt-2 text-sm font-bold leading-6 text-slate-800">
+            このツールでは、実際に追加購入される確率、注文数の増減、最適な送料無料ラインまでは判定できません。
+          </p>
         </section>
 
         <form onSubmit={run} className="mt-8 min-w-0" noValidate>
@@ -190,7 +198,7 @@ export function FreeShippingThresholdCalculatorPage() {
               送料無料の候補
             </h2>
             <p className="mt-1 text-sm leading-6 text-slate-500">
-              追加購入額は、送料無料をきっかけに平均注文へ上乗せされると仮定する金額です。確実に増える金額ではありません。
+              「見込む追加購入額」には、送料無料をきっかけに現在の平均注文額へ上乗せされると仮定する金額を入力します。実績ではなく、比較するための仮定です。
             </p>
             <div className="mt-4 grid gap-4 lg:grid-cols-3">
               {inputs.scenarios.map((scenario, index) => (
@@ -255,7 +263,7 @@ export function FreeShippingThresholdCalculatorPage() {
           ) : (
             <>
               <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200">
-                <table className="w-full min-w-[720px] text-left text-sm">
+                <table className="w-full min-w-[880px] text-left text-sm">
                   <thead className="bg-slate-100 text-slate-700">
                     <tr>
                       <th className="p-4">条件</th>
@@ -263,6 +271,7 @@ export function FreeShippingThresholdCalculatorPage() {
                       <th className="p-4">到達状況</th>
                       <th className="p-4">注文当たり利益</th>
                       <th className="p-4">現在との差</th>
+                      <th className="p-4">判断の目安</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -272,6 +281,7 @@ export function FreeShippingThresholdCalculatorPage() {
                       <td className="p-4">基準</td>
                       <td className="p-4 font-black">{yen(currentProfit)}</td>
                       <td className="p-4">基準</td>
+                      <td className="p-4">現在の利益水準</td>
                     </tr>
                     {results.map((result, index) => (
                       <tr key={result.id} className="border-t border-slate-200">
@@ -295,6 +305,13 @@ export function FreeShippingThresholdCalculatorPage() {
                           {result.qualifies
                             ? `${result.profitDifference >= 0 ? "+" : ""}${yen(result.profitDifference)}`
                             : "未達のため算出対象外"}
+                        </td>
+                        <td className="p-4 font-bold">
+                          {!result.qualifies
+                            ? "想定注文額がライン未達"
+                            : result.profitDifference >= 0
+                              ? "1注文利益を維持・増加"
+                              : "1注文利益が減少"}
                         </td>
                       </tr>
                     ))}
@@ -324,7 +341,7 @@ export function FreeShippingThresholdCalculatorPage() {
               </details>
               <aside className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
                 <strong className="block">結果の読み方と次の確認</strong>
-                利益差は1注文当たりの試算です。送料無料にしても購入率や売上が必ず伸びるとは限りません。実施前後の注文数、客単価、地域別送料、返品率を記録して検証してください。
+                「1注文利益を維持・増加」なら、入力した追加購入が実現する前提では採算候補です。「1注文利益が減少」なら、注文数の増加で減少分を補える見込みがなければ条件の見直しが必要です。「未達」なら、想定した追加購入額では送料無料が適用されません。いずれも購入率や注文数の変化は予測していないため、実施前後の注文数、客単価、地域別送料、返品率を記録して検証してください。
               </aside>
               <PremiumInterestCards
                 toolId="free-shipping-threshold-calculator"
