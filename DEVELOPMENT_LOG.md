@@ -787,3 +787,4 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 自動テストでCSV解析・直列化、合計・件数・平均・最小・最大、空欄、重複、非数値停止、縦持ち変換、列役割の重複停止、サンプル・テンプレート保存、画面上の2モードと出力、有料候補、GA4許可値を確認した。全品質ゲートは構成590件、コンテンツ30ツール、Jest 58 suites・325 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
 - ローカル実画面で集計サンプル5行・4列から2行・4列、空欄1件、重複1件、実CSV 2行・4列から縦持ち4行・4列、非数値CSVの元行3エラーを確認した。関心度ダイアログの初期フォーカス・Escape・復帰、375px幅で表示幅360px・横スクロールなし、ブラウザーエラーなしを確認した。
 - 本番公開、X告知、外部API、認証、バックエンド、フォーム・メール収集は追加していない。Draft PRとVercelプレビュー成功後、ROADMAPに従って2026-07-29 15:00 JSTの予約公開へ切り替える。
+- Draft PR #29のGitHub Actions `validate`とVercel Preview deployment `dpl_E3fhrPcnePTdmLHUESapVofTu1kU`が成功した。プレビューで集計サンプル5行・4列から2行・4列、空欄1件、重複1件、関心度候補、ブラウザーエラーなしを再確認して、`status: scheduled`、`publishAt: 2026-07-29T15:00:00+09:00`へ切り替えた。
