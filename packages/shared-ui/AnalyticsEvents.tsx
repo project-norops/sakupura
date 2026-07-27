@@ -16,6 +16,10 @@ export const premiumInterestFeatures = {
   "har-sanitizer": ["redaction_profile_save", "batch_har_sanitize"],
   "pwa-manifest-checker": ["project_manifest_save", "icon_pack_export"],
   "csv-pivot-reshape": ["reshape_recipe_save", "batch_reshape"],
+  "reorder-point-calculator": [
+    "inventory_profile_save",
+    "multi_sku_inventory",
+  ],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;
