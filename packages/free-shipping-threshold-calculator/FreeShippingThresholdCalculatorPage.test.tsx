@@ -12,11 +12,17 @@ beforeEach(() => {
   };
 });
 
-test("shows the sample, three steps, definitions, and text-based comparison", () => {
+test("explains the inputs, outputs, decision scope, and text-based comparison", () => {
   render(<FreeShippingThresholdCalculatorPage />);
   expect(screen.getByText(/平均注文3,000円、送料700円/)).toBeInTheDocument();
   expect(
     screen.getByRole("region", { name: "かんたん操作手順" }),
+  ).toBeInTheDocument();
+  expect(screen.getByText("1. 入力するもの")).toBeInTheDocument();
+  expect(screen.getByText("2. 算出されるもの")).toBeInTheDocument();
+  expect(screen.getByText("3. 判断できること")).toBeInTheDocument();
+  expect(
+    screen.getByText(/最適な送料無料ラインまでは判定できません/),
   ).toBeInTheDocument();
   const run = screen.getByRole("button", { name: "送料無料ラインを比較する" });
   expect(run).toHaveAttribute(
@@ -25,10 +31,12 @@ test("shows the sample, three steps, definitions, and text-based comparison", ()
   );
   fireEvent.click(run);
   expect(screen.getAllByText("ライン到達")).toHaveLength(3);
+  expect(screen.getAllByText("1注文利益を維持・増加")).toHaveLength(2);
+  expect(screen.getByText("1注文利益が減少")).toBeInTheDocument();
   expect(screen.queryByText("商品条件の保存")).not.toBeInTheDocument();
   expect(screen.getByText("送料無料条件の保存")).toBeInTheDocument();
   expect(
-    screen.getByText(/購入率や売上が必ず伸びるとは限りません/),
+    screen.getByText(/購入率や注文数の変化は予測していないため/),
   ).toBeInTheDocument();
 });
 
@@ -41,6 +49,7 @@ test("explains when a candidate does not reach the threshold", () => {
   );
   expect(screen.getByText("あと800円")).toBeInTheDocument();
   expect(screen.getAllByText("未達のため算出対象外")).toHaveLength(2);
+  expect(screen.getByText("想定注文額がライン未達")).toBeInTheDocument();
 });
 
 test("stops with a clear error when the current order amount is zero", () => {
