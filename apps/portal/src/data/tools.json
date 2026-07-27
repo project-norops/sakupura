@@ -1866,8 +1866,8 @@
       ]
     },
     "releasePost": "送料無料ラインを感覚だけで決める前に。平均注文額、粗利率、送料、決済費率から、最大3案の必要追加額と注文当たり利益を比較できます。平均注文3,000円・送料700円のサンプル付きで、入力は外部送信しません。",
-    "status": "draft",
-    "publishAt": null,
+    "status": "scheduled",
+    "publishAt": "2026-07-30T09:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
   }
