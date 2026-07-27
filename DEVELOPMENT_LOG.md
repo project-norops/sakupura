@@ -850,3 +850,10 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - ユーザーが用途説明の修正版Previewを確認し、台帳032をリリース予定として公開可能な状態へ進めることを承認した。既存の7月28日・29日の各2枠を維持し、次の空き枠である2026-07-30 09:00 JSTを割り当てた。
 - サービス台帳を`status: scheduled`、`publishAt: 2026-07-30T09:00:00+09:00`へ変更し、`announceOnX: false`、`announcedAt: null`を維持した。台帳031はレビュー未承認のため`draft`のまま変更していない。
 - この変更時点では`published`への変更、予約公開workflowの手動実行、本番URLの公開、X告知を行わない。main統合後も予約時刻と公開品質ゲートの完了までは対象URLを非公開とする。
+
+## 2026-07-27（台帳032 main統合・予約状態確認）
+
+- PR #37のGitHub Actions `validate`とVercel Previewが成功した後、merge commit `98b0d03495885bcd6599dd39a23bf0dc1ae2851e`でmainへ統合した。
+- Vercel Production deployment `dpl_7UJwn3Xc1A7NdmNX1p9xYnqkehfJ`がReadyとなり、本番トップのHTTP 200を確認した。
+- 台帳032は`status: scheduled`、`publishAt: 2026-07-30T09:00:00+09:00`のため、本番`/tools/free-shipping-threshold-calculator`がHTTP 404で非公開を維持していることを確認した。台帳031は`draft`のままである。
+- `published`への変更、予約公開workflowの手動実行、X告知は行っていない。
