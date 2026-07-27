@@ -117,6 +117,8 @@
 
 台帳032「送料無料ライン・利益シミュレーター」は、用途説明の修正後にユーザーレビューが完了した。既存の7月28日・29日の各2枠を変更せず、次の空き枠である2026-07-30 09:00 JSTへ予約する。`status: scheduled`、`publishAt: 2026-07-30T09:00:00+09:00`、`announceOnX: false`とし、予約公開workflowが期限到来後に全品質検査と本番確認を完了するまでは非公開を維持する。台帳031はレビュー未承認のため`draft`のまま変更しない。
 
+PR #37をmerge commit `98b0d03495885bcd6599dd39a23bf0dc1ae2851e`でmainへ統合した。Vercel Production deployment `dpl_7UJwn3Xc1A7NdmNX1p9xYnqkehfJ`はReadyで、本番トップはHTTP 200、予約時刻前の`/tools/free-shipping-threshold-calculator`はHTTP 404であることを確認した。予約公開workflowの手動実行とX告知は行っていない。
+
 ## 2026-07-27：企画ID 28 CSVルール検証・データ品質チェック（本番公開済み）
 
 企画ID 28を本番公開し、サービス台帳上の公開ツールは26本となった。企画ID 29〜32は承認済みの順番で開発・本番公開を続ける。
