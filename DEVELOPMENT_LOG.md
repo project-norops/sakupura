@@ -689,4 +689,13 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 3ツール統合状態の`npm run check`は構成488件、コンテンツ24ツール、Jest 45 suites・275 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
 - Vercel Production deployment `dpl_3e4EEhXK2mEvS6WABxeCy5J9DvVG`がReadyとなり、`www.norops.jp`、`norops.jp`、`100apps-portal.vercel.app`へ反映された。
 - 本番の`/tools/calendar-csv-ics-converter`で利用者向け冒頭説明、`/tools/robots-sitemap-checker`で指摘例入りサンプルからURL 5件・Disallow 1件・指摘3件、`/tools/ogp-card-preview`で図形サンプル画像の実描画を確認した。3画面ともブラウザーエラーはなかった。
-- サービス台帳上の公開ツールは24本。企画ID 24は未公開のまま次の開発対象として維持し、X告知、有料機能本体、Google Indexing API、外部API、認証、バックエンド追加は行っていない。
+- この時点でサービス台帳上の公開ツールは24本だった。企画ID 24の本番公開結果は後続の記録に記載する。X告知、有料機能本体、Google Indexing API、外部API、認証、バックエンド追加は行っていない。
+
+## 2026-07-27（企画ID 24 本番公開）
+
+- 人間レビュー承認後、PR #18をmerge commit `bef4235e88042ae7c75a67b480dd1f06bd972768`でmainへ統合した。公開台帳IDは`025-csv-duplicate-cleaner`とした。
+- 最新main統合後の`npm run check`は構成505件、コンテンツ25ツール、Jest 48 suites・283 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+- Vercel Production deployment `dpl_4Wq6muo6Yy3fibJ8U9WkFtA7uefA`がReadyとなり、`www.norops.jp`、`norops.jp`、`100apps-portal.vercel.app`へ反映された。
+- 本番の`/tools/csv-duplicate-cleaner`で、冒頭操作手順、サンプル4行・4列の読込、氏名キーと正規化条件、表記ゆれ候補1グループ・3行、未選択時の保存停止、残す行の選択後に整理済み・除外行CSV保存ボタンが有効になることを確認した。ブラウザーエラーはなかった。
+- 共通フッターの「ご意見・不具合報告（X）」が`https://x.com/sakupura_tools`を新しいタブで開き、`rel="noopener noreferrer"`と公開投稿への注意を備えることを本番で確認した。
+- サービス台帳上の公開ツールは25本となり、企画ID 23〜27はすべて本番公開済みとなった。X告知、フォーム・メール収集、Google Indexing API、外部API、認証、バックエンド追加は行っていない。
