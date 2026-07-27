@@ -22,6 +22,7 @@
     "@sakupla/email-signature-generator": "file:../../packages/email-signature-generator",
     "@sakupla/email-subject-previewer": "file:../../packages/email-subject-previewer",
     "@sakupla/focus-cost-timer": "file:../../packages/focus-cost-timer",
+    "@sakupla/har-sanitizer": "file:../../packages/har-sanitizer",
     "@sakupla/image-resizer": "file:../../packages/image-resizer",
     "@sakupla/invoice-pdf-generator": "file:../../packages/invoice-pdf-generator",
     "@sakupla/lp-structure-builder": "file:../../packages/lp-structure-builder",
