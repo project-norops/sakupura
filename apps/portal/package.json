@@ -24,6 +24,7 @@
     "@sakupla/email-subject-previewer": "file:../../packages/email-subject-previewer",
     "@sakupla/focus-cost-timer": "file:../../packages/focus-cost-timer",
     "@sakupla/free-shipping-threshold-calculator": "file:../../packages/free-shipping-threshold-calculator",
+    "@sakupla/freelance-capacity-planner": "file:../../packages/freelance-capacity-planner",
     "@sakupla/har-sanitizer": "file:../../packages/har-sanitizer",
     "@sakupla/image-resizer": "file:../../packages/image-resizer",
     "@sakupla/invoice-pdf-generator": "file:../../packages/invoice-pdf-generator",
