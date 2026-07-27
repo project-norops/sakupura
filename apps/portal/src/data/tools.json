@@ -1692,7 +1692,7 @@
       ]
     },
     "releasePost": "PWA公開前の確認を1画面に。Web App Manifestと端末内アイコンを読み込み、主要項目・URL関係・宣言サイズと実寸・maskable表示をブラウザ内で確認し、修正版JSONを保存できます。登録不要・無料です。",
-    "status": "published",
+    "status": "scheduled",
     "publishAt": "2026-07-29T09:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null

@@ -769,3 +769,4 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 自動テストでJSON解析、必須項目、URL範囲、宣言サイズと実寸、192px・512px候補、maskable、修正版JSON、サンプル表示・保存、コピー、不正JSON、有料候補、GA4許可値を確認した。全品質ゲートは構成573件、コンテンツ29ツール、Jest 56 suites・312 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
 - ローカル実画面で操作サンプルの要修正0・要確認0・未確認0、実マニフェストと192px・512pxのSVG画像の照合、不正JSONエラーを確認した。関心度ダイアログの初期フォーカス・Escape・復帰、375px幅で表示幅360px・横スクロールなし、ブラウザーエラーなしを確認した。
 - 本番公開、X告知、外部API、認証、バックエンド、フォーム・メール収集は追加していない。Draft PRとVercelプレビュー成功後、ROADMAPに従って2026-07-29 09:00 JSTの予約公開へ切り替える。
+- Draft PR #28のGitHub Actions `validate`とVercel Preview deployment `dpl_8f4bd43mpfnb3PcNzXX67Ynffrfn`が成功した。プレビューで操作サンプルの要修正0・要確認0・未確認0、maskable表示、修正版JSON、有料候補、ブラウザーエラーなしを再確認して、`status: scheduled`、`publishAt: 2026-07-29T09:00:00+09:00`へ切り替えた。
