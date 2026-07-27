@@ -909,3 +909,10 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - Vercel Production deployment `dpl_H9QbQyzrEmWgZRFbzvyubxUVzZme`がReadyで、本番トップが表示できることを確認した。予約時刻前の`/tools/labor-sales-planner`、`/tools/freelance-capacity-planner`、`/tools/social-content-calendar`はいずれも404で非公開を維持している。
 - 公開予定は033が2026-07-30 15:00 JST、034が2026-07-31 09:00 JST、035が2026-07-31 15:00 JSTである。3件とも`status: scheduled`、`announceOnX: false`、`announcedAt: null`を維持し、予約公開workflowの手動実行、`published`への変更、X告知は行っていない。
 - 統合後の構成675件、コンテンツ35ツール、対象Jest 6 suites・16 tests、release 8 tests、全Lint、portal／dynamic-pricing buildに合格した。既知のnpm audit警告は既存依存関係を含む39件で、`npm audit fix --force`による破壊的更新は行っていない。
+
+## 2026-07-28（台帳031 レビュー承認・予約公開準備）
+
+- ユーザーが台帳031「発注点・安全在庫計算」のPreviewを確認し、レビューを承認した。
+- 既存の1日2本の予約枠を変更せず、次の空き枠である2026-08-01 09:00 JSTへ割り当て、`status: scheduled`、`publishAt: 2026-08-01T09:00:00+09:00`へ変更した。
+- `announceOnX: false`、`announcedAt: null`を維持する。予約公開workflowの手動実行、`published`への変更、X告知は行わず、期限到来後の全品質検査と本番確認まで公開URLは404を維持する。
+- 構成675件、コンテンツ35ツール、全Jest 68 suites・350 tests、release 8 tests、全Lint、portal／dynamic-pricing buildに合格した。

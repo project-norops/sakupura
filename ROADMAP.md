@@ -131,6 +131,10 @@ PR #37をmerge commit `98b0d03495885bcd6599dd39a23bf0dc1ae2851e`でmainへ統合
 
 台帳033はPR #40をmerge commit `c83ec0cef7b4499a3fb68a5162b1af64c05c1dd2`、台帳034はPR #42を`c44035bc655154cd9f89be162098cf837c270a26`、台帳035はPR #44を`8c673c82f5fcb84c50165796f3c83b516c316e1a`でmainへ統合した。最終のVercel Production deployment `dpl_H9QbQyzrEmWgZRFbzvyubxUVzZme`はReadyで、本番トップは表示可能、3件の公開URLは予約時刻前の404を維持している。
 
+### 台帳031 レビュー承認・予約公開
+
+台帳031「発注点・安全在庫計算」は、Vercel Previewでのユーザーレビューが完了した。既存の台帳033〜035までの予約枠を変更せず、次の空き枠である2026-08-01 09:00 JSTへ予約する。`status: scheduled`、`publishAt: 2026-08-01T09:00:00+09:00`、`announceOnX: false`とし、予約公開workflowが期限到来後に全品質検査と本番確認を完了するまでは非公開を維持する。
+
 ## 2026-07-27：企画ID 28 CSVルール検証・データ品質チェック（本番公開済み）
 
 企画ID 28を本番公開し、サービス台帳上の公開ツールは26本となった。企画ID 29〜32は承認済みの順番で開発・本番公開を続ける。
