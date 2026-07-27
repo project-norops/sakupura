@@ -1808,8 +1808,8 @@
       ]
     },
     "releasePost": "在庫が何個になったら発注するか、感覚だけで決めていませんか？ 毎週の平均・最大販売数、納期、現在庫、発注残から、安全在庫と発注点をブラウザ内で計算できます。式と発注前の確認事項も表示します。",
-    "status": "scheduled",
-    "publishAt": "2026-07-30T09:00:00+09:00",
+    "status": "draft",
+    "publishAt": null,
     "announceOnX": false,
     "announcedAt": null
   }
