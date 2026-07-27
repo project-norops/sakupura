@@ -1,5 +1,12 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-27（タスク間連携の正本化）
+
+- 収益化・ポートフォリオ、商品企画・リサーチ、開発・リリース、X運用の役割、最小ハンドオフ、記録先を`TASK_COORDINATION.md`へ正本化した。
+- 5本公開ごとの7・14・28日追跡を計測コホート、10本公開ごとの見直しを投資配分・ポートフォリオ判断ゲートとして整理した。
+- `AGENTS.md`の必読文書へ`TASK_COORDINATION.md`を追加した。
+- `npm run check`は構成539件、コンテンツ27ツール、Jest 52 suites・297 tests、リリース8 tests、全Lint、portal・dynamic-pricing buildに合格した。
+
 ## 2026-07-27（予約公開ワークフロー有効化）
 
 - Repository Variable `SCHEDULED_RELEASES_ENABLED=true`を設定し、15分間隔の予約公開workflowを有効化した。
