@@ -21,6 +21,7 @@ export const premiumInterestFeatures = {
     "shipping_scenario_save",
     "multi_region_shipping",
   ],
+  "social-content-calendar": ["content_calendar_save", "multi_brand_calendar"],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;
