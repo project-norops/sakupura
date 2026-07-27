@@ -14,6 +14,7 @@ export const premiumInterestFeatures = {
   "csv-rule-validator": ["validation_rule_save", "batch_validation"],
   "csv-joiner": ["join_recipe_save", "multi_file_join"],
   "har-sanitizer": ["redaction_profile_save", "batch_har_sanitize"],
+  "pwa-manifest-checker": ["project_manifest_save", "icon_pack_export"],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;

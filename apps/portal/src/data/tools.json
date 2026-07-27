@@ -1638,5 +1638,63 @@
     "publishAt": "2026-07-28T15:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
+  },
+  {
+    "id": "029-pwa-manifest-checker",
+    "slug": "pwa-manifest-checker",
+    "title": "PWAマニフェスト・アイコン事前チェック",
+    "description": "Web App Manifestと端末内アイコンを読み込み、主要項目、URL関係、宣言サイズと実寸、maskable表示を公開前に確認します。",
+    "href": "/tools/pwa-manifest-checker",
+    "badge": "Web制作・改善",
+    "categoryId": "web-design",
+    "categoryName": "Web制作・改善",
+    "packageName": "@sakupla/pwa-manifest-checker",
+    "componentName": "PwaManifestCheckerPage",
+    "content": {
+      "summary": "PWAマニフェスト・アイコン事前チェックは、Web App ManifestのJSONと端末内のアイコン画像を公開前に照合し、主要メンバー、start_urlとscopeの関係、宣言サイズと実寸、MIME、192px・512px候補、maskable表示をまとめて確認する無料ツールです。項目ごとの指摘を確認し、画像の実寸とMIMEを反映した修正版JSONをコピーまたは保存できます。入力ファイルと結果はブラウザ内だけで処理します。",
+      "audience": "PWAを公開・更新する個人開発者、Web制作会社、公開前チェックを担当する方に向いています。ブラウザの開発者ツールや複数の仕様ページを往復する前に、手元のファイルで基本的な不整合を整理したい場面で使えます。",
+      "features": [
+        {
+          "title": "主要項目とURL関係を確認",
+          "description": "name、short_name、start_url、scope、display、色、iconsを確認し、マニフェストURLを基準に同一オリジンとscope範囲も判定します。"
+        },
+        {
+          "title": "宣言サイズと実画像を照合",
+          "description": "srcと同じファイル名の端末内画像を対応付け、実寸、正方形、MIME、192x192・512x512候補を確認します。画像は外部へ送信しません。"
+        },
+        {
+          "title": "maskable表示と修正版JSON",
+          "description": "maskableアイコンを円形に切り抜き、安全領域の目安を重ねて確認できます。実寸とMIMEを反映した修正版JSONはコピーまたは保存できます。"
+        }
+      ],
+      "steps": [
+        "マニフェストJSONを貼り付けるかファイルで読み込み、公開予定のマニフェストURLを入力します。",
+        "iconsのsrcと同じファイル名のアイコン画像を端末から選び、「マニフェストとアイコンを確認」を押します。",
+        "要修正・要確認・未確認の一覧とmaskable表示を確認し、必要に応じて修正版JSONを保存して実機でも確認します。"
+      ],
+      "notes": [
+        "初期版は1MB以下のJSONを対象に、選択した画像と静的に照合します。Web上のURLへアクセスせず、入力したJSONや画像を外部へ送信しません。",
+        "PWAのインストール可否、Service Worker、HTTPS配信、ブラウザ固有要件、実機の切り抜きを保証するものではありません。公開前に対象ブラウザと実機で最終確認してください。"
+      ],
+      "faq": [
+        {
+          "question": "マニフェストURLは実在する必要がありますか？",
+          "answer": "いいえ。相対URLを解決する基準として使うため、まだ公開していない予定URLを絶対URLで入力できます。このツールからURLへアクセスしたり、Web上のマニフェストやアイコンを取得したりすることはありません。公開後は実際の配信URLとContent-Typeを別途確認してください。"
+        },
+        {
+          "question": "アイコン画像を選ばなくても使えますか？",
+          "answer": "はい。画像を選ばなくてもJSONの主要項目、URL関係、宣言された192px・512px候補は確認できます。その場合は実画像が未確認であることを結果に表示します。宣言サイズと実寸、MIME、正方形かどうか、maskableプレビューまで確認するには、iconsのsrcと同じファイル名の画像を端末から選んでください。"
+        },
+        {
+          "question": "指摘がゼロならPWAとして公開できますか？",
+          "answer": "公開可否やインストール成功を保証するものではありません。Service Worker、HTTPS、配信時のContent-Type、対象ブラウザの要件、実機での表示と起動を別途確認してください。"
+        }
+      ]
+    },
+    "releasePost": "PWA公開前の確認を1画面に。Web App Manifestと端末内アイコンを読み込み、主要項目・URL関係・宣言サイズと実寸・maskable表示をブラウザ内で確認し、修正版JSONを保存できます。登録不要・無料です。",
+    "status": "published",
+    "publishAt": "2026-07-29T09:00:00+09:00",
+    "announceOnX": false,
+    "announcedAt": null
   }
 ]

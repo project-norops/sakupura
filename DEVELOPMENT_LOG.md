@@ -758,3 +758,14 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - ローカル実画面でサンプル1リクエストから5候補・5件匿名化・残存0件、実HAR 2リクエストからクエリとJSON本文の2候補、不正HARエラー、未選択時の停止、監査表と保存導線を確認した。関心度ダイアログの初期フォーカス・Escape・復帰、375px幅で表示幅360px・横スクロールなし、ブラウザーエラーなしを確認した。
 - 本番公開、X告知、外部API、認証、バックエンド、フォーム・メール収集は追加していない。Draft PRとVercelプレビュー成功後、ROADMAPに従って2026-07-28 15:00 JSTの予約公開へ切り替える。
 - Draft PR #27のGitHub Actions `validate`とVercel Preview deployment `dpl_DvykBQEtMKPXnU4SuqdfLHer4aLY`が成功した。プレビューでサンプル5候補をすべて選択し、5件匿名化・残存0件・ブラウザーエラーなしを再確認して、`status: scheduled`、`publishAt: 2026-07-28T15:00:00+09:00`へ切り替えた。
+
+## 2026-07-27（企画ID 31 PWAマニフェスト・アイコン事前チェック プレビュー実装）
+
+- 承認済み企画ID 31を`npm run create:tool`で生成し、`packages/pwa-manifest-checker`と`/tools/pwa-manifest-checker`へ29本目のツールとして実装した。プレビュー確認用にブランチ内だけ`published`とし、`announceOnX: false`を維持した。
+- 1MB以下のWeb App Manifest JSONを貼り付けまたはファイルで読み込み、name、short_name、start_url、scope、display、色、icons、同一オリジンとscope範囲を静的に確認する。Web上のURLへアクセスせず、入力内容を外部へ送らない。
+- iconsのsrcと同名の端末内画像を複数選択し、宣言サイズと実寸、正方形、MIME、192x192・512x512候補を照合する。maskableアイコンは円形表示と直径80%の安全領域目安を重ね、画像の実寸とMIMEを反映した修正版JSONをコピーまたは保存できるようにした。
+- 主要項目が揃った操作サンプルとサンプルJSON保存、冒頭操作手順、固有の対象者・説明・利用例・注意・FAQ・関連ツール導線を追加した。W3C Web Application Manifest、web.dev、MDN iconsの公式リンクを掲載し、PWAのインストール可否や実機動作を保証しないことを明記した。
+- 正常な確認結果後に「プロジェクト別設定保存」「アイコン一式の書き出し」の匿名関心度テストを表示する。`project_manifest_save`と`icon_pack_export`を固定許可値へ追加し、JSON内容、URL、画像、結果をGA4へ送らない。
+- 自動テストでJSON解析、必須項目、URL範囲、宣言サイズと実寸、192px・512px候補、maskable、修正版JSON、サンプル表示・保存、コピー、不正JSON、有料候補、GA4許可値を確認した。全品質ゲートは構成573件、コンテンツ29ツール、Jest 56 suites・312 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+- ローカル実画面で操作サンプルの要修正0・要確認0・未確認0、実マニフェストと192px・512pxのSVG画像の照合、不正JSONエラーを確認した。関心度ダイアログの初期フォーカス・Escape・復帰、375px幅で表示幅360px・横スクロールなし、ブラウザーエラーなしを確認した。
+- 本番公開、X告知、外部API、認証、バックエンド、フォーム・メール収集は追加していない。Draft PRとVercelプレビュー成功後、ROADMAPに従って2026-07-29 09:00 JSTの予約公開へ切り替える。
