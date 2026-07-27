@@ -1,6 +1,6 @@
 # サクプラ AI開発ガードレール
 
-このファイルはリポジトリ全体に適用される。作業開始時に本ファイル、`ARCHITECTURE.md`、`ANALYTICS.md`、`PRODUCT_RESEARCH.md`、`PRODUCT_PLAN.md`、`ROADMAP.md`、`DEVELOPMENT_LOG.md`を読むこと。
+このファイルはリポジトリ全体に適用される。作業開始時に本ファイル、`ARCHITECTURE.md`、`ANALYTICS.md`、`PRODUCT_RESEARCH.md`、`PRODUCT_PLAN.md`、`ROADMAP.md`、`TASK_COORDINATION.md`、`DEVELOPMENT_LOG.md`を読むこと。
 
 ## 変更してよい範囲
 

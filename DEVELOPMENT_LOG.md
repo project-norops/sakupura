@@ -1,5 +1,12 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-27（タスク間連携の正本化）
+
+- 収益化・ポートフォリオ、商品企画・リサーチ、開発・リリース、X運用の役割、最小ハンドオフ、記録先を`TASK_COORDINATION.md`へ正本化した。
+- 5本公開ごとの7・14・28日追跡を計測コホート、10本公開ごとの見直しを投資配分・ポートフォリオ判断ゲートとして整理した。
+- `AGENTS.md`の必読文書へ`TASK_COORDINATION.md`を追加した。
+- `npm run check`は構成539件、コンテンツ27ツール、Jest 52 suites・297 tests、リリース8 tests、全Lint、portal・dynamic-pricing buildに合格した。
+
 ## 2026-07-27（予約公開ワークフロー有効化）
 
 - Repository Variable `SCHEDULED_RELEASES_ENABLED=true`を設定し、15分間隔の予約公開workflowを有効化した。
@@ -739,3 +746,15 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - ローカル実画面でサンプルから基準3行・参照4行を結合して4行、一致2行・基準未一致1行・参照未使用1行・重複増加1行となることを確認した。別の実CSVでは2行の結合結果、一致1行・左右未一致各1行を確認し、追加列未選択時は保存前にエラーを表示した。
 - 関心度ダイアログの初期フォーカス・Escape・フォーカス復帰を確認した。375px幅は表示幅360px・横スクロールなしで、ブラウザーエラーはなかった。本番公開、X告知、外部API、認証、バックエンド、フォーム・メール収集は追加していない。
 - Draft PR #26のGitHub Actions `validate`とVercel Preview deployment `dpl_57UXcKjYMyoT78fADAmH6zXiLr4X`が成功した。プレビューでサンプルから4行の結合結果と重複キーの元行3・4、ブラウザーエラーなしを再確認し、ROADMAPの公開枠に従って`status: scheduled`、`publishAt: 2026-07-28T09:00:00+09:00`へ切り替えた。
+
+## 2026-07-27（企画ID 30 HAR機密情報チェック・匿名化 プレビュー実装）
+
+- 承認済み企画ID 30を`npm run create:tool`で生成し、`packages/har-sanitizer`と`/tools/har-sanitizer`へ28本目のツールとして実装した。プレビュー確認用にブランチ内だけ`published`とし、`announceOnX: false`を維持した。
+- 20MB以下のHAR 1.2形式をブラウザ内で読み込み、Cookie、Set-Cookie、Authorizationなどのヘッダー、Cookie配列、クエリ、フォーム項目、JSON本文のトークン・パスワード候補をリクエスト単位で検出する。値は全文表示せず伏せ字とし、高い候補と要確認候補を区別した。
+- 利用者が匿名化対象を選択し、対象値とURLクエリを`[REDACTED]`へ置換する。変更件数、残存候補、リクエスト・場所・項目名の監査表を保存前に表示し、匿名化HARを端末内で生成する。自動検出だけで安全と確定せず、完全な機密除去を保証しない注意を明記した。
+- 認証ヘッダー、Cookie、クエリ、JSON本文の例を含むサンプルHAR、冒頭操作手順、固有の対象者・説明・利用例・注意・FAQ・関連ツール導線を追加した。Chrome DevTools Network referenceとMicrosoft Learnのブラウザートレース共有時の注意を2026-07-27時点で確認し、公式リンクを掲載した。
+- 正常な匿名化結果後に「匿名化プロファイル保存」「複数HAR一括匿名化」の匿名関心度テストを表示する。`redaction_profile_save`と`batch_har_sanitize`を固定許可値へ追加し、ファイル内容、URL、項目名、検出値、匿名化結果をGA4へ送らない。
+- 自動テストでHAR形式、ヘッダー・Cookie・クエリ・JSON本文の検出、伏せ字、選択した候補だけの匿名化、URL同期、残存候補、元データ非破壊、画面上のサンプル・未選択停止・保存、有料候補、GA4許可値を確認した。全品質ゲートは構成556件、コンテンツ28ツール、Jest 54 suites・304 tests、リリース8 tests、全Lint、portal／dynamic-pricing buildに合格した。
+- ローカル実画面でサンプル1リクエストから5候補・5件匿名化・残存0件、実HAR 2リクエストからクエリとJSON本文の2候補、不正HARエラー、未選択時の停止、監査表と保存導線を確認した。関心度ダイアログの初期フォーカス・Escape・復帰、375px幅で表示幅360px・横スクロールなし、ブラウザーエラーなしを確認した。
+- 本番公開、X告知、外部API、認証、バックエンド、フォーム・メール収集は追加していない。Draft PRとVercelプレビュー成功後、ROADMAPに従って2026-07-28 15:00 JSTの予約公開へ切り替える。
+- Draft PR #27のGitHub Actions `validate`とVercel Preview deployment `dpl_DvykBQEtMKPXnU4SuqdfLHer4aLY`が成功した。プレビューでサンプル5候補をすべて選択し、5件匿名化・残存0件・ブラウザーエラーなしを再確認して、`status: scheduled`、`publishAt: 2026-07-28T15:00:00+09:00`へ切り替えた。

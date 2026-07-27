@@ -13,6 +13,7 @@ export const premiumInterestFeatures = {
   "ogp-card-preview": ["brand_preset_save", "bulk_page_audit"],
   "csv-rule-validator": ["validation_rule_save", "batch_validation"],
   "csv-joiner": ["join_recipe_save", "multi_file_join"],
+  "har-sanitizer": ["redaction_profile_save", "batch_har_sanitize"],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;
