@@ -7,8 +7,9 @@
 - 不足PDF、許可外PSD、命名違い、画像寸法不足が出る機能説明用サンプルを用意した。実ファイルは最大50件・合計100MBとし、PSD内部構造、全動画コーデック、巨大動画の解析を対象外とした。ブラウザで画像寸法を読めない場合は推測せず要確認とする。
 - 正常結果後だけ`delivery_rule_save`と`batch_delivery_check`の匿名関心度カードを表示し、共通GA4許可リストへ固定値を追加した。入力値、ファイル名、生成結果はイベントへ含めない。
 - 自動テストで指摘サンプル、正常系、要件不足、ファイル未選択、実File選択、読取不能画像、コピー、CSV生成・保存、固定GA4値を確認した。構成709件、コンテンツ37ツール、Jest 71 suites・368 tests、release 8 tests、全lint、portal・dynamic-pricing buildに合格した。
-- ローカル実画面でPCと375px、空状態、入力エラー、指摘サンプル7件、実ファイル`package.json`の端末内読取と指摘なし判定、コピー、CSV保存操作、結果後の関心度ダイアログ、Escapeとフォーカス復帰を確認した。375pxでページ全体の横はみ出しはなく、結果表だけを横スクロール可能にした。ローカルNext.js開発環境固有のPerformance計測エラー1件を除き、ツール処理のコンソールエラーはなかった。Vercel Previewで本番ビルドのエラーを再確認する。
-- 本番公開、main統合、公開予約、X告知、外部API、認証、バックエンド、メール収集は行っていない。Draft PRとVercel Previewを作成し、ユーザーレビュー後に公開判断する。
+- ローカル実画面でPCと375px、空状態、入力エラー、指摘サンプル7件、実ファイル`package.json`の端末内読取と指摘なし判定、コピー、CSV保存操作、結果後の関心度ダイアログ、Escapeとフォーカス復帰を確認した。375pxでページ全体の横はみ出しはなく、結果表だけを横スクロール可能にした。ローカルNext.js開発環境固有のPerformance計測エラー1件を除き、ツール処理のコンソールエラーはなかった。
+- Draft PR #57（`https://github.com/project-norops/sakupura/pull/57`）を作成し、GitHub Actions `validate`とVercel deployment `dpl_5vcS6TVXkh899CTLbEstCuALNdbL`が成功した。Preview `https://100apps-portal-git-codex-040-delivery-file-checker-norops.vercel.app/tools/delivery-file-checker`は表示可能で、指摘サンプル7件、375pxの横はみ出しなし、Preview固有コンソールエラーなしを確認した。
+- 本番公開、main統合、公開予約、X告知、外部API、認証、バックエンド、メール収集は行っていない。ユーザーレビュー後に公開判断する。
 
 ## 2026-07-28（運営者情報本番確認・台帳036 main統合）
 
