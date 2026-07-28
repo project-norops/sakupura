@@ -29,6 +29,10 @@ export const premiumInterestFeatures = {
     "rate_card_preset_save",
     "multi_menu_rate_card",
   ],
+  "made-to-order-profit-calculator": [
+    "production_scenario_save",
+    "multi_product_compare",
+  ],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;
