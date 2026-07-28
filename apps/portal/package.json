@@ -12,6 +12,7 @@
     "@sakupla/business-day-calculator": "file:../../packages/business-day-calculator",
     "@sakupla/calendar-csv-ics-converter": "file:../../packages/calendar-csv-ics-converter",
     "@sakupla/commission-brief-builder": "file:../../packages/commission-brief-builder",
+    "@sakupla/commission-rate-card-maker": "file:../../packages/commission-rate-card-maker",
     "@sakupla/contrast-color-fixer": "file:../../packages/contrast-color-fixer",
     "@sakupla/csv-column-mapper": "file:../../packages/csv-column-mapper",
     "@sakupla/csv-diff-checker": "file:../../packages/csv-diff-checker",
