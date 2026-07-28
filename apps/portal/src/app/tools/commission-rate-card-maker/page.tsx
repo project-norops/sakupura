@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { CommissionRateCardMakerPage } from "@sakupla/commission-rate-card-maker";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("commission-rate-card-maker");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "コミッション料金表・受付条件メーカー",
   description:
     "メニューと価格、追加料金、納期、受付状況を整理し、SNS画像・Markdown・印刷用の料金表を作成します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/commission-rate-card-maker",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "コミッション料金表・受付条件メーカー",
     description:
       "メニューと価格、追加料金、納期、受付状況を整理し、SNS画像・Markdown・印刷用の料金表を作成します。",
   },
-};
+});
 
 export default function Page() {
   const isPreview =

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { MadeToOrderProfitCalculatorPage } from "@sakupla/made-to-order-profit-calculator";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("made-to-order-profit-calculator");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "グッズ受注生産・完売ライン計算",
   description:
     "販売価格と製造見積りから、ロット別の損益分岐注文数・完売時利益・1個当たり利益を比較します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/made-to-order-profit-calculator",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "グッズ受注生産・完売ライン計算",
     description:
       "販売価格と製造見積りから、ロット別の損益分岐注文数・完売時利益・1個当たり利益を比較します。",
   },
-};
+});
 
 export default function Page() {
   const isPreview =

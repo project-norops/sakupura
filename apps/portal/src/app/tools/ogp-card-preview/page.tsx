@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { OgpCardPreviewPage } from "@sakupla/ogp-card-preview";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("ogp-card-preview");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "OGP・SNSシェアカードプレビュー／タグ作成",
   description:
     "タイトル・説明・画像情報からシェアカード見本とOGP・X向けタグを作り、head断片の不足も公開前に確認します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/ogp-card-preview",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "OGP・SNSシェアカードプレビュー／タグ作成",
     description:
       "タイトル・説明・画像情報からシェアカード見本とOGP・X向けタグを作り、head断片の不足も公開前に確認します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

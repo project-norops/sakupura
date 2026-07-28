@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { FocusCostTimerPage } from "@sakupla/focus-cost-timer";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("focus-cost-timer");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "作業時間・工数コストタイマー",
   description:
     "作業時間と時給から、いままでにかかった工数コストをリアルタイム表示します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/focus-cost-timer",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "作業時間・工数コストタイマー",
     description:
       "作業時間と時給から、いままでにかかった工数コストをリアルタイム表示します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

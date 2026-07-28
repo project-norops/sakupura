@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import apps from "@/data/apps";
 import { categories, getCategoryBySlug } from "@/data/categories";
 import { ToolDirectory } from "@/components/ToolDirectory";
+import { withSocialMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/site";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -19,7 +20,7 @@ export async function generateMetadata({
   const category = getCategoryBySlug(slug);
   if (!category) return {};
   const title = `${category.name}の無料Webツール`;
-  return {
+  return withSocialMetadata({
     title,
     description: category.description,
     alternates: { canonical: `/categories/${category.id}` },
@@ -29,11 +30,11 @@ export async function generateMetadata({
       url: `/categories/${category.id}`,
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: `${title} | サクプラ`,
       description: category.shortDescription,
     },
-  };
+  });
 }
 
 export default async function CategoryPage({ params }: PageProps) {

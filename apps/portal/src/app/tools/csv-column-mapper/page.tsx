@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { CsvColumnMapperPage } from "@sakupla/csv-column-mapper";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("csv-column-mapper");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "CSV列マッピング・変換テンプレート",
   description:
     "異なるシステム間のCSV列を対応付け、並べ替え・除外・固定値追加を確認して変換CSVを保存します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/csv-column-mapper",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "CSV列マッピング・変換テンプレート",
     description:
       "異なるシステム間のCSV列を対応付け、並べ替え・除外・固定値追加を確認して変換CSVを保存します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

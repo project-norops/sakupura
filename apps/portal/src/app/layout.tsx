@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import "./globals.css";
 import { AppLayout, googleServices } from "@sakupla/shared-ui";
 import { siteUrl } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   metadataBase: new URL(siteUrl),
   title: {
     default: "サクプラ｜登録不要で使える無料Webツール集",
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
       "仕事・販売・SNS運用の面倒をすぐに片づける、登録不要の無料Webツール集。",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "サクプラ｜登録不要で使える無料Webツール集",
     description: "面倒な作業を、すぐに片づける。無料の実用Webツール集。",
   },
@@ -40,7 +41,7 @@ export const metadata: Metadata = {
   other: {
     "google-adsense-account": googleServices.adsenseClientId,
   },
-};
+});
 
 export default function RootLayout({
   children,

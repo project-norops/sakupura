@@ -58,6 +58,14 @@ apps/portal/src/app/tools/<slug>/
 - 予約公開からのX告知は、品質検査、Vercel本番反映、対象URLの内容確認がすべて成功した後だけ実行する。投稿成功時は`announcedAt`を自動記録し、二重投稿を停止する。
 - 定期実行はRepository Variable `SCHEDULED_RELEASES_ENABLED=true`の場合だけ有効になる。緊急停止はこの変数を`false`へ変更する。
 
+## 共通OGP・Xカード
+
+- サイト共通のブランド画像は`apps/portal/public/ogp/sakupura-ogp.png`（PNG、1200×630）を正本とし、本番絶対URL`https://www.norops.jp/ogp/sakupura-ogp.png`で配信する。編集用SVGも同じディレクトリへ保持する。
+- 各ページのMetadataは`apps/portal/src/lib/metadata.ts`の`withSocialMetadata`を使う。ページ固有のtitle、description、canonical、Open Graph URLを保ったまま、共通の`openGraph.images`、`twitter.images`、画像alt、`summary_large_image`を付与する。
+- Next.jsでは子segmentの`openGraph`や`twitter`が親segmentの同名オブジェクトを上書きするため、root metadataだけに依存しない。トップ、カテゴリ、ツール、サイトポリシー系ページの各metadataを共通処理で包む。
+- `npm run create:tool`が使うroute templateにも同じ共通処理を組み込み、新規ツールで画像設定が欠落しないようにする。
+- 個別ツール画像は最初から全件作らない。共有・XのUTM流入・クリック等を確認した後、反応の高い上位ツールに限って別途判断する。
+
 ## 現在の例外
 
 - `apps/001-dynamic-pricing`は単体互換ビルドのため一時的に残す。新しいサービスでは同形式を増やさない。

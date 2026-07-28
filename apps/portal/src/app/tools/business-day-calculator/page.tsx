@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { BusinessDayCalculatorPage } from "@sakupla/business-day-calculator";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("business-day-calculator");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "営業日・期限計算カレンダー",
   description:
     "土日・日本の祝日・任意休業日を除外し、指定営業日後または前の期限を計算します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/business-day-calculator",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "営業日・期限計算カレンダー",
     description:
       "土日・日本の祝日・任意休業日を除外し、指定営業日後または前の期限を計算します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

@@ -227,7 +227,8 @@ for (const tool of manifest) {
     assert(
       routeSource.includes("ToolStructuredData") &&
         routeSource.includes("canonical") &&
-        routeSource.includes("openGraph"),
+        routeSource.includes("openGraph") &&
+        routeSource.includes("withSocialMetadata"),
       `${label}: routeがSEOメタデータと構造化データを表示`,
     );
     assert(
@@ -300,6 +301,9 @@ for (const requiredPath of [
   ["packages", "shared-ui", "ToolGuide.tsx"],
   ["apps", "portal", "src", "app", "icon.png"],
   ["apps", "portal", "src", "app", "apple-icon.png"],
+  ["apps", "portal", "src", "lib", "metadata.ts"],
+  ["apps", "portal", "public", "ogp", "sakupura-ogp.png"],
+  ["apps", "portal", "public", "ogp", "sakupura-ogp.svg"],
   [".github", "copilot-instructions.md"],
   [".github", "instructions", "tools.instructions.md"],
   [".github", "workflows", "announce-tool.yml"],
@@ -318,6 +322,63 @@ for (const requiredPath of [
     `${requiredPath.join("/")}が存在`,
   );
 }
+
+const socialMetadataSource = readText(
+  "apps",
+  "portal",
+  "src",
+  "lib",
+  "metadata.ts",
+);
+assert(
+  socialMetadataSource.includes('socialImagePath = "/ogp/sakupura-ogp.png"') &&
+    socialMetadataSource.includes('card: "summary_large_image"') &&
+    socialMetadataSource.includes("width: 1200") &&
+    socialMetadataSource.includes("height: 630") &&
+    socialMetadataSource.includes('type: "image/png"') &&
+    socialMetadataSource.includes("alt: socialImageAlt"),
+  "共通OGPは画像URL・large card・寸法・MIME type・altを固定",
+);
+const socialImage = fs.readFileSync(
+  path.join(rootDir, "apps", "portal", "public", "ogp", "sakupura-ogp.png"),
+);
+assert(
+  socialImage.subarray(1, 4).toString("ascii") === "PNG" &&
+    socialImage.readUInt32BE(16) === 1200 &&
+    socialImage.readUInt32BE(20) === 630,
+  "共通OGP画像は1200×630のPNG",
+);
+const routeTemplateSource = readText("templates", "tool", "route", "page.tsx");
+assert(
+  routeTemplateSource.includes("withSocialMetadata") &&
+    routeTemplateSource.includes('card: "summary_large_image"'),
+  "新規ツールtemplateが共通OGPを継承",
+);
+const rootLayoutSource = readText("apps", "portal", "src", "app", "layout.tsx");
+const categoryRouteSource = readText(
+  "apps",
+  "portal",
+  "src",
+  "app",
+  "categories",
+  "[slug]",
+  "page.tsx",
+);
+assert(
+  rootLayoutSource.includes("withSocialMetadata") &&
+    categoryRouteSource.includes("withSocialMetadata"),
+  "トップとカテゴリrouteが共通OGPを継承",
+);
+assert(
+  !findFiles(
+    path.join(rootDir, "apps", "portal", "src", "app"),
+    null,
+    new Set([".next"]),
+  )
+    .filter((file) => /\.tsx$/.test(file))
+    .some((file) => fs.readFileSync(file, "utf8").includes('card: "summary"')),
+  "公開routeに小型summary card設定が残っていない",
+);
 
 const agentsSource = readText("AGENTS.md");
 const copilotSource = readText(".github", "copilot-instructions.md");

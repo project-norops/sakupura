@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { LaborSalesPlannerPage } from "@sakupla/labor-sales-planner";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("labor-sales-planner");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "人時売上・シフト採算シミュレーター",
   description:
     "時間帯別の予想売上と人数・勤務時間・時給から、人時売上と人件費率を比較します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/labor-sales-planner",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "人時売上・シフト採算シミュレーター",
     description:
       "時間帯別の予想売上と人数・勤務時間・時給から、人時売上と人件費率を比較します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

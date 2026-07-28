@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "プライバシーポリシー | サクプラ",
   description:
     "サクプラにおけるアクセス情報、Cookie、Google Analytics、Google AdSense等の取り扱い方針です。",
-};
+});
 
 const sections = [
   {

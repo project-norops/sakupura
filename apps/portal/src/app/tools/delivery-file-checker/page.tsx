@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { DeliveryFileCheckerPage } from "@sakupla/delivery-file-checker";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("delivery-file-checker");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "制作物納品チェック・ファイル構成確認",
   description:
     "納品前のファイルを端末内で照合し、形式・画像寸法・名前・必要ファイルの抜けを確認します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/delivery-file-checker",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "制作物納品チェック・ファイル構成確認",
     description:
       "納品前のファイルを端末内で照合し、形式・画像寸法・名前・必要ファイルの抜けを確認します。",
   },
-};
+});
 
 export default function Page() {
   const isPreview =

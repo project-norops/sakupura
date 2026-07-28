@@ -4,11 +4,12 @@ import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
 import { notFound } from "next/navigation";
 import { getToolBySlug, isToolPublished } from "@/data/apps";
+import { withSocialMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("__SLUG__");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: __TITLE_JSON__,
   description: __DESCRIPTION_JSON__,
   alternates: { canonical: "/tools/__SLUG__" },
@@ -18,11 +19,11 @@ export const metadata: Metadata = {
     url: "/tools/__SLUG__",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: __TITLE_JSON__,
     description: __DESCRIPTION_JSON__,
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

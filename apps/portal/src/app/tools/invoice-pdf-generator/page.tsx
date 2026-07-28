@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { InvoicePdfGeneratorPage } from "@sakupla/invoice-pdf-generator";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("invoice-pdf-generator");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "見積書・請求書PDF作成ツール",
   description:
     "住所・取引年月日・登録番号・税率別金額を記載した見積書や請求書を作成し、PDF保存できます。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/invoice-pdf-generator",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "見積書・請求書PDF作成ツール",
     description:
       "住所・取引年月日・登録番号・税率別金額を記載した見積書や請求書を作成し、PDF保存できます。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

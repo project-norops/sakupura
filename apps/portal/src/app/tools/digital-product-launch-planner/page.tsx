@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { DigitalProductLaunchPlannerPage } from "@sakupla/digital-product-launch-planner";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("digital-product-launch-planner");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "デジタル商品ローンチ逆算プランナー",
   description:
     "発売日から準備工程を逆算し、日付付きチェックリストとICSを作成します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/digital-product-launch-planner",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "デジタル商品ローンチ逆算プランナー",
     description:
       "発売日から準備工程を逆算し、日付付きチェックリストとICSを作成します。",
   },
-};
+});
 
 export default function Page() {
   const isPreview =

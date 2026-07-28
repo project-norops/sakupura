@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { LpStructureBuilderPage } from "@sakupla/lp-structure-builder";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("lp-structure-builder");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "LP構成案作成ツール｜セクション設計・Notion出力",
   description:
     "LPで伝える内容と順番を整理し、企画書用MarkdownやNotion向け制作チェックリストを無料で作成できます。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/lp-structure-builder",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "LP構成案作成ツール",
     description:
       "LPの伝える順番を整理し、Notionや企画書用の構成メモを作成します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

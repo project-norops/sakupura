@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { CsvEncodingFixerPage } from "@sakupla/csv-encoding-fixer";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("csv-encoding-fixer");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "CSV文字化け修復・文字コード変換",
   description:
     "Excelで文字化けしたCSVの文字コードを判定し、日本語を確認しながらBOM付きUTF-8へ変換します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/csv-encoding-fixer",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "CSV文字化け修復・文字コード変換",
     description:
       "Excelで文字化けしたCSVの文字コードを判定し、日本語を確認しながらBOM付きUTF-8へ変換します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();
