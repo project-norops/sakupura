@@ -2103,8 +2103,8 @@
       ]
     },
     "releasePost": "制作依頼の聞き漏らしを着手前に確認。無料の「制作案件ヒアリングシート作成」で、用途・サイズ・納期・修正・納品形式を質問に沿って整理し、確認シートをコピー・印刷できます。登録不要、入力内容は外部へ送信しません。",
-    "status": "draft",
-    "publishAt": null,
+    "status": "scheduled",
+    "publishAt": "2026-08-01T15:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
   }
