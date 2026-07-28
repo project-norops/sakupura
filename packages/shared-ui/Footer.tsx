@@ -17,6 +17,12 @@ export function Footer() {
         >
           <a
             className="underline-offset-4 hover:text-blue-600 hover:underline"
+            href="/about"
+          >
+            運営者情報
+          </a>
+          <a
+            className="underline-offset-4 hover:text-blue-600 hover:underline"
             href="/privacy"
           >
             プライバシーポリシー
