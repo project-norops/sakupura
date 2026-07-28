@@ -937,3 +937,12 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - PR #47のGitHub Actions `validate`とVercel Previewが成功した後、merge commit `1e0091a8c7751a4b27f96cbad52ca57b165efc64`でmainへ統合した。
 - Vercel Production deployment `dpl_EsCjTKDoeCtgLrsyaeWFk3xwx25j`がReadyで、本番トップが表示できることを確認した。予約時刻前の`/tools/reorder-point-calculator`は404で非公開を維持している。
 - 台帳031は`status: scheduled`、`publishAt: 2026-08-01T09:00:00+09:00`、`announceOnX: false`、`announcedAt: null`である。予約公開workflowの手動実行、`published`への変更、X告知は行っていない。
+
+## 2026-07-28（台帳036 制作案件ヒアリングシート作成 Preview準備）
+
+- 承認済みの台帳036を公式ジェネレーターで`packages/commission-brief-builder`と`/tools/commission-brief-builder`へ追加した。`status: draft`、`publishAt: null`、`announceOnX: false`、`announcedAt: null`を維持し、Vercel Previewと開発環境だけでレビューできる経路にした。
+- 制作種別、用途、サイズ、希望納期、参考資料、修正回数、納品形式、実績公開、補足事項を質問に沿って整理し、未確認項目付きの制作依頼確認シートをブラウザ内で作成できるようにした。文章コピー、印刷・PDF保存、具体的なSNSアイコン制作サンプル、空状態、入力エラーを用意した。
+- 契約書・法的文書ではないこと、料金、支払い、権利・利用範囲は別途合意することを画面と出力に明記した。関連導線は台帳014、020、034を指定し、未公開ツールは公開後に表示されるようにした。
+- 正常な結果表示後だけ「ヒアリング項目の保存」「複数案件の確認状況管理」の匿名関心度テストを表示する。固定の`tool_id`、`feature_id`、`placement`だけを許可し、案件名や入力内容、生成結果をGA4へ送信しない。
+- 構成692件、コンテンツ36ツール、全Jest 69 suites・356 tests、release 8 tests、全Lint、portal／dynamic-pricing buildに合格した。PC幅と375pxで、空状態、必須エラー、サンプル生成、未確認項目、コピー、結果後の関心度カード、横スクロールがないことを実画面確認した。印刷呼び出しと印刷対象のCSSは自動テストで確認した。
+- 本番公開、main統合、公開予約、X告知は行っていない。Preview URLを提示してユーザーレビューを受け、明示承認後にのみ公開日程を判断する。

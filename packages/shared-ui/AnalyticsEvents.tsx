@@ -24,6 +24,7 @@ export const premiumInterestFeatures = {
   "social-content-calendar": ["content_calendar_save", "multi_brand_calendar"],
   "freelance-capacity-planner": ["capacity_plan_save", "multi_month_capacity"],
   "labor-sales-planner": ["shift_template_save", "multi_store_labor_compare"],
+  "commission-brief-builder": ["brief_template_save", "multi_brief_project"],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;

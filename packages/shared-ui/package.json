@@ -13,6 +13,10 @@
     "./PremiumInterestCards": {
       "import": "./PremiumInterestCards.tsx",
       "default": "./PremiumInterestCards.tsx"
+    },
+    "./AnalyticsEvents": {
+      "import": "./AnalyticsEvents.tsx",
+      "default": "./AnalyticsEvents.tsx"
     }
   },
   "peerDependencies": {
