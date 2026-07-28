@@ -128,6 +128,29 @@ function toPlainText(inputs: BriefInputs) {
   ].join("\n\n");
 }
 
+function safeFileName(value: string) {
+  const safe = value
+    .trim()
+    .replace(/[\\/:*?"<>|]/g, "-")
+    .replace(/\s+/g, " ")
+    .slice(0, 60);
+  return `${safe || "制作依頼"}-確認シート.txt`;
+}
+
+function downloadText(inputs: BriefInputs) {
+  const blob = new Blob(["\uFEFF", toPlainText(inputs)], {
+    type: "text/plain;charset=utf-8",
+  });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = safeFileName(inputs.projectName);
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
 export function CommissionBriefBuilderPage() {
   const [inputs, setInputs] = useState<BriefInputs>(EMPTY);
   const [result, setResult] = useState<BriefInputs | null>(null);
@@ -196,6 +219,48 @@ export function CommissionBriefBuilderPage() {
         "コピーできませんでした。印刷からPDF保存をお試しください。",
       );
     }
+  };
+
+  const shareOrSave = async () => {
+    if (!result) return;
+    const content = toPlainText(result);
+    const fileName = safeFileName(result.projectName);
+    const file = new File(["\uFEFF", content], fileName, {
+      type: "text/plain;charset=utf-8",
+    });
+
+    try {
+      if (
+        typeof navigator.share === "function" &&
+        typeof navigator.canShare === "function" &&
+        navigator.canShare({ files: [file] })
+      ) {
+        await navigator.share({
+          title: `${result.projectName} 制作依頼確認シート`,
+          files: [file],
+        });
+        setCopyStatus(
+          "共有メニューを開きました。「プリント」または「ファイルに保存」を選べます。",
+        );
+        return;
+      }
+
+      if (typeof navigator.share === "function") {
+        await navigator.share({
+          title: `${result.projectName} 制作依頼確認シート`,
+          text: content,
+        });
+        setCopyStatus("共有メニューを開きました。");
+        return;
+      }
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+    }
+
+    downloadText(result);
+    setCopyStatus(
+      "確認シートをテキストファイルで保存しました。対応アプリから印刷できます。",
+    );
   };
 
   return (
@@ -440,13 +505,23 @@ export function CommissionBriefBuilderPage() {
                 </button>
                 <button
                   type="button"
+                  onClick={shareOrSave}
+                  className="min-h-11 rounded-full bg-blue-600 px-4 text-sm font-bold text-white"
+                >
+                  スマホで共有・保存
+                </button>
+                <button
+                  type="button"
                   onClick={() => window.print()}
                   className="min-h-11 rounded-full bg-slate-900 px-4 text-sm font-bold text-white"
                 >
-                  印刷・PDF保存
+                  印刷・PDF保存（PC向け）
                 </button>
               </div>
             </div>
+            <p className="print-avoid mt-3 text-sm leading-6 text-slate-600">
+              スマホで印刷画面が開かない場合は「スマホで共有・保存」から「プリント」または「ファイルに保存」を選んでください。共有に対応しないブラウザではテキストファイルを保存します。
+            </p>
             {copyStatus && (
               <p
                 role="status"
