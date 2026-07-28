@@ -1,5 +1,10 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-28（台帳038 Previewレビュー承認・公開保留）
+
+- ユーザーが台帳038「グッズ受注生産・完売ライン計算」のVercel Previewを確認し、サンプル計算、ロット比較、結果表示、CSV保存を含む画面と主要操作を承認した。
+- 次の台帳039開発へ進む指示を受けた。台帳038は`status: draft`、`publishAt: null`、`announceOnX: false`を維持し、この承認だけではmain統合、予約公開、本番公開、X告知を行わない。
+
 ## 2026-07-28（台帳038 グッズ受注生産・完売ライン計算 Preview実装）
 
 - ユーザー承認済みの台帳038を`npm run create:tool`で生成し、`packages/made-to-order-profit-calculator`と`/tools/made-to-order-profit-calculator`へ実装した。`status: draft`、`publishAt: null`、`announceOnX: false`を維持している。
