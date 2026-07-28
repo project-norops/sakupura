@@ -1,5 +1,22 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-29（台帳040 予約公開準備）
+
+- 台帳037〜039を含む最新mainを台帳040の実装ブランチへ取り込み、4ツールの台帳情報、共通GA4許可値、自動テスト、実装記録を保持した。
+- ユーザーのPreview承認と公開枠決定に基づき、台帳040を`status: scheduled`、`publishAt: 2026-08-03T15:00:00+09:00`へ変更した。`announceOnX: false`、`announcedAt: null`は維持する。
+- 予約公開workflowが期限到来後に品質検査と本番確認を完了するまでは`published`へ変更せず、公開URLは404を維持する。
+
+## 2026-07-28（台帳040 制作物納品チェック・ファイル構成確認 Preview実装）
+
+- ユーザー承認済みの台帳040を`npm run create:tool`で生成し、`packages/delivery-file-checker`と`/tools/delivery-file-checker`へ実装した。ジェネレーターが最新main上で自動採番した`037`は承認済みの正式番号`040`へ修正し、`status: draft`、`publishAt: null`、`announceOnX: false`、`announcedAt: null`を維持した。
+- 許可拡張子、必要ファイル名、命名先頭、小文字・空白、画像の最小幅・高さ、重複名をブラウザ内で照合し、要修正・要確認と理由を一覧化した。結果は文章コピーとCSV保存に対応し、ファイル名・内容・画像寸法・結果を外部やGA4へ送らない。
+- 不足PDF、許可外PSD、命名違い、画像寸法不足が出る機能説明用サンプルを用意した。実ファイルは最大50件・合計100MBとし、PSD内部構造、全動画コーデック、巨大動画の解析を対象外とした。ブラウザで画像寸法を読めない場合は推測せず要確認とする。
+- 正常結果後だけ`delivery_rule_save`と`batch_delivery_check`の匿名関心度カードを表示し、共通GA4許可リストへ固定値を追加した。入力値、ファイル名、生成結果はイベントへ含めない。
+- 自動テストで指摘サンプル、正常系、要件不足、ファイル未選択、実File選択、読取不能画像、コピー、CSV生成・保存、固定GA4値を確認した。構成709件、コンテンツ37ツール、Jest 71 suites・368 tests、release 8 tests、全lint、portal・dynamic-pricing buildに合格した。
+- ローカル実画面でPCと375px、空状態、入力エラー、指摘サンプル7件、実ファイル`package.json`の端末内読取と指摘なし判定、コピー、CSV保存操作、結果後の関心度ダイアログ、Escapeとフォーカス復帰を確認した。375pxでページ全体の横はみ出しはなく、結果表だけを横スクロール可能にした。ローカルNext.js開発環境固有のPerformance計測エラー1件を除き、ツール処理のコンソールエラーはなかった。
+- Draft PR #57（`https://github.com/project-norops/sakupura/pull/57`）を作成し、GitHub Actions `validate`とVercel deployment `dpl_5vcS6TVXkh899CTLbEstCuALNdbL`が成功した。Preview `https://100apps-portal-git-codex-040-delivery-file-checker-norops.vercel.app/tools/delivery-file-checker`は表示可能で、指摘サンプル7件、375pxの横はみ出しなし、Preview固有コンソールエラーなしを確認した。
+- 本番公開、main統合、公開予約、X告知、外部API、認証、バックエンド、メール収集は行っていない。ユーザーレビュー後に公開判断する。
+
 ## 2026-07-29（台帳039 予約公開準備）
 
 - 台帳037・038を含む最新mainを台帳039の実装ブランチへ取り込み、3ツールの台帳情報、共通GA4許可値、自動テスト、実装記録を保持した。

@@ -34,6 +34,7 @@ export const premiumInterestFeatures = {
     "multi_product_compare",
   ],
   "digital-product-launch-planner": ["launch_plan_save", "multi_launch_plan"],
+  "delivery-file-checker": ["delivery_rule_save", "batch_delivery_check"],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;

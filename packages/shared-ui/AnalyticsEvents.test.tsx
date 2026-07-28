@@ -276,6 +276,25 @@ describe("AnalyticsEvents", () => {
     );
   });
 
+  it("納品チェックの固定feature_idだけを許可する", () => {
+    window.gtag = jest.fn();
+    trackAnalyticsEvent("premium_interest_confirm", {
+      tool_id: "delivery-file-checker",
+      feature_id: "delivery_rule_save",
+      placement: "result_after",
+    });
+
+    expect(window.gtag).toHaveBeenCalledWith(
+      "event",
+      "premium_interest_confirm",
+      {
+        tool_id: "delivery-file-checker",
+        feature_id: "delivery_rule_save",
+        placement: "result_after",
+      },
+    );
+  });
+
   it.each([
     {
       tool_id: "csv-column-mapper",
