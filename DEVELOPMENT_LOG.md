@@ -7,7 +7,7 @@
 - 法的な利用規約、契約書、返金条件を生成せず、料金の適正や受注を保証しないことを画面と説明へ明記した。関連導線は台帳001と007を指定した。
 - 正常な結果表示後だけ「料金表プリセットの保存」「複数ブランド・料金表の管理」の匿名関心度テストを表示する。固定の`tool_id`、`feature_id`、`placement`だけを許可し、活動名、価格、受付条件、生成結果をGA4へ送信しない。
 - `npm run check`は構成709件、コンテンツ37ツール、Jest 70 suites・363 tests、release 8 tests、全Lint、portal・dynamic-pricing buildに合格した。実画面では空入力エラー、サンプル生成、PNG保存完了、Markdownコピー完了、結果後の関心度カードを確認し、375px幅で`innerWidth: 375`、`scrollWidth: 360`となり横方向のはみ出しがないことを確認した。印刷呼び出しと印刷対象CSSは自動テストで確認した。
-- 本番公開、main統合、公開予約、X告知は行っていない。Draft PRとVercel Previewを作成し、ユーザーレビュー後にのみ次の公開判断へ進む。
+- Draft PR #54（`https://github.com/project-norops/sakupura/pull/54`）とVercel Preview（`https://100apps-portal-git-codex-037-commission-rate-card-maker-norops.vercel.app/tools/commission-rate-card-maker`）を作成した。PreviewでもPC・375px、サンプル生成、PNG保存、横方向のはみ出しなし、037固有のブラウザーエラーなしを確認した。本番公開、main統合、公開予約、X告知は行わず、ユーザーレビュー後にのみ次の公開判断へ進む。
 
 ## 2026-07-28（運営者情報本番確認・台帳036 main統合）
 
