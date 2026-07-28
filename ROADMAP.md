@@ -1,5 +1,13 @@
 # サクプラ 開発ロードマップ
 
+## 2026-07-28：台帳027 CSV結合・VLOOKUP代替（本番公開済み）
+
+台帳027（旧企画ID 29）`csv-joiner`は、2026-07-28 09:00 JSTの公開枠で予約公開workflowにより`published`へ移行した。GitHub Actions run `30316354960`は全品質ゲートと公開後HTTP確認に合格し、release commit `df516dc1d6d115a48300d09412eb3da6333f7e40`だけをmainへ反映した。
+
+Vercel Production deployment `dpl_4yCF8dvxg9NiH3EATgSRcGwRxoE9`はReadyで、`https://www.norops.jp/tools/csv-joiner`はHTTP 200。PC（1280px）と375px幅でサンプル結合、4行の結果、未選択時のエラー、CSV保存操作、横方向のページはみ出しなし、ブラウザーエラーなしを確認した。`announceOnX: false`と`announcedAt: null`を維持し、X告知、外部API、認証、バックエンド、メール収集は行っていない。
+
+同日の15:00 JST以降に予定している台帳028〜030は変更せず、各期限到来後の品質確認へ引き継ぐ。
+
 ## 2026-07-26：次期6ツール（本番公開済み）
 
 - CSV差分比較・変更抽出ツール
