@@ -6,10 +6,12 @@ import { useState, type FormEvent } from "react";
 
 type Menu = { id: number; name: string; price: string; detail: string };
 type Option = { id: number; name: string; price: string };
+type ThemeId = "sky" | "rose" | "mint" | "violet";
 type RateCard = {
   creatorName: string;
   title: string;
   status: "open" | "limited" | "closed";
+  theme: ThemeId;
   turnaround: string;
   revisions: string;
   contact: string;
@@ -22,6 +24,7 @@ const EMPTY: RateCard = {
   creatorName: "",
   title: "コミッション料金表",
   status: "open",
+  theme: "sky",
   turnaround: "",
   revisions: "",
   contact: "",
@@ -34,6 +37,7 @@ const SAMPLE: RateCard = {
   creatorName: "Sakura Illustration",
   title: "イラストコミッション",
   status: "limited",
+  theme: "rose",
   turnaround: "ご入金確認後 14〜21日",
   revisions: "ラフ段階で2回まで",
   contact: "Xのプロフィールにある依頼フォームからご相談ください",
@@ -62,6 +66,55 @@ const statusLabels = {
   open: "受付中",
   limited: "残りわずか",
   closed: "受付停止中",
+};
+const themes: Record<
+  ThemeId,
+  {
+    label: string;
+    start: string;
+    end: string;
+    text: string;
+    muted: string;
+    border: string;
+    panel: string;
+  }
+> = {
+  sky: {
+    label: "明るいブルー",
+    start: "#eff6ff",
+    end: "#bfdbfe",
+    text: "#172554",
+    muted: "#1e3a8a",
+    border: "rgba(30, 58, 138, 0.22)",
+    panel: "rgba(255, 255, 255, 0.58)",
+  },
+  rose: {
+    label: "やわらかいピンク",
+    start: "#fff1f2",
+    end: "#fecdd3",
+    text: "#4c0519",
+    muted: "#881337",
+    border: "rgba(136, 19, 55, 0.2)",
+    panel: "rgba(255, 255, 255, 0.55)",
+  },
+  mint: {
+    label: "明るいミント",
+    start: "#ecfdf5",
+    end: "#a7f3d0",
+    text: "#022c22",
+    muted: "#065f46",
+    border: "rgba(6, 95, 70, 0.2)",
+    panel: "rgba(255, 255, 255, 0.55)",
+  },
+  violet: {
+    label: "濃い紫",
+    start: "#312e81",
+    end: "#7c3aed",
+    text: "#ffffff",
+    muted: "#ede9fe",
+    border: "rgba(255, 255, 255, 0.2)",
+    panel: "rgba(255, 255, 255, 0.1)",
+  },
 };
 const inputClass =
   "mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-950 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100";
@@ -149,21 +202,22 @@ function downloadImage(card: RateCard) {
   canvas.height = 1350;
   const context = canvas.getContext("2d");
   if (!context) throw new Error("画像を作成できませんでした。");
+  const theme = themes[card.theme];
   const gradient = context.createLinearGradient(0, 0, 1080, 1350);
-  gradient.addColorStop(0, "#312e81");
-  gradient.addColorStop(1, "#7c3aed");
+  gradient.addColorStop(0, theme.start);
+  gradient.addColorStop(1, theme.end);
   context.fillStyle = gradient;
   context.fillRect(0, 0, 1080, 1350);
-  context.fillStyle = "#ffffff";
+  context.fillStyle = theme.text;
   context.font = "700 34px sans-serif";
   context.fillText(card.creatorName, 70, 90);
   context.font = "900 62px sans-serif";
   let y = drawWrapped(context, card.title, 70, 180, 940, 76);
-  context.fillStyle = "#fef3c7";
+  context.fillStyle = theme.muted;
   context.font = "800 36px sans-serif";
   context.fillText(statusLabels[card.status], 70, y + 15);
   y += 80;
-  context.fillStyle = "#ffffff";
+  context.fillStyle = theme.text;
   for (const menu of card.menus) {
     context.font = "800 40px sans-serif";
     context.fillText(menu.name, 70, y);
@@ -184,10 +238,10 @@ function downloadImage(card: RateCard) {
   const options = card.options.filter((item) => item.name.trim());
   if (options.length) {
     context.font = "800 30px sans-serif";
-    context.fillStyle = "#ddd6fe";
+    context.fillStyle = theme.muted;
     context.fillText("追加オプション", 70, y);
     y += 48;
-    context.fillStyle = "#ffffff";
+    context.fillStyle = theme.text;
     context.font = "500 27px sans-serif";
     for (const option of options) {
       context.fillText(
@@ -199,7 +253,7 @@ function downloadImage(card: RateCard) {
     }
   }
   context.font = "500 27px sans-serif";
-  context.fillStyle = "#ede9fe";
+  context.fillStyle = theme.muted;
   y = drawWrapped(
     context,
     `納期：${card.turnaround} / 修正：${card.revisions}`,
@@ -322,6 +376,7 @@ export function CommissionRateCardMakerPage() {
       setStatus("画像を保存できませんでした。別のブラウザでお試しください。");
     }
   };
+  const resultTheme = result ? themes[result.theme] : null;
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
@@ -418,6 +473,22 @@ export function CommissionRateCardMakerPage() {
                 {Object.entries(statusLabels).map(([value, label]) => (
                   <option key={value} value={value}>
                     {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="block text-sm font-bold text-slate-700">
+              背景カラー
+              <select
+                value={inputs.theme}
+                onChange={(e) =>
+                  change("theme", e.target.value as RateCard["theme"])
+                }
+                className={inputClass}
+              >
+                {Object.entries(themes).map(([value, theme]) => (
+                  <option key={value} value={value}>
+                    {theme.label}
                   </option>
                 ))}
               </select>
@@ -636,9 +707,15 @@ export function CommissionRateCardMakerPage() {
             )}
             <article
               aria-label="SNS向け料金表プレビュー"
-              className="mx-auto mt-6 max-w-2xl overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-950 to-violet-700 p-6 text-white sm:p-10"
+              className="mx-auto mt-6 max-w-2xl overflow-hidden rounded-3xl p-6 sm:p-10"
+              style={{
+                background: `linear-gradient(135deg, ${resultTheme?.start}, ${resultTheme?.end})`,
+                color: resultTheme?.text,
+              }}
             >
-              <p className="font-bold text-violet-100">{result.creatorName}</p>
+              <p className="font-bold" style={{ color: resultTheme?.muted }}>
+                {result.creatorName}
+              </p>
               <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
                 <h3 className="max-w-lg text-3xl font-black">{result.title}</h3>
                 <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-black text-amber-950">
@@ -647,12 +724,19 @@ export function CommissionRateCardMakerPage() {
               </div>
               <div className="mt-7 space-y-5">
                 {result.menus.map((menu) => (
-                  <div key={menu.id} className="border-b border-white/20 pb-5">
+                  <div
+                    key={menu.id}
+                    className="border-b pb-5"
+                    style={{ borderColor: resultTheme?.border }}
+                  >
                     <div className="flex flex-wrap justify-between gap-2 text-xl font-black">
                       <span>{menu.name}</span>
                       <span>{yen(menu.price)}</span>
                     </div>
-                    <p className="mt-2 text-sm leading-6 text-violet-100">
+                    <p
+                      className="mt-2 text-sm leading-6"
+                      style={{ color: resultTheme?.muted }}
+                    >
                       {menu.detail || "内容はご相談ください"}
                     </p>
                   </div>
@@ -660,7 +744,12 @@ export function CommissionRateCardMakerPage() {
               </div>
               {result.options.some((item) => item.name.trim()) && (
                 <div className="mt-6">
-                  <h4 className="font-black text-violet-100">追加オプション</h4>
+                  <h4
+                    className="font-black"
+                    style={{ color: resultTheme?.muted }}
+                  >
+                    追加オプション
+                  </h4>
                   <ul className="mt-2 space-y-1 text-sm">
                     {result.options
                       .filter((item) => item.name.trim())
@@ -673,7 +762,10 @@ export function CommissionRateCardMakerPage() {
                   </ul>
                 </div>
               )}
-              <dl className="mt-7 space-y-2 rounded-2xl bg-white/10 p-4 text-sm">
+              <dl
+                className="mt-7 space-y-2 rounded-2xl p-4 text-sm"
+                style={{ backgroundColor: resultTheme?.panel }}
+              >
                 <div>
                   <dt className="font-black">納期目安</dt>
                   <dd>{result.turnaround}</dd>
@@ -688,7 +780,10 @@ export function CommissionRateCardMakerPage() {
                 </div>
               </dl>
               {result.notes && (
-                <p className="mt-4 text-sm leading-6 text-violet-100">
+                <p
+                  className="mt-4 text-sm leading-6"
+                  style={{ color: resultTheme?.muted }}
+                >
                   {result.notes}
                 </p>
               )}

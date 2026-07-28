@@ -9,6 +9,7 @@ const anchorClick = jest
   .spyOn(HTMLAnchorElement.prototype, "click")
   .mockImplementation(() => undefined);
 const fillText = jest.fn();
+const addColorStop = jest.fn();
 const context = {
   fillStyle: "",
   font: "",
@@ -16,7 +17,7 @@ const context = {
   fillRect: jest.fn(),
   fillText,
   measureText: jest.fn((text: string) => ({ width: text.length * 20 })),
-  createLinearGradient: jest.fn(() => ({ addColorStop: jest.fn() })),
+  createLinearGradient: jest.fn(() => ({ addColorStop })),
 };
 
 beforeEach(() => {
@@ -91,6 +92,26 @@ test("adds a menu and hides a stale result after editing", () => {
   expect(screen.getByLabelText("メニュー 3の名前 必須")).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "入力をクリア" }));
   expect(screen.getByLabelText(/活動名・屋号/)).toHaveValue("");
+});
+
+test("changes the preview and saved PNG background color", () => {
+  render(<CommissionRateCardMakerPage />);
+  fireEvent.click(screen.getByRole("button", { name: "サンプルを読み込む" }));
+  fireEvent.change(screen.getByLabelText("背景カラー"), {
+    target: { value: "mint" },
+  });
+  fireEvent.click(
+    screen.getByRole("button", { name: "プレビューと料金表を作成" }),
+  );
+
+  expect(
+    screen.getByRole("article", { name: "SNS向け料金表プレビュー" }),
+  ).toHaveStyle({
+    background: "linear-gradient(135deg, #ecfdf5, #a7f3d0)",
+  });
+  fireEvent.click(screen.getByRole("button", { name: "SNS画像を保存" }));
+  expect(addColorStop).toHaveBeenNthCalledWith(1, 0, "#ecfdf5");
+  expect(addColorStop).toHaveBeenNthCalledWith(2, 1, "#a7f3d0");
 });
 
 test("copies Markdown, downloads PNG, and opens print", async () => {
