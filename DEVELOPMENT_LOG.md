@@ -7,6 +7,7 @@
 - 手動広告枠、広告プレースホルダー、AdSense client、CMP、Google連携、環境変数は変更していない。
 - `npm run check`は構成675件、コンテンツ35ツール、Jest 68 suites・350 tests、リリース8 tests、全Lint、portal・dynamic-pricing buildに合格し、portal buildで`/about`の静的生成を確認した。
 - ローカル実画面でPCと375px幅を確認し、375pxでは`innerWidth: 375`、`scrollWidth: 360`で横方向のページはみ出しがないことを確認した。フッターの「運営者情報」から`/about`への遷移、サイトURL、公式X、プライバシーポリシー、免責事項のリンク属性、コンソールエラーなしを確認した。
+- Draft PR #50のVercel Preview `https://100apps-portal-git-codex-operator-about-norops.vercel.app/about`でPCと375px表示を再確認した。375pxで横方向のページはみ出しがなく、フッターからの遷移、Xリンクの新規タブ・安全属性、ポリシーリンク、手動広告枠なし、未確認表現なし、コンソールエラーなしを確認した。
 - ユーザーレビュー前のため、main統合、本番公開、予約公開、X告知は行っていない。
 
 ## 2026-07-28（次回候補の中心ターゲット方針）
