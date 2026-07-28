@@ -946,3 +946,4 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 正常な結果表示後だけ「ヒアリング項目の保存」「複数案件の確認状況管理」の匿名関心度テストを表示する。固定の`tool_id`、`feature_id`、`placement`だけを許可し、案件名や入力内容、生成結果をGA4へ送信しない。
 - 構成692件、コンテンツ36ツール、全Jest 69 suites・356 tests、release 8 tests、全Lint、portal／dynamic-pricing buildに合格した。PC幅と375pxで、空状態、必須エラー、サンプル生成、未確認項目、コピー、結果後の関心度カード、横スクロールがないことを実画面確認した。印刷呼び出しと印刷対象のCSSは自動テストで確認した。
 - 本番公開、main統合、公開予約、X告知は行っていない。Preview URLを提示してユーザーレビューを受け、明示承認後にのみ公開日程を判断する。
+- Draft PR #51（`https://github.com/project-norops/sakupura/pull/51`）を作成し、GitHub Actions `validate`とVercel deployment `dpl_BDUBtpJqDivu2n1LNKYpho1Ni96d`が成功した。Preview `https://100apps-portal-git-codex-036-commission-brief-builder-norops.vercel.app/tools/commission-brief-builder`はHTTP 200で、PC幅と375pxの主要操作を再確認した。
