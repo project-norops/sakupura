@@ -20,6 +20,7 @@
     "@sakupla/csv-joiner": "file:../../packages/csv-joiner",
     "@sakupla/csv-pivot-reshape": "file:../../packages/csv-pivot-reshape",
     "@sakupla/csv-rule-validator": "file:../../packages/csv-rule-validator",
+    "@sakupla/digital-product-launch-planner": "file:../../packages/digital-product-launch-planner",
     "@sakupla/dynamic-pricing": "file:../../packages/dynamic-pricing",
     "@sakupla/email-signature-generator": "file:../../packages/email-signature-generator",
     "@sakupla/email-subject-previewer": "file:../../packages/email-subject-previewer",
