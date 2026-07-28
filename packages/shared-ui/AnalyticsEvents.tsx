@@ -33,6 +33,7 @@ export const premiumInterestFeatures = {
     "production_scenario_save",
     "multi_product_compare",
   ],
+  "digital-product-launch-planner": ["launch_plan_save", "multi_launch_plan"],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;
