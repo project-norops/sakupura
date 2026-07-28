@@ -1,5 +1,13 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-28（台帳027 CSV結合・VLOOKUP代替 予約公開完了）
+
+- 09:00 JST枠の予約公開workflowを実行し、期限到来済みの`csv-joiner`だけを`scheduled`から`published`へ変更した。GitHub Actions run `30316354960`は成功し、release commitは`df516dc1d6d115a48300d09412eb3da6333f7e40`。台帳028〜030の状態と公開予定は変更していない。
+- Vercel Production deployment `dpl_4yCF8dvxg9NiH3EATgSRcGwRxoE9`はReadyで、`https://www.norops.jp/tools/csv-joiner`のHTTP 200を確認した。
+- 本番実画面はPC（1280px）と375px幅で確認した。操作サンプルから注文3行・商品4行を読み込み、left joinで結合結果4行、基準側未一致1行、参照側未使用1行、重複による増加1行を確認した。追加列を未選択にした場合のエラー、結果復帰後の結合CSV保存操作、横方向のページはみ出しなし、ブラウザーエラーなしも確認した。
+- `announceOnX: false`、`announcedAt: null`を維持したためX投稿は発生していない。外部API、認証、バックエンド、フォーム・メール収集も追加していない。
+- 実績記録の更新後に`npm run check`を再実行し、構成675件、コンテンツ35ツール、Jest 68 suites・350 tests、予約公開8 tests、全lint、portal・dynamic-pricing buildに合格した。
+
 ## 2026-07-27（企画ID 33以降のユーザーレビューゲート是正）
 
 - 企画ID 33以降は、実装・全品質ゲート・Vercel Preview・PC/375px実画面確認の完了後、トップレベルの「サクプラ開発・リリース」チャットへレビュー資料を提示し、ユーザーの明示承認後だけmain統合・予約公開へ進む運用へ修正した。
