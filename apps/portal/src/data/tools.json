@@ -1634,7 +1634,7 @@
       ]
     },
     "releasePost": "HARを問い合わせ先へ共有する前に確認できる「HAR機密情報チェック・匿名化」を公開しました。Cookie、認証ヘッダー、トークンや本文キーの候補を選んで匿名化し、変更監査表とHARを端末内で作成できます。登録不要・外部送信なしです。",
-    "status": "scheduled",
+    "status": "published",
     "publishAt": "2026-07-28T15:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
