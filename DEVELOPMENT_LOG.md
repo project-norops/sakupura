@@ -1,5 +1,10 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-28（台帳039 Previewレビュー承認・公開保留）
+
+- ユーザーが台帳039「デジタル商品ローンチ逆算プランナー」のVercel Previewを確認し、用途別工程、日付付きチェックリスト、コピー、ICS、印刷・PDF保存を含む画面と主要操作を承認した。
+- 次の台帳040開発へ進む指示を受けた。台帳039は`status: draft`、`publishAt: null`、`announceOnX: false`を維持し、この承認だけではmain統合、予約公開、本番公開、X告知を行わない。
+
 ## 2026-07-28（台帳039 デジタル商品ローンチ逆算プランナー Preview実装）
 
 - ユーザー承認済みの台帳039を`npm run create:tool`で生成し、`packages/digital-product-launch-planner`と`/tools/digital-product-launch-planner`へ実装した。`status: draft`、`publishAt: null`、`announceOnX: false`を維持している。
