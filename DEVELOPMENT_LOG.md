@@ -1,5 +1,13 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-29（台帳037〜040 main統合・予約確認）
+
+- ユーザーの各Preview承認後、台帳037〜040を順番に最新mainへ取り込み、各段階で`npm run check`とGitHub Actions `validate`、Vercel Previewに合格してからPR #54〜#57をmainへ統合した。
+- merge commitは037が`dbe4dccc66f52c817ae2160c2f5c221f1af5e53c`、038が`7a4970e27a411fed49adb2639104c4fb467b63ff`、039が`c098a17044f3f3e4164dd70bfa95b0b7600a85ef`、040が`27264b45fc5ee4e82e1c93bbfabf1b64789fed70`である。競合解消では既存ツール、各台帳項目、共通GA4許可値、自動テスト、正本文書の記録をすべて保持した。
+- 公開枠は037が2026-08-02 09:00 JST、038が同日15:00、039が2026-08-03 09:00、040が同日15:00。4件とも`status: scheduled`、`announceOnX: false`、`announcedAt: null`を維持する。
+- 最終のVercel Production deployment `dpl_FQJ4XfCgVw8YMMgdDnX2Hbxg6MVs`はReady。本番トップはHTTP 200、予約中の`/tools/commission-rate-card-maker`、`/tools/made-to-order-profit-calculator`、`/tools/digital-product-launch-planner`、`/tools/delivery-file-checker`はすべてHTTP 404で、期限前の非公開を確認した。
+- X告知、予約公開workflowの手動実行、公開日時前の`published`変更、外部API、認証、バックエンド、メール収集は行っていない。
+
 ## 2026-07-29（台帳040 予約公開準備）
 
 - 台帳037〜039を含む最新mainを台帳040の実装ブランチへ取り込み、4ツールの台帳情報、共通GA4許可値、自動テスト、実装記録を保持した。

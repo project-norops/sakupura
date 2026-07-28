@@ -1,5 +1,16 @@
 # サクプラ 開発ロードマップ
 
+## 2026-07-29：台帳037〜040 main統合・予約状態確認
+
+ユーザーが各Vercel Previewを承認した台帳037〜040を、開発順と1日最大2本の公開方針を維持してmainへ統合した。4件とも`status: scheduled`、`announceOnX: false`、`announcedAt: null`であり、期限到来後の予約公開workflowが全品質検査と公開後確認を完了するまでは非公開とする。
+
+- 台帳037：PR #54、merge commit `dbe4dccc66f52c817ae2160c2f5c221f1af5e53c`、2026-08-02 09:00 JST
+- 台帳038：PR #55、merge commit `7a4970e27a411fed49adb2639104c4fb467b63ff`、2026-08-02 15:00 JST
+- 台帳039：PR #56、merge commit `c098a17044f3f3e4164dd70bfa95b0b7600a85ef`、2026-08-03 09:00 JST
+- 台帳040：PR #57、merge commit `27264b45fc5ee4e82e1c93bbfabf1b64789fed70`、2026-08-03 15:00 JST
+
+最終のVercel Production deployment `dpl_FQJ4XfCgVw8YMMgdDnX2Hbxg6MVs`はReadyで、本番トップはHTTP 200、予約中4ツールの公開URLはすべてHTTP 404を維持している。X告知、予約公開workflowの手動実行、外部API、認証、バックエンド、メール収集は行っていない。
+
 ## 2026-07-28：台帳027 CSV結合・VLOOKUP代替（本番公開済み）
 
 台帳027（旧企画ID 29）`csv-joiner`は、2026-07-28 09:00 JSTの公開枠で予約公開workflowにより`published`へ移行した。GitHub Actions run `30316354960`は全品質ゲートと公開後HTTP確認に合格し、release commit `df516dc1d6d115a48300d09412eb3da6333f7e40`だけをmainへ反映した。
