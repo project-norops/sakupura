@@ -477,22 +477,6 @@ export function CommissionRateCardMakerPage() {
                 ))}
               </select>
             </label>
-            <label className="block text-sm font-bold text-slate-700">
-              背景カラー
-              <select
-                value={inputs.theme}
-                onChange={(e) =>
-                  change("theme", e.target.value as RateCard["theme"])
-                }
-                className={inputClass}
-              >
-                {Object.entries(themes).map(([value, theme]) => (
-                  <option key={value} value={value}>
-                    {theme.label}
-                  </option>
-                ))}
-              </select>
-            </label>
             <Field
               label="納期目安"
               value={inputs.turnaround}
@@ -633,6 +617,54 @@ export function CommissionRateCardMakerPage() {
               placeholder="例：商用利用は用途を確認して個別見積り"
             />
           </label>
+
+          <fieldset className="mt-8 rounded-2xl border border-violet-200 bg-violet-50 p-4 sm:p-5">
+            <legend className="px-1 text-lg font-black text-slate-950">
+              SNS画像のデザイン
+            </legend>
+            <p
+              id="rate-card-theme-help"
+              className="mt-1 text-sm leading-6 text-slate-600"
+            >
+              ここで選んだ背景カラーを、下に表示する料金表プレビューと保存するPNG画像の両方に反映します。
+            </p>
+            <div
+              className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4"
+              aria-describedby="rate-card-theme-help"
+            >
+              {Object.entries(themes).map(([value, theme]) => {
+                const selected = inputs.theme === value;
+                return (
+                  <label
+                    key={value}
+                    className={`cursor-pointer rounded-xl border bg-white p-3 text-sm font-bold transition ${
+                      selected
+                        ? "border-violet-600 ring-2 ring-violet-200"
+                        : "border-slate-200 hover:border-violet-300"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="rate-card-theme"
+                      value={value}
+                      checked={selected}
+                      onChange={() => change("theme", value as ThemeId)}
+                      className="mr-2 accent-violet-700"
+                    />
+                    {theme.label}
+                    <span
+                      aria-hidden="true"
+                      className="mt-2 block h-10 rounded-lg border border-black/10"
+                      style={{
+                        background: `linear-gradient(135deg, ${theme.start}, ${theme.end})`,
+                      }}
+                    />
+                  </label>
+                );
+              })}
+            </div>
+          </fieldset>
+
           {error && (
             <p
               role="alert"

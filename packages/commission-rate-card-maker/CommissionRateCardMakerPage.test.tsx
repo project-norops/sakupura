@@ -97,9 +97,12 @@ test("adds a menu and hides a stale result after editing", () => {
 test("changes the preview and saved PNG background color", () => {
   render(<CommissionRateCardMakerPage />);
   fireEvent.click(screen.getByRole("button", { name: "サンプルを読み込む" }));
-  fireEvent.change(screen.getByLabelText("背景カラー"), {
-    target: { value: "mint" },
-  });
+  expect(screen.getByText("SNS画像のデザイン")).toBeInTheDocument();
+  expect(
+    screen.getByText(/料金表プレビューと保存するPNG画像の両方/),
+  ).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("radio", { name: "明るいミント" }));
+  expect(screen.getByRole("radio", { name: "明るいミント" })).toBeChecked();
   fireEvent.click(
     screen.getByRole("button", { name: "プレビューと料金表を作成" }),
   );
