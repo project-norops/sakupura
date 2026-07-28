@@ -12,6 +12,7 @@ export type AppDefinition = {
   categoryName: string;
   packageName: string;
   componentName: string;
+  relatedSlugs?: string[];
   content: ToolGuideContent;
   releasePost: string;
   status: "draft" | "scheduled" | "published" | "archived";
@@ -35,6 +36,13 @@ export function getToolBySlug(slug: string) {
 }
 
 export function getRelatedTools(tool: AppDefinition, limit = 3) {
+  if (tool.relatedSlugs?.length) {
+    return tool.relatedSlugs
+      .map((slug) => apps.find((candidate) => candidate.slug === slug))
+      .filter((candidate): candidate is AppDefinition => Boolean(candidate))
+      .slice(0, limit);
+  }
+
   return apps
     .filter(
       (candidate) =>

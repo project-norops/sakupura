@@ -184,6 +184,25 @@ describe("AnalyticsEvents", () => {
     });
   });
 
+  it("制作案件ヒアリングの固定feature_idだけを許可する", () => {
+    window.gtag = jest.fn();
+    trackAnalyticsEvent("premium_interest_confirm", {
+      tool_id: "commission-brief-builder",
+      feature_id: "brief_template_save",
+      placement: "result_after",
+    });
+
+    expect(window.gtag).toHaveBeenCalledWith(
+      "event",
+      "premium_interest_confirm",
+      {
+        tool_id: "commission-brief-builder",
+        feature_id: "brief_template_save",
+        placement: "result_after",
+      },
+    );
+  });
+
   it.each([
     {
       tool_id: "csv-column-mapper",

@@ -1,5 +1,20 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-28（運営者情報ページ 本番公開・台帳036 レビュー承認）
+
+- ユーザーが運営者情報ページと台帳036のPreviewを確認し、両方を承認した。
+- 運営者情報ページはPR #50をmerge commit `9a4b4c6be107b88007b7c4d5043e5d573b91e7be`でmainへ統合した。Vercel Production deployment `dpl_7w8euU4m8rL8gbA6EUWZH8Np9ThL`はReadyである。
+- 台帳036は既存の公開予定を維持し、次の空き枠である2026-08-01 15:00 JSTへ割り当てた。`status: scheduled`、`publishAt: 2026-08-01T15:00:00+09:00`、`announceOnX: false`、`announcedAt: null`とし、期限到来後の品質検査と本番確認まで非公開を維持する。
+- 最新main統合後の`npm run check`は構成692件、コンテンツ36ツール、Jest 69 suites・358 tests、予約公開8 tests、全lint、portal・dynamic-pricing buildに合格した。
+- X告知、予約公開workflowの手動実行、台帳037以降の公開枠設定は行っていない。
+
+## 2026-07-28（台帳036〜040 正式付番・開発移管）
+
+- ユーザー承認に基づき、制作案件ヒアリングシート作成を036、コミッション料金表・受付条件メーカーを037、グッズ受注生産・完売ライン計算を038、デジタル商品ローンチ逆算プランナーを039、制作物納品チェック・ファイル構成確認を040として正式付番した。
+- 中心ターゲットは、作品や知識を自分で販売し、価格・納期・告知・収益管理まで一人で担う個人クリエイター／小規模なコンテンツ事業者とする。個別仕様、関連導線、リスク、有料候補、検証指標を`PRODUCT_PLAN.md`、開発順とレビュー条件を`ROADMAP.md`へ正本化した。
+- 既存35ツールとの重複を再確認し、各案は要件整理、料金表出力、製造ロット別損益分岐、用途別ローンチ逆算、納品要件照合として既存ツールと主目的・主出力を分けられるため、重大な重複はないと判断した。
+- 開発順は036→037→038→039→040とし、各アプリはPreview提示まで`draft`、`publishAt: null`、`announceOnX: false`を維持する。この記録時点では新規ルート、本番公開、予約公開、X告知を追加していない。
+
 ## 2026-07-28（運営者情報ページ Preview実装）
 
 - `/about`へ「運営者情報」を追加し、サイト名「サクプラ」、運営者「NOROPS」、サイトURL、提供目的、制作・検証方針、データの取り扱い、公式Xへの問い合わせ案内、プライバシーポリシー・免責事項、制定日を掲載した。個人名、住所、メールアドレス、法人格などの未確認情報は掲載していない。
@@ -22,6 +37,12 @@
 - Vercel Production deployment `dpl_4yCF8dvxg9NiH3EATgSRcGwRxoE9`はReadyで、`https://www.norops.jp/tools/csv-joiner`のHTTP 200を確認した。
 - 本番実画面はPC（1280px）と375px幅で確認した。操作サンプルから注文3行・商品4行を読み込み、left joinで結合結果4行、基準側未一致1行、参照側未使用1行、重複による増加1行を確認した。追加列を未選択にした場合のエラー、結果復帰後の結合CSV保存操作、横方向のページはみ出しなし、ブラウザーエラーなしも確認した。
 - `announceOnX: false`、`announcedAt: null`を維持したためX投稿は発生していない。外部API、認証、バックエンド、フォーム・メール収集も追加していない。
+
+## 2026-07-28（台帳036 スマホ保存導線の改善）
+
+- ユーザー確認でChromeでは「印刷・PDF保存」が正常に動作し、スマホのアプリ内ブラウザではブラウザ標準の印刷呼び出しが反応しない場合があることを確認した。
+- PC向けの印刷・PDF保存を維持し、結果欄へ「スマホで共有・保存」を追加した。対応端末では確認シートのテキストファイルをOS共有メニューへ渡し、「プリント」または「ファイルに保存」を選べるようにした。共有非対応ブラウザでは同じ内容の`.txt`を端末へ保存する。
+- 共有・保存は利用者の明示操作時だけ実行し、入力内容や生成結果をサーバーやGA4へ送らない。共有ファイル、テキスト保存への切り替え、従来のコピーとPC印刷を自動テストへ追加した。
 - 実績記録の更新後に`npm run check`を再実行し、構成675件、コンテンツ35ツール、Jest 68 suites・350 tests、予約公開8 tests、全lint、portal・dynamic-pricing buildに合格した。
 
 ## 2026-07-27（企画ID 33以降のユーザーレビューゲート是正）
@@ -946,6 +967,16 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - PR #47のGitHub Actions `validate`とVercel Previewが成功した後、merge commit `1e0091a8c7751a4b27f96cbad52ca57b165efc64`でmainへ統合した。
 - Vercel Production deployment `dpl_EsCjTKDoeCtgLrsyaeWFk3xwx25j`がReadyで、本番トップが表示できることを確認した。予約時刻前の`/tools/reorder-point-calculator`は404で非公開を維持している。
 - 台帳031は`status: scheduled`、`publishAt: 2026-08-01T09:00:00+09:00`、`announceOnX: false`、`announcedAt: null`である。予約公開workflowの手動実行、`published`への変更、X告知は行っていない。
+
+## 2026-07-28（台帳036 制作案件ヒアリングシート作成 Preview準備）
+
+- 承認済みの台帳036を公式ジェネレーターで`packages/commission-brief-builder`と`/tools/commission-brief-builder`へ追加した。`status: draft`、`publishAt: null`、`announceOnX: false`、`announcedAt: null`を維持し、Vercel Previewと開発環境だけでレビューできる経路にした。
+- 制作種別、用途、サイズ、希望納期、参考資料、修正回数、納品形式、実績公開、補足事項を質問に沿って整理し、未確認項目付きの制作依頼確認シートをブラウザ内で作成できるようにした。文章コピー、印刷・PDF保存、具体的なSNSアイコン制作サンプル、空状態、入力エラーを用意した。
+- 契約書・法的文書ではないこと、料金、支払い、権利・利用範囲は別途合意することを画面と出力に明記した。関連導線は台帳014、020、034を指定し、未公開ツールは公開後に表示されるようにした。
+- 正常な結果表示後だけ「ヒアリング項目の保存」「複数案件の確認状況管理」の匿名関心度テストを表示する。固定の`tool_id`、`feature_id`、`placement`だけを許可し、案件名や入力内容、生成結果をGA4へ送信しない。
+- 構成692件、コンテンツ36ツール、全Jest 69 suites・356 tests、release 8 tests、全Lint、portal／dynamic-pricing buildに合格した。PC幅と375pxで、空状態、必須エラー、サンプル生成、未確認項目、コピー、結果後の関心度カード、横スクロールがないことを実画面確認した。印刷呼び出しと印刷対象のCSSは自動テストで確認した。
+- 本番公開、main統合、公開予約、X告知は行っていない。Preview URLを提示してユーザーレビューを受け、明示承認後にのみ公開日程を判断する。
+- Draft PR #51（`https://github.com/project-norops/sakupura/pull/51`）を作成し、GitHub Actions `validate`とVercel deployment `dpl_BDUBtpJqDivu2n1LNKYpho1Ni96d`が成功した。Preview `https://100apps-portal-git-codex-036-commission-brief-builder-norops.vercel.app/tools/commission-brief-builder`はHTTP 200で、PC幅と375pxの主要操作を再確認した。
 
 ## 2026-07-28（台帳028 HAR機密情報チェック・匿名化 予約公開完了）
 
