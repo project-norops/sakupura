@@ -930,3 +930,10 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - PR #47のGitHub Actions `validate`とVercel Previewが成功した後、merge commit `1e0091a8c7751a4b27f96cbad52ca57b165efc64`でmainへ統合した。
 - Vercel Production deployment `dpl_EsCjTKDoeCtgLrsyaeWFk3xwx25j`がReadyで、本番トップが表示できることを確認した。予約時刻前の`/tools/reorder-point-calculator`は404で非公開を維持している。
 - 台帳031は`status: scheduled`、`publishAt: 2026-08-01T09:00:00+09:00`、`announceOnX: false`、`announcedAt: null`である。予約公開workflowの手動実行、`published`への変更、X告知は行っていない。
+
+## 2026-07-28（台帳028 HAR機密情報チェック・匿名化 予約公開完了）
+
+- 15:00 JST枠の予約公開workflowを実行し、期限到来済みの`har-sanitizer`だけを`scheduled`から`published`へ変更した。GitHub Actions run `30333771458`は成功し、release commitは`ba852ab18011c78d8b5f15f5c6012853726dd7c5`。台帳029・030の公開予定は変更していない。
+- Vercel Production deployment `dpl_H99VCRptyp2tDDxiweoZw4Kr3Nss`はReadyで、`https://www.norops.jp/tools/har-sanitizer`のHTTP 200を確認した。
+- 本番実画面はPCと375px幅で確認した。操作サンプルから5件の機密候補を検出し、初期選択2件の匿名化・残存3件、全選択5件の匿名化・保存導線を確認した。候補未選択時は「匿名化する候補を1件以上選択してください。」で停止し、375pxで横方向のページはみ出しなし、ブラウザーエラーなしだった。
+- `announceOnX: false`、`announcedAt: null`を維持したためX投稿は発生していない。外部API、認証、バックエンド、フォーム・メール収集も追加していない。
