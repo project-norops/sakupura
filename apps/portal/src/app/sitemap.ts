@@ -4,7 +4,7 @@ import { categories } from "@/data/categories";
 import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPages = ["/privacy", "/disclaimer", "/categories"];
+  const staticPages = ["/about", "/privacy", "/disclaimer", "/categories"];
 
   return [
     {
