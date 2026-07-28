@@ -203,6 +203,60 @@ describe("AnalyticsEvents", () => {
     );
   });
 
+  it("コミッション料金表の固定feature_idだけを許可する", () => {
+    window.gtag = jest.fn();
+    trackAnalyticsEvent("premium_interest_open", {
+      tool_id: "commission-rate-card-maker",
+      feature_id: "rate_card_preset_save",
+      placement: "result_after",
+    });
+    trackAnalyticsEvent("premium_interest_confirm", {
+      tool_id: "commission-rate-card-maker",
+      feature_id: "multi_menu_rate_card",
+      placement: "result_after",
+    });
+
+    expect(window.gtag).toHaveBeenNthCalledWith(
+      1,
+      "event",
+      "premium_interest_open",
+      {
+        tool_id: "commission-rate-card-maker",
+        feature_id: "rate_card_preset_save",
+        placement: "result_after",
+      },
+    );
+    expect(window.gtag).toHaveBeenNthCalledWith(
+      2,
+      "event",
+      "premium_interest_confirm",
+      {
+        tool_id: "commission-rate-card-maker",
+        feature_id: "multi_menu_rate_card",
+        placement: "result_after",
+      },
+    );
+  });
+
+  it("グッズ損益比較の固定feature_idだけを許可する", () => {
+    window.gtag = jest.fn();
+    trackAnalyticsEvent("premium_interest_confirm", {
+      tool_id: "made-to-order-profit-calculator",
+      feature_id: "production_scenario_save",
+      placement: "result_after",
+    });
+
+    expect(window.gtag).toHaveBeenCalledWith(
+      "event",
+      "premium_interest_confirm",
+      {
+        tool_id: "made-to-order-profit-calculator",
+        feature_id: "production_scenario_save",
+        placement: "result_after",
+      },
+    );
+  });
+
   it("ローンチ逆算の固定feature_idだけを許可する", () => {
     window.gtag = jest.fn();
     trackAnalyticsEvent("premium_interest_confirm", {
@@ -238,6 +292,12 @@ describe("AnalyticsEvents", () => {
       feature_id: "mapping_rule_save",
       placement: "result_after",
       input_value: "送信禁止",
+    },
+    {
+      tool_id: "commission-rate-card-maker",
+      feature_id: "rate_card_preset_save",
+      placement: "result_after",
+      price: 8000,
     },
   ])("有料候補イベントの未許可値や追加値を拒否する", (parameters) => {
     window.gtag = jest.fn();

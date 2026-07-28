@@ -25,6 +25,14 @@ export const premiumInterestFeatures = {
   "freelance-capacity-planner": ["capacity_plan_save", "multi_month_capacity"],
   "labor-sales-planner": ["shift_template_save", "multi_store_labor_compare"],
   "commission-brief-builder": ["brief_template_save", "multi_brief_project"],
+  "commission-rate-card-maker": [
+    "rate_card_preset_save",
+    "multi_menu_rate_card",
+  ],
+  "made-to-order-profit-calculator": [
+    "production_scenario_save",
+    "multi_product_compare",
+  ],
   "digital-product-launch-planner": ["launch_plan_save", "multi_launch_plan"],
 } as const;
 
