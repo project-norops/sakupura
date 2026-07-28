@@ -1,5 +1,12 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-28（運営者情報本番確認・台帳036 main統合）
+
+- 運営者情報ページの本番`https://www.norops.jp/about`はHTTP 200で、375px幅において見出し「運営者情報」、運営者「NOROPS」、フッターの運営者情報・プライバシー・免責・X導線、横方向のページはみ出しなし、ブラウザーエラーなしを確認した。本番トップもHTTP 200だった。
+- 台帳036はPR #51をmerge commit `731a842011a29ec13c54c16e488606a761a2f9ef`でmainへ統合した。Vercel Production deployment `dpl_8J4Snq4DV3Zoy4EgGiqajRLs1j37`はReadyである。
+- 台帳036は`status: scheduled`、`publishAt: 2026-08-01T15:00:00+09:00`、`announceOnX: false`、`announcedAt: null`である。本番`/tools/commission-brief-builder`は予約時刻前のHTTP 404で非公開を維持している。
+- 予約公開workflowの手動実行、X告知、台帳037以降の公開枠設定は行っていない。
+
 ## 2026-07-28（運営者情報ページ 本番公開・台帳036 レビュー承認）
 
 - ユーザーが運営者情報ページと台帳036のPreviewを確認し、両方を承認した。
