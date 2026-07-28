@@ -203,6 +203,25 @@ describe("AnalyticsEvents", () => {
     );
   });
 
+  it("グッズ損益比較の固定feature_idだけを許可する", () => {
+    window.gtag = jest.fn();
+    trackAnalyticsEvent("premium_interest_confirm", {
+      tool_id: "made-to-order-profit-calculator",
+      feature_id: "production_scenario_save",
+      placement: "result_after",
+    });
+
+    expect(window.gtag).toHaveBeenCalledWith(
+      "event",
+      "premium_interest_confirm",
+      {
+        tool_id: "made-to-order-profit-calculator",
+        feature_id: "production_scenario_save",
+        placement: "result_after",
+      },
+    );
+  });
+
   it.each([
     {
       tool_id: "csv-column-mapper",
