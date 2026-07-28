@@ -947,3 +947,10 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - 構成692件、コンテンツ36ツール、全Jest 69 suites・356 tests、release 8 tests、全Lint、portal／dynamic-pricing buildに合格した。PC幅と375pxで、空状態、必須エラー、サンプル生成、未確認項目、コピー、結果後の関心度カード、横スクロールがないことを実画面確認した。印刷呼び出しと印刷対象のCSSは自動テストで確認した。
 - 本番公開、main統合、公開予約、X告知は行っていない。Preview URLを提示してユーザーレビューを受け、明示承認後にのみ公開日程を判断する。
 - Draft PR #51（`https://github.com/project-norops/sakupura/pull/51`）を作成し、GitHub Actions `validate`とVercel deployment `dpl_BDUBtpJqDivu2n1LNKYpho1Ni96d`が成功した。Preview `https://100apps-portal-git-codex-036-commission-brief-builder-norops.vercel.app/tools/commission-brief-builder`はHTTP 200で、PC幅と375pxの主要操作を再確認した。
+
+## 2026-07-28（台帳028 HAR機密情報チェック・匿名化 予約公開完了）
+
+- 15:00 JST枠の予約公開workflowを実行し、期限到来済みの`har-sanitizer`だけを`scheduled`から`published`へ変更した。GitHub Actions run `30333771458`は成功し、release commitは`ba852ab18011c78d8b5f15f5c6012853726dd7c5`。台帳029・030の公開予定は変更していない。
+- Vercel Production deployment `dpl_H99VCRptyp2tDDxiweoZw4Kr3Nss`はReadyで、`https://www.norops.jp/tools/har-sanitizer`のHTTP 200を確認した。
+- 本番実画面はPCと375px幅で確認した。操作サンプルから5件の機密候補を検出し、初期選択2件の匿名化・残存3件、全選択5件の匿名化・保存導線を確認した。候補未選択時は「匿名化する候補を1件以上選択してください。」で停止し、375pxで横方向のページはみ出しなし、ブラウザーエラーなしだった。
+- `announceOnX: false`、`announcedAt: null`を維持したためX投稿は発生していない。外部API、認証、バックエンド、フォーム・メール収集も追加していない。

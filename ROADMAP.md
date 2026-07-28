@@ -210,3 +210,11 @@ PR #47をmerge commit `1e0091a8c7751a4b27f96cbad52ca57b165efc64`でmainへ統合
 - ユーザビリティ：トップの検索だけでは目的のツールを見つけにくくなっている。
 - 収益性：同じ課題を持つ利用者へ関連ツールや有料機能を案内できる。
 - 品質：空のカテゴリー、重複説明、検索結果だけのページは公開しない。
+
+## 2026-07-28：台帳028 HAR機密情報チェック・匿名化（本番公開済み）
+
+台帳028（旧企画ID 30）`har-sanitizer`は、2026-07-28 15:00 JSTの公開枠で予約公開workflowにより`published`へ移行した。GitHub Actions run `30333771458`は全品質ゲートと公開後検証に合格し、release commit `ba852ab18011c78d8b5f15f5c6012853726dd7c5`をmainへ反映した。
+
+Vercel Production deployment `dpl_H99VCRptyp2tDDxiweoZw4Kr3Nss`はReadyで、`https://www.norops.jp/tools/har-sanitizer`はHTTP 200。PCと375px幅で操作サンプル5候補、未選択時のエラー、2件・5件の匿名化結果、残存候補、保存導線、横方向のページはみ出しなし、ブラウザーエラーなしを確認した。`announceOnX: false`と`announcedAt: null`を維持し、X告知、外部API、認証、バックエンド、メール収集は行っていない。
+
+台帳029は2026-07-29 09:00 JST、台帳030は同日15:00 JSTの期限到来後に公開品質を確認する。
