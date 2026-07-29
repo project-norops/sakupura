@@ -7,7 +7,8 @@
 - `ARCHITECTURE.md`と`ROADMAP.md`へ共通OGPの段階導入方針、`TASK_COORDINATION.md`へ中心ターゲットに沿うX訴求軸を正本化した。X投稿、予約変更、X API実行、公開スケジュール変更は行っていない。
 - 構成検査へ共通画像の存在・PNG寸法、共通metadata、全ツールroute、カテゴリroute、生成テンプレート、旧`summary`残存の回帰検査を追加した。`npm run check`は構成768件、コンテンツ40ツール、Jest 76 suites・395 tests、release 8 tests、全lint、portal・dynamic-pricing buildに合格した。
 - Next.js 16.2.11が生成したHTMLで、トップ、`/categories/content-marketing`、`/tools/csv-diff-checker`のcanonicalを維持し、`og:image`と`twitter:image`が`https://www.norops.jp/ogp/sakupura-ogp.png`、Open Graph画像寸法が1200×630、MIME typeが`image/png`、Xカードが`summary_large_image`となることを確認した。
-- Draft PR #59を作成し、GitHub Actions `validate`とVercel Preview deployment `dpl_6yUJWeKaMpzD3tYZvUjPeGwGLfSw`が成功した。認証済みPreviewでトップをPC 1280px・375px表示し、横はみ出しなし、ブラウザーエラー0件、メタタグ維持を確認した。共通画像はPreview上でも1200×630で表示できた。Preview保護により未認証HTTPはVercelログインへ転送されるため、Preview実画面は認証済みブラウザで確認した。本番配信結果はPR統合後に確認する。
+- Draft PR #59を作成し、GitHub Actions `validate`とVercel Preview deployment `dpl_6yUJWeKaMpzD3tYZvUjPeGwGLfSw`が成功した。認証済みPreviewでトップをPC 1280px・375px表示し、横はみ出しなし、ブラウザーエラー0件、メタタグ維持を確認した。共通画像はPreview上でも1200×630で表示できた。Preview保護により未認証HTTPはVercelログインへ転送されるため、Preview実画面は認証済みブラウザで確認した。
+- PR #59をmainへ統合した（merge commit `70d967e901accceded26c1fa4b708b66133c1ffe`）。Vercel Production deployment `dpl_AwHgG2bMWY42oaAUmCcgwQNJg6p5`はReadyで、トップ、発信・集客カテゴリ、CSV差分比較ツールはHTTP 200。各title、description、canonicalを維持し、`og:image`、`twitter:image`、画像alt、1200×630、`image/png`、`summary_large_image`を本番HTMLで確認した。画像URLはHTTP 200・223,896 bytesで、ブラウザ実寸も1200×630だった。代表ツールは375pxで横はみ出し・コンソールエラーなし、予約中の台帳040 URLはHTTP 404を維持した。
 
 ## 2026-07-29（台帳037〜040 main統合・予約確認）
 
