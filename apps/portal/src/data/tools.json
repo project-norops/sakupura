@@ -1750,7 +1750,7 @@
       ]
     },
     "releasePost": "月・地域・商品が行に並ぶCSVを集計表へ、月別列が並ぶ表を取込用の縦持ちへ変換できる「CSVピボット・縦横変換」を追加しました。空欄、重複、行列数を確認してブラウザ内で保存できます。登録不要・無料です。",
-    "status": "scheduled",
+    "status": "published",
     "publishAt": "2026-07-29T15:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
