@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { UtmLinkBuilderPage } from "@sakupla/utm-link-builder";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("utm-link-builder");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "UTMリンク・QRコード作成ツール",
   description:
     "計測用UTMリンクを命名チェック付きで作成し、QRコードとして保存できます。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/utm-link-builder",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "UTMリンク・QRコード作成ツール",
     description:
       "計測用UTMリンクを命名チェック付きで作成し、QRコードとして保存できます。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

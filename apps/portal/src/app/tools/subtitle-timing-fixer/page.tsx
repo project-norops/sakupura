@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { SubtitleTimingFixerPage } from "@sakupla/subtitle-timing-fixer";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("subtitle-timing-fixer");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "SRT・VTT字幕チェック／時間ずれ修正",
   description:
     "字幕ファイルの形式エラーを確認し、全字幕の時間ずれをブラウザ内でまとめて修正します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/subtitle-timing-fixer",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "SRT・VTT字幕チェック／時間ずれ修正",
     description:
       "字幕ファイルの形式エラーを確認し、全字幕の時間ずれをブラウザ内でまとめて修正します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

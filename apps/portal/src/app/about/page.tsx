@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "運営者情報",
   description:
     "無料Webツールサイト「サクプラ」の運営者、提供目的、制作・検証方針、データの取り扱い、お問い合わせ先をご案内します。",
-};
+});
 
 const overview = [
   ["サイト名", "サクプラ"],

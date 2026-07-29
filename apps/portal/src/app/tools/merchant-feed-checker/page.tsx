@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { MerchantFeedCheckerPage } from "@sakupla/merchant-feed-checker";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("merchant-feed-checker");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "Google Merchant Center商品フィード診断",
   description:
     "商品フィードの必須項目、価格、在庫、GTINなどをアップロード前に診断します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/merchant-feed-checker",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Google Merchant Center商品フィード診断",
     description:
       "商品フィードの必須項目、価格、在庫、GTINなどをアップロード前に診断します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

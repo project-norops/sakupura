@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "免責事項 | サクプラ",
   description:
     "サクプラが提供する計算結果や情報をご利用いただく際の免責事項です。",
-};
+});
 
 export default function DisclaimerPage() {
   return (

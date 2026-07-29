@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { FreeShippingThresholdCalculatorPage } from "@sakupla/free-shipping-threshold-calculator";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("free-shipping-threshold-calculator");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "送料無料ライン・利益シミュレーター",
   description:
     "注文額と粗利率、送料、決済費から送料無料ライン別の利益を比較します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/free-shipping-threshold-calculator",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "送料無料ライン・利益シミュレーター",
     description:
       "注文額と粗利率、送料、決済費から送料無料ライン別の利益を比較します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

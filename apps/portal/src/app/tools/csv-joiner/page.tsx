@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { CsvJoinerPage } from "@sakupla/csv-joiner";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,21 +9,24 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("csv-joiner");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "CSV結合・VLOOKUP代替",
-  description: "2つのCSVをキー列で照合し、追加する列、結合方法、未一致や重複キーを確認して結合CSVを作成します。",
+  description:
+    "2つのCSVをキー列で照合し、追加する列、結合方法、未一致や重複キーを確認して結合CSVを作成します。",
   alternates: { canonical: "/tools/csv-joiner" },
   openGraph: {
     title: "CSV結合・VLOOKUP代替",
-    description: "2つのCSVをキー列で照合し、追加する列、結合方法、未一致や重複キーを確認して結合CSVを作成します。",
+    description:
+      "2つのCSVをキー列で照合し、追加する列、結合方法、未一致や重複キーを確認して結合CSVを作成します。",
     url: "/tools/csv-joiner",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "CSV結合・VLOOKUP代替",
-    description: "2つのCSVをキー列で照合し、追加する列、結合方法、未一致や重複キーを確認して結合CSVを作成します。",
+    description:
+      "2つのCSVをキー列で照合し、追加する列、結合方法、未一致や重複キーを確認して結合CSVを作成します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

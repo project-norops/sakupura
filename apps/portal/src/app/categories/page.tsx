@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import apps from "@/data/apps";
 import { categories } from "@/data/categories";
 import { siteUrl } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "無料Webツールを目的別に探す",
   description:
     "発信・集客、業務効率化、EC・CSV、Web制作・改善の目的別に、登録不要で使える無料Webツールを探せます。",
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
     description: "20件の無料Webツールを4つのカテゴリーから選べます。",
     url: "/categories",
   },
-};
+});
 
 export default function CategoriesPage() {
   const structuredData = {

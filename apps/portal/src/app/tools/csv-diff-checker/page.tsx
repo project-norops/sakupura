@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { CsvDiffCheckerPage } from "@sakupla/csv-diff-checker";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("csv-diff-checker");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "CSV差分比較・変更抽出ツール",
   description:
     "変更前・変更後のCSVを商品コードやIDで照合し、追加・削除・変更された行とセルを確認できます。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/csv-diff-checker",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "CSV差分比較・変更抽出ツール",
     description:
       "変更前・変更後のCSVを商品コードやIDで照合し、追加・削除・変更された行とセルを確認できます。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

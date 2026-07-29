@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { EmailSignatureGeneratorPage } from "@sakupla/email-signature-generator";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("email-signature-generator");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "無料メール署名ジェネレーター｜Gmail・Outlook対応",
   description:
     "登録不要のメール署名ジェネレーター。名前や会社情報を入力して、Gmail・Outlookへ貼り付けられるビジネス署名を無料で作成できます。",
@@ -20,11 +21,11 @@ export const metadata: Metadata = {
     url: "/tools/email-signature-generator",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "無料メール署名ジェネレーター｜Gmail・Outlook対応",
     description: "登録不要でGmail・Outlook対応のビジネス署名を作成できます。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

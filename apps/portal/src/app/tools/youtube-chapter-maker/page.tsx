@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { YoutubeChapterMakerPage } from "@sakupla/youtube-chapter-maker";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("youtube-chapter-maker");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "YouTubeチャプター・タイムスタンプ作成",
   description:
     "時刻と見出しを並べ、YouTube概要欄へ貼れるチャプター形式を公式条件に沿って作成します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/youtube-chapter-maker",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "YouTubeチャプター・タイムスタンプ作成",
     description:
       "時刻と見出しを並べ、YouTube概要欄へ貼れるチャプター形式を公式条件に沿って作成します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

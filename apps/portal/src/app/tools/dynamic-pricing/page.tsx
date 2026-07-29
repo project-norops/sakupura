@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { DynamicPricingPage } from "@sakupla/dynamic-pricing";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("dynamic-pricing");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "販売価格・利益シミュレーター",
   description:
     "目標手取り額、原価、決済手数料、販売数から推奨販売価格と利益を計算します。",
@@ -19,11 +20,11 @@ export const metadata: Metadata = {
     url: "/tools/dynamic-pricing",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "販売価格・利益シミュレーター",
     description: tool.description,
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { SocialContentCalendarPage } from "@sakupla/social-content-calendar";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("social-content-calendar");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "SNSコンテンツカレンダー",
   description:
     "投稿日、媒体、テーマ、目的、素材、CTAを整理し、投稿漏れと内容の偏りを確認できるカレンダーを作ります。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/social-content-calendar",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "SNSコンテンツカレンダー",
     description:
       "投稿日、媒体、テーマ、目的、素材、CTAを整理し、投稿漏れと内容の偏りを確認できるカレンダーを作ります。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

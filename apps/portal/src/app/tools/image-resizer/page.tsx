@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { ImageResizerPage } from "@sakupla/image-resizer";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("image-resizer");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "Web・SNS画像一括リサイザー",
   description:
     "1枚の画像からOGP・SNS・favicon向けサイズをブラウザ内で一括作成します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/image-resizer",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Web・SNS画像一括リサイザー",
     description:
       "1枚の画像からOGP・SNS・favicon向けサイズをブラウザ内で一括作成します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

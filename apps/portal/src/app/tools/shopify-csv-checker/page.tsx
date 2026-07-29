@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { ShopifyCsvCheckerPage } from "@sakupla/shopify-csv-checker";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("shopify-csv-checker");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "Shopify商品CSV診断・修正ツール",
   description:
     "商品CSVの列名や値の不備を行ごとに診断し、修正版CSVをブラウザ内で作成します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/shopify-csv-checker",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Shopify商品CSV診断・修正ツール",
     description:
       "商品CSVの列名や値の不備を行ごとに診断し、修正版CSVをブラウザ内で作成します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

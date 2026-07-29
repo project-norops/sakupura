@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { RoutineTaskLoopPage } from "@sakupla/routine-task-loop";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("routine-task-loop");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "定期タスク専用チェックリスト｜次回日を自動更新",
   description:
     "毎週・毎月の定期業務だけを日常タスクから分けて管理し、完了すると次回予定日へ自動で繰り越します。",
@@ -20,11 +21,11 @@ export const metadata: Metadata = {
     url: "/tools/routine-task-loop",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "定期タスク専用チェックリスト",
     description: "定期業務を日常のToDoから分け、完了と次回予定日を管理します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { EmailSubjectPreviewerPage } from "@sakupla/email-subject-previewer";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("email-subject-previewer");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "メール件名・プリヘッダープレビュー",
   description:
     "メール件名とプリヘッダーがPC・スマホの受信箱でどう見えるかを送信前に確認できます。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/email-subject-previewer",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "メール件名・プリヘッダープレビュー",
     description:
       "メール件名とプリヘッダーがPC・スマホの受信箱でどう見えるかを送信前に確認できます。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

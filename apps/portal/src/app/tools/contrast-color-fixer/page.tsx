@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { ContrastColorFixerPage } from "@sakupla/contrast-color-fixer";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("contrast-color-fixer");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "配色コントラスト改善ツール",
   description:
     "文字色と背景色の見やすさを判定し、WCAG基準を満たす近似色を提案します。",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     url: "/tools/contrast-color-fixer",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "配色コントラスト改善ツール",
     description:
       "文字色と背景色の見やすさを判定し、WCAG基準を満たす近似色を提案します。",
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();

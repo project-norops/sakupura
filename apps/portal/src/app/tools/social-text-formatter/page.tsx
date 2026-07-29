@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { withSocialMetadata } from "@/lib/metadata";
 import { SocialTextFormatterPage } from "@sakupla/social-text-formatter";
 import { ToolStructuredData } from "@sakupla/shared-ui";
 import { ToolGuideWithRelated } from "@/components/ToolGuideWithRelated";
@@ -8,7 +9,7 @@ import { siteUrl } from "@/lib/site";
 
 const tool = getToolBySlug("social-text-formatter");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withSocialMetadata({
   title: "SNS文字数カウンター・文章整形ツール",
   description:
     "X、Instagram、LinkedIn向けの文章を、改行・空白・文字数・ハッシュタグを確認しながらブラウザ上で整形できます。",
@@ -19,11 +20,11 @@ export const metadata: Metadata = {
     url: "/tools/social-text-formatter",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "SNS文字数カウンター・文章整形ツール",
     description: tool.description,
   },
-};
+});
 
 export default function Page() {
   if (!isToolPublished(tool)) notFound();
