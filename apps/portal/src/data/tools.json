@@ -1692,7 +1692,7 @@
       ]
     },
     "releasePost": "PWA公開前の確認を1画面に。Web App Manifestと端末内アイコンを読み込み、主要項目・URL関係・宣言サイズと実寸・maskable表示をブラウザ内で確認し、修正版JSONを保存できます。登録不要・無料です。",
-    "status": "scheduled",
+    "status": "published",
     "publishAt": "2026-07-29T09:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
@@ -2119,7 +2119,10 @@
     "categoryName": "業務効率化",
     "packageName": "@sakupla/delivery-file-checker",
     "componentName": "DeliveryFileCheckerPage",
-    "relatedSlugs": ["image-resizer", "commission-brief-builder"],
+    "relatedSlugs": [
+      "image-resizer",
+      "commission-brief-builder"
+    ],
     "content": {
       "summary": "画像、動画、デザイン、テンプレートなどの制作物を納品する前に、利用者が入力した納品要件と端末内のファイルを照合します。許可する拡張子、画像の最小寸法、ファイル名の先頭・小文字・空白、必須ファイル、重複名を確認し、「要修正」「要確認」と理由を一覧表示します。結果は文章としてコピーするかCSVで保存でき、入れ忘れや形式違いを納品前に見直せます。",
       "audience": "作品や知識を自分で販売し、制作だけでなく納期や納品管理まで一人で行うイラストレーター、動画編集者、配信者、デザイナー、デジタル商品販売者に向いています。クライアントや販売サービスから指定されたファイル一式を、送付・公開する直前に自分で確認したい場面で利用できます。",
@@ -2304,7 +2307,10 @@
     "categoryName": "発信・集客",
     "packageName": "@sakupla/commission-rate-card-maker",
     "componentName": "CommissionRateCardMakerPage",
-    "relatedSlugs": ["dynamic-pricing", "image-resizer"],
+    "relatedSlugs": [
+      "dynamic-pricing",
+      "image-resizer"
+    ],
     "content": {
       "summary": "コミッション、イラスト、動画編集、配信素材などの基本メニュー、料金、追加オプション、納期、修正回数、受付状況を1枚の案内に整理します。入力後はSNS投稿に使える縦長の料金表画像、プロフィールや依頼ページへ貼れるMarkdown、紙やPDF向けの印刷用料金表をブラウザ内で作成できます。媒体ごとに価格や条件を書き直す手間と、公開前の記載漏れを減らすツールです。",
       "audience": "作品や知識を自分で販売し、制作だけでなく価格、納期、告知、収益管理まで一人で行うイラストレーター、動画編集者、配信者、デザイナーなどに向いています。SNSやポートフォリオで依頼受付を始めるときや、受付状況・料金・納期をまとめて更新したい場面で利用できます。",
