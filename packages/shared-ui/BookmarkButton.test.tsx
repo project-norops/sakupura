@@ -7,6 +7,10 @@ beforeEach(() => {
   window.gtag = jest.fn();
 });
 
+afterEach(() => {
+  jest.restoreAllMocks();
+});
+
 test("keeps the bookmark dialog top reachable in a short mobile viewport", () => {
   render(
     <div data-testid="header-stacking-context">
@@ -32,4 +36,25 @@ test("keeps the bookmark dialog top reachable in a short mobile viewport", () =>
   ).toBeNull();
   expect(dialog.parentElement).toBe(document.body);
   expect(screen.getByRole("button", { name: "閉じる" })).toBeVisible();
+});
+
+test("uses browser-generic bookmark instructions on iPhone", () => {
+  jest
+    .spyOn(window.navigator, "userAgent", "get")
+    .mockReturnValue("Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)");
+
+  render(<BookmarkButton />);
+
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "このページをブックマークに追加",
+    }),
+  );
+
+  expect(
+    screen.getByText(
+      "ブラウザの共有ボタンを開き、「ブックマークを追加」または「ホーム画面に追加」を選んでください。",
+    ),
+  ).toBeVisible();
+  expect(screen.queryByText(/Safari/)).not.toBeInTheDocument();
 });

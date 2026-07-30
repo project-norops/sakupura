@@ -10,7 +10,7 @@ function bookmarkInstructions() {
 
   const userAgent = navigator.userAgent.toLowerCase();
   if (/iphone|ipad|ipod/.test(userAgent)) {
-    return "Safariの共有ボタンを開き、「ブックマークを追加」または「ホーム画面に追加」を選んでください。";
+    return "ブラウザの共有ボタンを開き、「ブックマークを追加」または「ホーム画面に追加」を選んでください。";
   }
   if (/android/.test(userAgent)) {
     return "ブラウザ右上のメニューを開き、星印または「ブックマークに追加」を選んでください。";
