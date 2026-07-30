@@ -171,7 +171,7 @@ export function PopupEventProfitCalculatorPage() {
           ポップアップ出店採算・必要販売数
         </h1>
         <p className="mt-4 max-w-3xl leading-7 text-slate-600">
-          週末マルシェへ3商品を持ち込む場合のように、出店料、移動費、人件費と商品構成から、何点売れば固定費を回収できるか試算します。入力と結果はブラウザ内だけで処理します。
+          マルシェ（対面販売イベント）、フリーマーケット、展示即売会、期間限定店舗へ出店する場合のように、出店料、移動費、人件費と商品構成から、何点売れば固定費を回収できるか試算します。入力と結果はブラウザ内だけで処理します。
         </p>
 
         <section
@@ -198,6 +198,12 @@ export function PopupEventProfitCalculatorPage() {
               損益分岐、想定利益、完売時利益を確認します。
             </li>
           </ol>
+          <div className="mt-3 rounded-xl bg-white p-4 text-sm leading-6 text-slate-700">
+            <strong className="text-slate-950">対象となる出店の例</strong>
+            <p className="mt-1">
+              マルシェはハンドメイド作品・焼き菓子・農産物・雑貨などの新品や自作品、フリーマーケットは家庭の不用品や中古品、展示即売会は特定テーマの作品、ポップアップは商業施設などで期間限定販売する場面を想定しています。
+            </p>
+          </div>
           <p className="mt-3 text-sm font-bold leading-6 text-slate-800">
             来場者数や需要、販売数、完売、利益を予測・保証するツールではありません。複数の販売率で再計算してください。
           </p>

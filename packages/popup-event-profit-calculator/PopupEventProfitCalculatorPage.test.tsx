@@ -17,7 +17,12 @@ beforeEach(() => {
 
 test("explains the boundary and calculates the sample event", () => {
   render(<PopupEventProfitCalculatorPage />);
-  expect(screen.getByText(/週末マルシェへ3商品/)).toBeInTheDocument();
+  expect(
+    screen.getByText(/マルシェ（対面販売イベント）、フリーマーケット/),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(/フリーマーケットは家庭の不用品や中古品/),
+  ).toBeInTheDocument();
   expect(
     screen.getByRole("region", { name: "かんたん操作手順" }),
   ).toBeInTheDocument();
