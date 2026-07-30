@@ -35,6 +35,14 @@ export const premiumInterestFeatures = {
   ],
   "digital-product-launch-planner": ["launch_plan_save", "multi_launch_plan"],
   "delivery-file-checker": ["delivery_rule_save", "batch_delivery_check"],
+  "popup-event-profit-calculator": [
+    "event_scenario_save",
+    "multi_event_compare",
+  ],
+  "return-cost-calculator": [
+    "return_scenario_save",
+    "multi_product_return_compare",
+  ],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;

@@ -6,6 +6,54 @@
 - 共通`BookmarkButton`の背景を縦スクロール可能にし、スマホでは上寄せ、PCでは中央寄せを維持した。モーダル本体は`100dvh`基準の最大高と内部スクロールを持ち、上下のsafe areaを確保する。回帰テストで上端到達性に必要なレイアウト契約を固定した。
 - 追加のiPhone Preview画像から、モーダルが`backdrop-blur`付きsticky headerのスタッキングコンテキスト内に残り、後続コンテンツの背面へ潜る問題を確認した。単純なz-index増加ではなく、React Portalでモーダルを`document.body`直下へ移し、ヘッダーのスタッキングコンテキストから分離した。回帰テストでモーダルがヘッダー配下に存在しないことを固定する。
 - コミット`0476958`をDraft PR #64へpushし、Vercel Preview deployment `dpl_8G3qxUQU6F5HXXYFQNrbkQ2FEv19`がReady、対象ページがHTTP 200であることを確認した。ローカル実画面はPCと375×500pxで、モーダル上端、閉じる操作、背景の横はみ出しなしを確認した。`npm run check`は構造768件、コンテンツ40ツール、Jest 77 suites・396 tests、release 8 tests、lint、portal・dynamic-pricing buildに合格した。本番公開・main統合は行っていない。
+## 2026-07-30（台帳041・042 main統合・予約確認）
+
+- Preview承認済みの台帳041をPR #62（merge commit `d8d5c136badec82918390772847ae7b9ee0fee37`）、台帳042をPR #63（merge commit `fc97d142455271d0ee138ee24fd43d97523e6a1c`）から順番にmainへ統合した。競合解消では両台帳、利用場面の改善文言、GA4許可値、既存ツールと正本文書を保持した。
+- 統合後の`npm run check`は構造802件、コンテンツ42ツール、Jest 80 suites・407 tests、release 8 tests、lint、portal・dynamic-pricing buildに合格した。GitHub Actions `validate`とVercel Previewも両PRで成功した。
+- Vercel Production deployment `dpl_62xNSfHaYjQzfje9jGymw74K2b5D`はReadyで、本番トップはHTTP 200。予約時刻前の台帳041・042の公開URLはHTTP 404を維持している。予約公開workflowの手動実行、X告知、外部API、認証、バックエンド、メール収集は行っていない。
+
+## 2026-07-30（台帳042 Preview承認・予約設定）
+
+- ユーザーのPreview承認と予定公開リストへの追加指示に基づき、台帳042を`status: scheduled`、`publishAt: 2026-08-04T15:00:00+09:00`へ変更した。台帳041の同日09:00枠に続け、1日2件の上限を維持する。
+- `announceOnX: false`、`announcedAt: null`を維持し、予約公開workflowの手動実行、`published`への変更、X告知は行わない。期限到来後の全品質検査と本番確認が完了するまでは非公開とする。
+
+## 2026-07-30（台帳042 利用場面の説明改善）
+
+- WisherのPreviewレビューに基づき、「マルシェ」を対面販売イベントと説明し、フリーマーケット、展示即売会、期間限定店舗との違いを冒頭と利用案内へ追加した。計算ロジック、入力項目、公開状態は変更していない。
+- commit `2ad33fd`をPR #63へ反映し、Vercel Preview deployment `dpl_agN3Chzuu6WzKH5SmCpKqQoehLf9`がReady、GitHub Actions `validate`が成功した。PC・375pxで4種類の利用場面、ページ全体の横はみ出しなし、既存サンプル結果10,330円を確認した。`status: draft`、`publishAt: null`、`announceOnX: false`を維持する。
+
+## 2026-07-30（台帳042 ローカル実装・検証完了）
+
+- 台帳042 `popup-event-profit-calculator`に、イベント共通費と最大3商品の販売条件から、損益分岐売上、必要販売数、想定売上・利益、完売時利益、持込在庫原価を試算する画面とCSV保存を実装した。入力・計算はブラウザ内に限定し、商品名、金額、持込数、結果を外部やGA4へ送らない。
+- 自動テストは台帳042の2 suites・6 tests、全体品質ゲートは構造785 checks、コンテンツ41 tools、Jest 78 suites・401 tests、release 8 tests、lint、portal・dynamic-pricing buildに合格した。PCと375pxでサンプル、入力エラー、結果、比較表、CSV保存状態を確認し、ページ全体の横はみ出しはなかった。
+- ローカル開発環境では既存のAdSenseタグに関する警告が1件出るが、台帳042固有のエラーはない。`status: draft`、`publishAt: null`、`announceOnX: false`を維持し、本番公開・main統合・予約・X告知は行っていない。
+- Draft PR #63を作成し、Vercel Preview deployment `dpl_GjEpqpma4yS7H6WYnA2r9tCDFuE3`がReadyとなった。Preview上でもPCと375pxでサンプル結果、ページ全体の横はみ出しなし、比較表だけの横スクロール、ブラウザーエラーなしを確認した。ユーザーレビュー前のためDraftと非公開状態を維持する。
+## 2026-07-30（台帳041 Preview承認・予約設定）
+
+- ユーザーのPreview承認と予定公開リストへの追加指示に基づき、台帳041を`status: scheduled`、`publishAt: 2026-08-04T09:00:00+09:00`へ変更した。既存の台帳040までの公開枠と1日2件の上限を維持する。
+- `announceOnX: false`、`announcedAt: null`を維持し、予約公開workflowの手動実行、`published`への変更、X告知は行わない。期限到来後の全品質検査と本番確認が完了するまでは非公開とする。
+
+## 2026-07-30（台帳041 ローカル実装・検証完了）
+
+- 台帳041 `return-cost-calculator`に、販売条件と最大3つの返品シナリオから返品件数、返金額、返品対応費、回収原価、返品後利益、利益減少、返品1件当たり影響を比較する画面とCSV保存を実装した。入力・計算はブラウザ内に限定し、顧客情報・注文情報・計算結果を外部やGA4へ送らない。
+- 自動テストは台帳041の2 suites・6 tests、全体品質ゲートは構造785 checks、コンテンツ41 tools、Jest 78 suites・401 tests、release 8 tests、lint、portal・dynamic-pricing buildに合格した。PCと375pxでサンプル、入力エラー、結果、比較表、CSV保存状態を確認し、ページ全体の横はみ出しはなかった。
+- ローカル開発環境では既存のAdSenseタグに関する警告が1件出るが、台帳041固有のエラーはない。`status: draft`、`publishAt: null`、`announceOnX: false`を維持し、本番公開・main統合・予約・X告知は行っていない。
+- Draft PR #62を作成し、Vercel Preview deployment `dpl_C9CALWV61kh6iRnKFHumVqVPDWrq`がReady、GitHub Actions `validate`が成功した。Preview上でもPCと375pxでサンプル結果、ページ全体の横はみ出しなし、比較表だけの横スクロール、ブラウザーエラーなしを確認した。ユーザーレビュー前のためDraftと非公開状態を維持する。
+
+## 2026-07-30（台帳041・042 正式付番・開発開始）
+
+- ユーザーが次期候補の選択肢Aを承認したため、返品・交換コスト試算を台帳041、ポップアップ出店採算・必要販売数を台帳042として正式付番した。個別仕様と受入条件を`PRODUCT_PLAN.md`、開発順とレビューゲートを`ROADMAP.md`へ記録した。
+- 台帳041は公式ジェネレーターで`packages/return-cost-calculator`と`/tools/return-cost-calculator`を生成し、`status: draft`、`publishAt: null`、`announceOnX: false`、`announcedAt: null`で実装を開始した。
+- この承認はPreview実装までを対象とし、main統合、本番公開、予約公開、X告知、外部API、認証、バックエンド、顧客・注文データ収集を含まない。各Previewへの明示的なユーザーレビュー後に次の判断を行う。
+
+## 2026-07-30（40ツール到達時点の次期候補リサーチ）
+
+- Chief Inboxの依頼に基づき、既存40ツール、台帳031〜040の実装・予約状態、既存の保留案を監査した。承認済み未実装ツールはなく、台帳040まで実装・ユーザーレビュー・main統合・公開予約済みであることを確認した。
+- 次期候補10案を、フリーランス・一人会社2案、店舗・地域サービス2案、CSV以外のEC運営2案、SNS・コンテンツ運用2案、Web制作・専門1案、実験1案の構成で調査し、`PRODUCT_RESEARCH.md`へ評価、根拠、MVP、既存ツールとの重複、リスクを記録した。
+- 上位は、`e`返品・交換コスト試算87点、`f`セット販売・まとめ買い利益比較87点、`c`ポップアップ出店採算・必要販売数86点、`b`案件の入金予定・資金繰りカレンダー83点、`g`コンテンツ再利用プランナー83点。検索ボリューム実数と実RPMは未確認として区別した。
+- Shopify、消費者庁、Etsy、HoneyBook、Stripe、国税庁、Buffer、Fiverr、Squareの公式資料を2026-07-30に確認した。返品の適法性、税務上の売上計上、契約解釈はMVPの判定対象外とし、ブラウザ内の採算・計画・整理支援へ限定する。
+- 旧保留案「予約キャンセル損失・前金効果試算」は重複して再提出していない。1日2件は品質条件を満たした公開の上限であり、未承認案や未完成案で枠を埋めない。
+- この時点では候補固有のユーザー承認前のため、台帳番号付与、`PRODUCT_PLAN.md`への個別仕様追加、ツール実装、ブランチ作成、Preview、本番公開、予約変更、X告知を行っていない。
 
 ## 2026-07-30（台帳029・030 予約公開・本番確認）
 
