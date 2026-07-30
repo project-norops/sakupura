@@ -1,5 +1,13 @@
 # サクプラ 開発ロードマップ
 
+## 2026-07-30：台帳041・042（企画・Preview実装承認済み）
+
+40ツール到達時点の次期候補10案から、ユーザーが選択肢Aを承認した。台帳041を「返品・交換コスト試算」`return-cost-calculator`、台帳042を「ポップアップ出店採算・必要販売数」`popup-event-profit-calculator`として正式付番し、041→042の順でPreview実装する。
+
+個別受入条件は`PRODUCT_PLAN.md`を正本とする。各ツールは1件ずつ公式ジェネレーターで生成し、全品質ゲート、Vercel Preview、PC・375px、サンプル、空状態、入力エラー、主要結果、保存操作を確認する。Preview提示時点では`status: draft`、`publishAt: null`、`announceOnX: false`を維持し、対象ツールへのユーザーの明示的なレビュー承認後にだけmain統合と公開日程設定へ進む。
+
+本承認にはmain統合、本番公開、予約公開、X告知、外部API、認証、バックエンド、顧客・注文データ収集を含めない。1日2件は品質条件を満たした公開の上限であり、Preview未確認または未承認の枠は見送る。
+
 ## 2026-07-30：台帳029・030（本番公開・確認済み）
 
 台帳029 `pwa-manifest-checker`は2026-07-29 09:00 JSTの公開枠を受け、GitHub Actions run `30413178281`で全品質ゲートに合格し、release commit `c044dc43eff78641f6a13e6d0bcd9dee611ea833`により`published`へ移行した。Vercel Production deployment `dpl_CJaavJ6tvvgLgztib8wnhFSXqomA`はReadyで、本番URLはHTTP 200。PCと375pxでサンプル、構文エラー、指摘件数、maskable表示、修正版JSONを確認した。
