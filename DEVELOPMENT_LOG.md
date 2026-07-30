@@ -1,5 +1,11 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-30（共通保存モーダル iPhone表示修正）
+
+- Wisher提供のiPhone実機画像から、ヘッダーの「☆ 保存」で開く共通モーダルが、Safariの縮小した実表示高に対して中央配置され、上端が画面外へ切れる問題を確認した。
+- 共通`BookmarkButton`の背景を縦スクロール可能にし、スマホでは上寄せ、PCでは中央寄せを維持した。モーダル本体は`100dvh`基準の最大高と内部スクロールを持ち、上下のsafe areaを確保する。回帰テストで上端到達性に必要なレイアウト契約を固定した。
+- 本番公開・main統合は行わず、全品質ゲートとVercel Previewで短いモバイル表示、URLコピー、閉じる操作、背景の横はみ出しを確認する。
+
 ## 2026-07-30（台帳029・030 予約公開・本番確認）
 
 - 台帳029 `pwa-manifest-checker`はGitHub Actions run `30413178281`で全品質ゲート、期限到来判定、`published`への変更、本番確認に合格した。release commitは`c044dc43eff78641f6a13e6d0bcd9dee611ea833`、Vercel Production deployment `dpl_CJaavJ6tvvgLgztib8wnhFSXqomA`はReadyで、本番URLはHTTP 200。
