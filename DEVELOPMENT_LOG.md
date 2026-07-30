@@ -1,5 +1,11 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-30（台帳041・042 main統合・予約確認）
+
+- Preview承認済みの台帳041をPR #62（merge commit `d8d5c136badec82918390772847ae7b9ee0fee37`）、台帳042をPR #63（merge commit `fc97d142455271d0ee138ee24fd43d97523e6a1c`）から順番にmainへ統合した。競合解消では両台帳、利用場面の改善文言、GA4許可値、既存ツールと正本文書を保持した。
+- 統合後の`npm run check`は構造802件、コンテンツ42ツール、Jest 80 suites・407 tests、release 8 tests、lint、portal・dynamic-pricing buildに合格した。GitHub Actions `validate`とVercel Previewも両PRで成功した。
+- Vercel Production deployment `dpl_62xNSfHaYjQzfje9jGymw74K2b5D`はReadyで、本番トップはHTTP 200。予約時刻前の台帳041・042の公開URLはHTTP 404を維持している。予約公開workflowの手動実行、X告知、外部API、認証、バックエンド、メール収集は行っていない。
+
 ## 2026-07-30（台帳042 Preview承認・予約設定）
 
 - ユーザーのPreview承認と予定公開リストへの追加指示に基づき、台帳042を`status: scheduled`、`publishAt: 2026-08-04T15:00:00+09:00`へ変更した。台帳041の同日09:00枠に続け、1日2件の上限を維持する。
