@@ -3,7 +3,7 @@
 ## 2026-07-30（台帳042 利用場面の説明改善）
 
 - WisherのPreviewレビューに基づき、「マルシェ」を対面販売イベントと説明し、フリーマーケット、展示即売会、期間限定店舗との違いを冒頭と利用案内へ追加した。計算ロジック、入力項目、公開状態は変更していない。
-- `status: draft`、`publishAt: null`、`announceOnX: false`を維持し、PR #63のPreviewでPC・375pxとコンテンツ品質を再確認する。
+- commit `2ad33fd`をPR #63へ反映し、Vercel Preview deployment `dpl_agN3Chzuu6WzKH5SmCpKqQoehLf9`がReady、GitHub Actions `validate`が成功した。PC・375pxで4種類の利用場面、ページ全体の横はみ出しなし、既存サンプル結果10,330円を確認した。`status: draft`、`publishAt: null`、`announceOnX: false`を維持する。
 
 ## 2026-07-30（台帳042 ローカル実装・検証完了）
 
