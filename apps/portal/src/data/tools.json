@@ -2410,8 +2410,8 @@
       ]
     },
     "releasePost": "返品8件で、返金以外に利益はいくら減る？無料の「返品・交換コスト試算」で、返送料・検品・決済費・再販可否を含む返品後利益を最大3案で比較できます。登録不要、注文情報や顧客情報は外部へ送信しません。",
-    "status": "draft",
-    "publishAt": null,
+    "status": "scheduled",
+    "publishAt": "2026-08-04T09:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
   }
