@@ -5,6 +5,7 @@
 - 台帳042 `popup-event-profit-calculator`に、イベント共通費と最大3商品の販売条件から、損益分岐売上、必要販売数、想定売上・利益、完売時利益、持込在庫原価を試算する画面とCSV保存を実装した。入力・計算はブラウザ内に限定し、商品名、金額、持込数、結果を外部やGA4へ送らない。
 - 自動テストは台帳042の2 suites・6 tests、全体品質ゲートは構造785 checks、コンテンツ41 tools、Jest 78 suites・401 tests、release 8 tests、lint、portal・dynamic-pricing buildに合格した。PCと375pxでサンプル、入力エラー、結果、比較表、CSV保存状態を確認し、ページ全体の横はみ出しはなかった。
 - ローカル開発環境では既存のAdSenseタグに関する警告が1件出るが、台帳042固有のエラーはない。`status: draft`、`publishAt: null`、`announceOnX: false`を維持し、本番公開・main統合・予約・X告知は行っていない。
+- Draft PR #63を作成し、Vercel Preview deployment `dpl_GjEpqpma4yS7H6WYnA2r9tCDFuE3`がReadyとなった。Preview上でもPCと375pxでサンプル結果、ページ全体の横はみ出しなし、比較表だけの横スクロール、ブラウザーエラーなしを確認した。ユーザーレビュー前のためDraftと非公開状態を維持する。
 
 ## 2026-07-30（台帳041 ローカル実装・検証完了）
 
