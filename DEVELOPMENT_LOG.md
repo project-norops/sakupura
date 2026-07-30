@@ -1,5 +1,13 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-30（台帳029・030 予約公開・本番確認）
+
+- 台帳029 `pwa-manifest-checker`はGitHub Actions run `30413178281`で全品質ゲート、期限到来判定、`published`への変更、本番確認に合格した。release commitは`c044dc43eff78641f6a13e6d0bcd9dee611ea833`、Vercel Production deployment `dpl_CJaavJ6tvvgLgztib8wnhFSXqomA`はReadyで、本番URLはHTTP 200。
+- 台帳029の本番実画面はPCと375pxで、操作サンプルからアイコン2件、要修正・要確認・未確認各0件、maskable安全領域、修正版JSONを確認した。不正なJSONでは「マニフェストをJSONとして読み込めませんでした」と表示され、375pxで横方向のページはみ出しとブラウザーエラーはなかった。
+- 台帳030 `csv-pivot-reshape`はGitHub Actions run `30431340569`で全品質ゲート、期限到来判定、`published`への変更、本番確認に合格した。release commitは`c78a8d76f99dab305651c151a8c7320edc696dac`、Vercel Production deployment `dpl_4TnExcF8rjf1jDWT4z1y9VnqaUCf`はReadyで、本番URLはHTTP 200。
+- 台帳030の本番実画面はPCと375pxで、集計サンプル5行・4列から2行・4列の結果、空欄1件、重複1件、CSV保存ボタンを確認した。識別列未選択では明示エラーが表示され、375pxで横方向のページはみ出しとブラウザーエラーはなかった。
+- 両ツールとも`announceOnX: false`、`announcedAt: null`を維持した。X告知、外部API、認証、バックエンド、メール収集は行っていない。監視対象の台帳027〜030はすべて公開・記録・本番確認済みとなった。
+
 ## 2026-07-29（サイト共通OGP基盤）
 
 - PR #58のmain統合と正本文書・台帳状態の監査完了後、ユーザーの明示承認に基づいてサイト共通OGPの実装を開始した。監査時点の全40ツール（`published` 28件、`scheduled` 12件）、予約日時、予約中全件の`announceOnX: false`を変更していない。

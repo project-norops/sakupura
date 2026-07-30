@@ -1,5 +1,13 @@
 # サクプラ 開発ロードマップ
 
+## 2026-07-30：台帳029・030（本番公開・確認済み）
+
+台帳029 `pwa-manifest-checker`は2026-07-29 09:00 JSTの公開枠を受け、GitHub Actions run `30413178281`で全品質ゲートに合格し、release commit `c044dc43eff78641f6a13e6d0bcd9dee611ea833`により`published`へ移行した。Vercel Production deployment `dpl_CJaavJ6tvvgLgztib8wnhFSXqomA`はReadyで、本番URLはHTTP 200。PCと375pxでサンプル、構文エラー、指摘件数、maskable表示、修正版JSONを確認した。
+
+台帳030 `csv-pivot-reshape`は2026-07-29 15:00 JSTの公開枠を受け、GitHub Actions run `30431340569`で全品質ゲートに合格し、release commit `c78a8d76f99dab305651c151a8c7320edc696dac`により`published`へ移行した。Vercel Production deployment `dpl_4TnExcF8rjf1jDWT4z1y9VnqaUCf`はReadyで、本番URLはHTTP 200。PCと375pxで集計サンプル、2行・4列の出力、空欄・重複表示、識別列未選択エラーを確認した。
+
+両ツールとも375pxでページ全体の横方向のはみ出しとブラウザーエラーはない。`announceOnX: false`、`announcedAt: null`を維持し、X告知、外部API、認証、バックエンド、メール収集は行っていない。これにより、監視対象の台帳027〜030はすべて公開・記録・本番確認済みとなった。
+
 ## 2026-07-29：サイト共通OGP基盤（実装承認済み）
 
 X等で共有されたリンクの視認性とブランド統一を改善するため、特定ツール名を含まない共通ブランド画像を1200×630で用意し、トップ、カテゴリ、全ツール、サイトポリシー系ページへ`og:image`、`twitter:image`、`summary_large_image`を共通適用する。ページ固有のtitle、description、canonical、公開状態は変更しない。
