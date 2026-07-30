@@ -4,7 +4,7 @@
 
 - Wisher提供のiPhone実機画像から、ヘッダーの「☆ 保存」で開く共通モーダルが、Safariの縮小した実表示高に対して中央配置され、上端が画面外へ切れる問題を確認した。
 - 共通`BookmarkButton`の背景を縦スクロール可能にし、スマホでは上寄せ、PCでは中央寄せを維持した。モーダル本体は`100dvh`基準の最大高と内部スクロールを持ち、上下のsafe areaを確保する。回帰テストで上端到達性に必要なレイアウト契約を固定した。
-- 本番公開・main統合は行わず、全品質ゲートとVercel Previewで短いモバイル表示、URLコピー、閉じる操作、背景の横はみ出しを確認する。
+- コミット`0476958`をDraft PR #64へpushし、Vercel Preview deployment `dpl_8G3qxUQU6F5HXXYFQNrbkQ2FEv19`がReady、対象ページがHTTP 200であることを確認した。ローカル実画面はPCと375×500pxで、モーダル上端、閉じる操作、背景の横はみ出しなしを確認した。`npm run check`は構造768件、コンテンツ40ツール、Jest 77 suites・396 tests、release 8 tests、lint、portal・dynamic-pricing buildに合格した。本番公開・main統合は行っていない。
 
 ## 2026-07-30（台帳029・030 予約公開・本番確認）
 
