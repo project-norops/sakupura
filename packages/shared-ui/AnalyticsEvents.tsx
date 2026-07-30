@@ -39,6 +39,10 @@ export const premiumInterestFeatures = {
     "event_scenario_save",
     "multi_event_compare",
   ],
+  "return-cost-calculator": [
+    "return_scenario_save",
+    "multi_product_return_compare",
+  ],
 } as const;
 
 export type PremiumInterestToolId = keyof typeof premiumInterestFeatures;

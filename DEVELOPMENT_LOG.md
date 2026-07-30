@@ -1,5 +1,10 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-30（台帳042 Preview承認・予約設定）
+
+- ユーザーのPreview承認と予定公開リストへの追加指示に基づき、台帳042を`status: scheduled`、`publishAt: 2026-08-04T15:00:00+09:00`へ変更した。台帳041の同日09:00枠に続け、1日2件の上限を維持する。
+- `announceOnX: false`、`announcedAt: null`を維持し、予約公開workflowの手動実行、`published`への変更、X告知は行わない。期限到来後の全品質検査と本番確認が完了するまでは非公開とする。
+
 ## 2026-07-30（台帳042 利用場面の説明改善）
 
 - WisherのPreviewレビューに基づき、「マルシェ」を対面販売イベントと説明し、フリーマーケット、展示即売会、期間限定店舗との違いを冒頭と利用案内へ追加した。計算ロジック、入力項目、公開状態は変更していない。
@@ -11,12 +16,17 @@
 - 自動テストは台帳042の2 suites・6 tests、全体品質ゲートは構造785 checks、コンテンツ41 tools、Jest 78 suites・401 tests、release 8 tests、lint、portal・dynamic-pricing buildに合格した。PCと375pxでサンプル、入力エラー、結果、比較表、CSV保存状態を確認し、ページ全体の横はみ出しはなかった。
 - ローカル開発環境では既存のAdSenseタグに関する警告が1件出るが、台帳042固有のエラーはない。`status: draft`、`publishAt: null`、`announceOnX: false`を維持し、本番公開・main統合・予約・X告知は行っていない。
 - Draft PR #63を作成し、Vercel Preview deployment `dpl_GjEpqpma4yS7H6WYnA2r9tCDFuE3`がReadyとなった。Preview上でもPCと375pxでサンプル結果、ページ全体の横はみ出しなし、比較表だけの横スクロール、ブラウザーエラーなしを確認した。ユーザーレビュー前のためDraftと非公開状態を維持する。
+## 2026-07-30（台帳041 Preview承認・予約設定）
+
+- ユーザーのPreview承認と予定公開リストへの追加指示に基づき、台帳041を`status: scheduled`、`publishAt: 2026-08-04T09:00:00+09:00`へ変更した。既存の台帳040までの公開枠と1日2件の上限を維持する。
+- `announceOnX: false`、`announcedAt: null`を維持し、予約公開workflowの手動実行、`published`への変更、X告知は行わない。期限到来後の全品質検査と本番確認が完了するまでは非公開とする。
 
 ## 2026-07-30（台帳041 ローカル実装・検証完了）
 
 - 台帳041 `return-cost-calculator`に、販売条件と最大3つの返品シナリオから返品件数、返金額、返品対応費、回収原価、返品後利益、利益減少、返品1件当たり影響を比較する画面とCSV保存を実装した。入力・計算はブラウザ内に限定し、顧客情報・注文情報・計算結果を外部やGA4へ送らない。
 - 自動テストは台帳041の2 suites・6 tests、全体品質ゲートは構造785 checks、コンテンツ41 tools、Jest 78 suites・401 tests、release 8 tests、lint、portal・dynamic-pricing buildに合格した。PCと375pxでサンプル、入力エラー、結果、比較表、CSV保存状態を確認し、ページ全体の横はみ出しはなかった。
 - ローカル開発環境では既存のAdSenseタグに関する警告が1件出るが、台帳041固有のエラーはない。`status: draft`、`publishAt: null`、`announceOnX: false`を維持し、本番公開・main統合・予約・X告知は行っていない。
+- Draft PR #62を作成し、Vercel Preview deployment `dpl_C9CALWV61kh6iRnKFHumVqVPDWrq`がReady、GitHub Actions `validate`が成功した。Preview上でもPCと375pxでサンプル結果、ページ全体の横はみ出しなし、比較表だけの横スクロール、ブラウザーエラーなしを確認した。ユーザーレビュー前のためDraftと非公開状態を維持する。
 
 ## 2026-07-30（台帳041・042 正式付番・開発開始）
 
