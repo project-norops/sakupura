@@ -8,7 +8,11 @@ beforeEach(() => {
 });
 
 test("keeps the bookmark dialog top reachable in a short mobile viewport", () => {
-  render(<BookmarkButton />);
+  render(
+    <div data-testid="header-stacking-context">
+      <BookmarkButton />
+    </div>,
+  );
 
   fireEvent.click(
     screen.getByRole("button", {
@@ -23,5 +27,9 @@ test("keeps the bookmark dialog top reachable in a short mobile viewport", () =>
   expect(dialog).toHaveClass("overflow-y-auto", "overscroll-contain");
   expect(layout).toHaveClass("items-start", "sm:items-center");
   expect(panel).toHaveClass("max-h-[calc(100dvh-2rem)]", "overflow-y-auto");
+  expect(
+    screen.getByTestId("header-stacking-context").querySelector('[role="dialog"]'),
+  ).toBeNull();
+  expect(dialog.parentElement).toBe(document.body);
   expect(screen.getByRole("button", { name: "閉じる" })).toBeVisible();
 });

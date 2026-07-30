@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { trackAnalyticsEvent } from "./AnalyticsEvents";
 
 function bookmarkInstructions() {
@@ -38,28 +39,9 @@ export function BookmarkButton() {
     }
   };
 
-  return (
-    <>
-      <button
-        type="button"
-        onClick={() => {
-          setCopied(false);
-          setOpen(true);
-          trackAnalyticsEvent("bookmark_prompt_open", {
-            method: "site_header",
-            content_type: "web_page",
-            item_id: window.location.pathname,
-          });
-        }}
-        className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-blue-600 px-3.5 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:px-4"
-        aria-label="このページをブックマークに追加"
-      >
-        <span aria-hidden="true">☆</span>
-        <span className="sm:hidden">保存</span>
-        <span className="hidden sm:inline">このページを保存</span>
-      </button>
-
-      {open ? (
+  const dialog =
+    open && typeof document !== "undefined"
+      ? createPortal(
         <div
           className="fixed inset-0 z-50 overflow-y-auto overscroll-contain bg-slate-950/70 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]"
           role="dialog"
@@ -92,8 +74,33 @@ export function BookmarkButton() {
               </div>
             </div>
           </div>
-        </div>
-      ) : null}
+        </div>,
+        document.body,
+      )
+      : null;
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => {
+          setCopied(false);
+          setOpen(true);
+          trackAnalyticsEvent("bookmark_prompt_open", {
+            method: "site_header",
+            content_type: "web_page",
+            item_id: window.location.pathname,
+          });
+        }}
+        className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-blue-600 px-3.5 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:px-4"
+        aria-label="このページをブックマークに追加"
+      >
+        <span aria-hidden="true">☆</span>
+        <span className="sm:hidden">保存</span>
+        <span className="hidden sm:inline">このページを保存</span>
+      </button>
+
+      {dialog}
     </>
   );
 }
