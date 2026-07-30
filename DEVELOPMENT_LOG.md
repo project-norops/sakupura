@@ -1,5 +1,32 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-07-30（台帳041 Preview承認・予約設定）
+
+- ユーザーのPreview承認と予定公開リストへの追加指示に基づき、台帳041を`status: scheduled`、`publishAt: 2026-08-04T09:00:00+09:00`へ変更した。既存の台帳040までの公開枠と1日2件の上限を維持する。
+- `announceOnX: false`、`announcedAt: null`を維持し、予約公開workflowの手動実行、`published`への変更、X告知は行わない。期限到来後の全品質検査と本番確認が完了するまでは非公開とする。
+
+## 2026-07-30（台帳041 ローカル実装・検証完了）
+
+- 台帳041 `return-cost-calculator`に、販売条件と最大3つの返品シナリオから返品件数、返金額、返品対応費、回収原価、返品後利益、利益減少、返品1件当たり影響を比較する画面とCSV保存を実装した。入力・計算はブラウザ内に限定し、顧客情報・注文情報・計算結果を外部やGA4へ送らない。
+- 自動テストは台帳041の2 suites・6 tests、全体品質ゲートは構造785 checks、コンテンツ41 tools、Jest 78 suites・401 tests、release 8 tests、lint、portal・dynamic-pricing buildに合格した。PCと375pxでサンプル、入力エラー、結果、比較表、CSV保存状態を確認し、ページ全体の横はみ出しはなかった。
+- ローカル開発環境では既存のAdSenseタグに関する警告が1件出るが、台帳041固有のエラーはない。`status: draft`、`publishAt: null`、`announceOnX: false`を維持し、本番公開・main統合・予約・X告知は行っていない。
+- Draft PR #62を作成し、Vercel Preview deployment `dpl_C9CALWV61kh6iRnKFHumVqVPDWrq`がReady、GitHub Actions `validate`が成功した。Preview上でもPCと375pxでサンプル結果、ページ全体の横はみ出しなし、比較表だけの横スクロール、ブラウザーエラーなしを確認した。ユーザーレビュー前のためDraftと非公開状態を維持する。
+
+## 2026-07-30（台帳041・042 正式付番・開発開始）
+
+- ユーザーが次期候補の選択肢Aを承認したため、返品・交換コスト試算を台帳041、ポップアップ出店採算・必要販売数を台帳042として正式付番した。個別仕様と受入条件を`PRODUCT_PLAN.md`、開発順とレビューゲートを`ROADMAP.md`へ記録した。
+- 台帳041は公式ジェネレーターで`packages/return-cost-calculator`と`/tools/return-cost-calculator`を生成し、`status: draft`、`publishAt: null`、`announceOnX: false`、`announcedAt: null`で実装を開始した。
+- この承認はPreview実装までを対象とし、main統合、本番公開、予約公開、X告知、外部API、認証、バックエンド、顧客・注文データ収集を含まない。各Previewへの明示的なユーザーレビュー後に次の判断を行う。
+
+## 2026-07-30（40ツール到達時点の次期候補リサーチ）
+
+- Chief Inboxの依頼に基づき、既存40ツール、台帳031〜040の実装・予約状態、既存の保留案を監査した。承認済み未実装ツールはなく、台帳040まで実装・ユーザーレビュー・main統合・公開予約済みであることを確認した。
+- 次期候補10案を、フリーランス・一人会社2案、店舗・地域サービス2案、CSV以外のEC運営2案、SNS・コンテンツ運用2案、Web制作・専門1案、実験1案の構成で調査し、`PRODUCT_RESEARCH.md`へ評価、根拠、MVP、既存ツールとの重複、リスクを記録した。
+- 上位は、`e`返品・交換コスト試算87点、`f`セット販売・まとめ買い利益比較87点、`c`ポップアップ出店採算・必要販売数86点、`b`案件の入金予定・資金繰りカレンダー83点、`g`コンテンツ再利用プランナー83点。検索ボリューム実数と実RPMは未確認として区別した。
+- Shopify、消費者庁、Etsy、HoneyBook、Stripe、国税庁、Buffer、Fiverr、Squareの公式資料を2026-07-30に確認した。返品の適法性、税務上の売上計上、契約解釈はMVPの判定対象外とし、ブラウザ内の採算・計画・整理支援へ限定する。
+- 旧保留案「予約キャンセル損失・前金効果試算」は重複して再提出していない。1日2件は品質条件を満たした公開の上限であり、未承認案や未完成案で枠を埋めない。
+- この時点では候補固有のユーザー承認前のため、台帳番号付与、`PRODUCT_PLAN.md`への個別仕様追加、ツール実装、ブランチ作成、Preview、本番公開、予約変更、X告知を行っていない。
+
 ## 2026-07-30（台帳029・030 予約公開・本番確認）
 
 - 台帳029 `pwa-manifest-checker`はGitHub Actions run `30413178281`で全品質ゲート、期限到来判定、`published`への変更、本番確認に合格した。release commitは`c044dc43eff78641f6a13e6d0bcd9dee611ea833`、Vercel Production deployment `dpl_CJaavJ6tvvgLgztib8wnhFSXqomA`はReadyで、本番URLはHTTP 200。

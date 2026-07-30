@@ -40,6 +40,7 @@
     "@sakupla/pwa-manifest-checker": "file:../../packages/pwa-manifest-checker",
     "@sakupla/redirect-map-checker": "file:../../packages/redirect-map-checker",
     "@sakupla/reorder-point-calculator": "file:../../packages/reorder-point-calculator",
+    "@sakupla/return-cost-calculator": "file:../../packages/return-cost-calculator",
     "@sakupla/review-reply-builder": "file:../../packages/review-reply-builder",
     "@sakupla/robots-sitemap-checker": "file:../../packages/robots-sitemap-checker",
     "@sakupla/routine-task-loop": "file:../../packages/routine-task-loop",
