@@ -37,6 +37,7 @@
     "@sakupla/made-to-order-profit-calculator": "file:../../packages/made-to-order-profit-calculator",
     "@sakupla/merchant-feed-checker": "file:../../packages/merchant-feed-checker",
     "@sakupla/ogp-card-preview": "file:../../packages/ogp-card-preview",
+    "@sakupla/popup-event-profit-calculator": "file:../../packages/popup-event-profit-calculator",
     "@sakupla/pwa-manifest-checker": "file:../../packages/pwa-manifest-checker",
     "@sakupla/redirect-map-checker": "file:../../packages/redirect-map-checker",
     "@sakupla/reorder-point-calculator": "file:../../packages/reorder-point-calculator",
