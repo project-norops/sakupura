@@ -2353,7 +2353,7 @@
       ]
     },
     "releasePost": "コミッションの料金と受付条件を1枚に整理。無料の「コミッション料金表・受付条件メーカー」で、基本メニュー、追加料金、納期、修正、受付状況からSNS画像・Markdown・印刷用料金表を作れます。登録不要、入力内容は外部へ送信しません。",
-    "status": "scheduled",
+    "status": "published",
     "publishAt": "2026-08-02T09:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
