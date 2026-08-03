@@ -7,25 +7,6 @@ const nextConfig: NextConfig = {
     "@sakupla/social-text-formatter",
     "twitter-text",
   ],
-  async headers() {
-    return [
-      {
-        source: "/:path*",
-        missing: [
-          {
-            type: "host",
-            value: "^(www\\.)?norops\\.jp$",
-          },
-        ],
-        headers: [
-          {
-            key: "X-Robots-Tag",
-            value: "noindex, nofollow",
-          },
-        ],
-      },
-    ];
-  },
 };
 
 export default nextConfig;
