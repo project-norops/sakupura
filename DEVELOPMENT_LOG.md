@@ -9,6 +9,7 @@
 - ユーザーの最終Preview承認後、PR #64をmainへ統合した（merge commit `2158cb27a29a7efcf26b1f2dcdf06e44216ba2da`）。Vercel Production deployment `dpl_EDSeuqq9i6c68WmJLgnfqL8aE62V`はReadyで、本番トップと代表ツールはHTTP 200、予約中の台帳041・042はHTTP 404を維持した。X告知、予約変更、外部API、認証、バックエンド、メール収集は行っていない。
 - Portal修正commit `9ceba63`と最新main統合commit `5274494`をPR #64へ反映した。Vercel Preview deployment `dpl_8pSmRQNMy4cziZjacjp72Y7M9i3T`はReady。375×812pxでモーダルの親が`BODY`、header内包なし、前面要素がモーダル内、上端24px、横はみ出しなし、閉じる操作、ブラウザーエラー0件を確認した。`npm run check`は構造802件、コンテンツ42ツール、Jest 81 suites・408 tests、release 8 tests、lint、portal・dynamic-pricing buildに合格した。
 - コミット`0476958`をDraft PR #64へpushし、Vercel Preview deployment `dpl_8G3qxUQU6F5HXXYFQNrbkQ2FEv19`がReady、対象ページがHTTP 200であることを確認した。ローカル実画面はPCと375×500pxで、モーダル上端、閉じる操作、背景の横はみ出しなしを確認した。`npm run check`は構造768件、コンテンツ40ツール、Jest 77 suites・396 tests、release 8 tests、lint、portal・dynamic-pricing buildに合格した。本番公開・main統合は行っていない。
+
 ## 2026-07-30（台帳041・042 main統合・予約確認）
 
 - Preview承認済みの台帳041をPR #62（merge commit `d8d5c136badec82918390772847ae7b9ee0fee37`）、台帳042をPR #63（merge commit `fc97d142455271d0ee138ee24fd43d97523e6a1c`）から順番にmainへ統合した。競合解消では両台帳、利用場面の改善文言、GA4許可値、既存ツールと正本文書を保持した。
@@ -31,6 +32,7 @@
 - 自動テストは台帳042の2 suites・6 tests、全体品質ゲートは構造785 checks、コンテンツ41 tools、Jest 78 suites・401 tests、release 8 tests、lint、portal・dynamic-pricing buildに合格した。PCと375pxでサンプル、入力エラー、結果、比較表、CSV保存状態を確認し、ページ全体の横はみ出しはなかった。
 - ローカル開発環境では既存のAdSenseタグに関する警告が1件出るが、台帳042固有のエラーはない。`status: draft`、`publishAt: null`、`announceOnX: false`を維持し、本番公開・main統合・予約・X告知は行っていない。
 - Draft PR #63を作成し、Vercel Preview deployment `dpl_GjEpqpma4yS7H6WYnA2r9tCDFuE3`がReadyとなった。Preview上でもPCと375pxでサンプル結果、ページ全体の横はみ出しなし、比較表だけの横スクロール、ブラウザーエラーなしを確認した。ユーザーレビュー前のためDraftと非公開状態を維持する。
+
 ## 2026-07-30（台帳041 Preview承認・予約設定）
 
 - ユーザーのPreview承認と予定公開リストへの追加指示に基づき、台帳041を`status: scheduled`、`publishAt: 2026-08-04T09:00:00+09:00`へ変更した。既存の台帳040までの公開枠と1日2件の上限を維持する。
@@ -1164,3 +1166,22 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - Vercel Production deployment `dpl_H99VCRptyp2tDDxiweoZw4Kr3Nss`はReadyで、`https://www.norops.jp/tools/har-sanitizer`のHTTP 200を確認した。
 - 本番実画面はPCと375px幅で確認した。操作サンプルから5件の機密候補を検出し、初期選択2件の匿名化・残存3件、全選択5件の匿名化・保存導線を確認した。候補未選択時は「匿名化する候補を1件以上選択してください。」で停止し、375pxで横方向のページはみ出しなし、ブラウザーエラーなしだった。
 - `announceOnX: false`、`announcedAt: null`を維持したためX投稿は発生していない。外部API、認証、バックエンド、フォーム・メール収集も追加していない。
+
+# 2026-08-03（AdSense有用性改善・実践ガイド ローカル実装）
+
+- AdSense審査で「有用性の低いコンテンツ」と判定された事実を受け、所有権・広告コードの再実装ではなく、サイト全体の独自編集価値を改善する方針で着手した。
+- 既存42ツールを仕事の流れから選べる実践ガイド4本を追加した。題材は、個人クリエイターの料金決定・受注・納品、小規模ECの利益・送料・在庫・返品、CSV受け渡し品質、SNS・Web公開前確認。各ガイドは具体例、比較、工程、停止条件、適用限界、一次情報リンクを持ち、4本の章順も同一にしていない。
+- `/guides`と`/guides/<slug>`を追加し、トップ、該当カテゴリー、共通ヘッダー・フッター、sitemapから到達できるようにした。関連ツールは既存台帳slugを参照し、第二のツール台帳は作っていない。
+- ガイド選択を`select_content`の`guide`、ガイドからツールを選ぶ操作を`guide_tool`として匿名計測できるようにした。入力内容、検索語、読了位置、個人情報は追加送信しない。
+- 構成802件、既存42ツールのコンテンツ検査、Jest 82 suites・410 tests、release 8 tests、全Lint、portal／dynamic-pricing buildに合格した。4ガイドが異なる章順、各6章、1,800文字超の本文データ、一次情報2件以上、既存tool slug参照を持つことを自動検査した。
+- 本番相当ローカル配信でトップ、ガイド一覧、4ガイド詳細、業務効率化カテゴリー、sitemapがすべてHTTP 200。各HTMLのcanonical、ガイド導線、noindex不在を確認した。公正取引委員会、消費者庁、RFC Editor、OWASP、Google Search Central、W3Cの参照先も取得可能であることを確認した。
+- このセッションでは接続可能な実画面ブラウザーがなかったため、PC・375pxの目視、横はみ出し、外部リンク操作はレビュー残件とした。比較表はページ全体ではなく表コンテナ内だけを横スクロールさせ、主要リンクは44px以上の操作高を持たせている。
+- Wisherが専用ブランチへのcommit・pushとVercel Preview反映を承認した。main統合、Production公開、AdSenseの「問題を修正しました」確認・再審査リクエスト、広告設定、認証、外部API、秘密情報、X投稿は承認対象外として行わない。
+- commit `b4c94d5`を専用ブランチへpushし、Draft PR #67を作成した。初回Vercel Preview deployment `dpl_GJa9FQpQbQ69qPyMN6r8NCWQ5WWC`はReady、GitHub Actionsの`validate`、Vercel、Vercel Preview Commentsはすべて合格した。
+- 認証済みクライアントでの初回Preview実測は全対象経路のHTTP 200とcanonicalを確認したが、認証リダイレクト後だけを見ていたため`X-Robots-Tag`不在と誤認した。未認証の生ヘッダーを再確認すると、Vercel SSOへHTTP 302で認証保護され、`X-Robots-Tag: noindex`も付与済みだった。アプリ側で試した環境変数・host条件の重複防御は認証後レスポンスへ反映されず、Productionへの不要な影響を避けるため除去した。本番`https://www.norops.jp/guides`は現行mainのためHTTP 404で、`X-Robots-Tag`不在を確認した。検証中に実行した全品質検査はいずれも構成802件、コンテンツ42ツール、Jest 82 suites・410 tests、release 8 tests、Lint、portal・dynamic-pricing buildに合格した。
+- WisherのPreviewレビューを反映し、ガイド詳細の関連ツール見出しを、運営側の「この流れで使う無料ツール」から利用者の目的に沿う「この業務のおすすめツール」へ変更した。
+- 追加レビューを受け、ツール利用順を中心にした工程説明を業務全体のガイドへ改めた。4ガイドすべてのworkflowを7段階以上とし、相談・合意・連絡・承認・納品・受領・記録・公開判断・公開後確認など、リンクするツールがない工程にも実施内容と「完了の目安」を追加した。ツール導線は「この工程で使える補助ツール」と明示し、各ガイドにツールなし工程が2件以上あること、全工程の説明と完了条件が一定の情報量を持つことを自動検査へ追加した。
+- 記事タイトルも読者視点へ改め、業務用語の列挙や抽象的な「設計」「発見性」を避けた。「誰のための記事か」または「何を安全に行うか」と、読後に実行できる範囲がタイトルだけで分かる表現へ4本とも変更した。
+- トップページを、サイトの価値説明、目的別カテゴリー、実践ガイド、ツール検索の順へ再構成した。H1とmetadataは実践ガイドと無料Webツールの両方を説明し、ガイドの`ItemList`構造化データ、カテゴリー・ガイド・ツールへのHTML内部リンク、説明本文を維持してSEO上の文脈を保持した。
+- 読み物4本には画一的な装飾画像を置かず、内容に合わせて制作案件のtimeline、ネットショップのrisk-map、CSVのpipeline、Web公開のgatesを追加した。図はHTMLの`figure`、見出し、説明、リストで構成し、スマートフォン表示、文字拡大、読み上げ、検索取得でも情報が欠けないようにした。
+- WisherがDraft PR #67のmain統合とVercel Production反映を明示承認した。承認範囲は本番反映と公開後検証までで、AdSenseの「問題を修正しました」確認と再審査リクエストは本番確認後の別判断として実行しない。

@@ -36,6 +36,15 @@ export function Header({ title }: HeaderProps) {
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <Link
+            href="/guides"
+            data-analytics-event="select_content"
+            data-analytics-content-type="navigation"
+            data-analytics-item-id="header_guides"
+            className="hidden rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950 md:inline-flex"
+          >
+            実践ガイド
+          </Link>
+          <Link
             href="/#tools"
             data-analytics-event="select_content"
             data-analytics-content-type="navigation"

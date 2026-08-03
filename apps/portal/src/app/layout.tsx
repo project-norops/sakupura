@@ -7,17 +7,19 @@ import { siteUrl } from "@/lib/site";
 export const metadata: Metadata = withSocialMetadata({
   metadataBase: new URL(siteUrl),
   title: {
-    default: "サクプラ｜登録不要で使える無料Webツール集",
+    default: "サクプラ｜仕事の進め方がわかる実践ガイド・無料Webツール",
     template: "%s | サクプラ",
   },
   description:
-    "仕事・販売・SNS運用の面倒をすぐに片づける、登録不要の無料Webツール集。スマホ・PCのブラウザからすぐ使えます。",
+    "受注・請求、ネットショップ、CSV、Web公開などの仕事の進め方を、具体的な手順と無料Webツールで支援します。登録不要でスマホ・PCから利用できます。",
   keywords: [
     "無料ツール",
     "Webツール",
     "業務効率化",
     "計算ツール",
     "SNS運用",
+    "仕事の進め方",
+    "実践ガイド",
     "サクプラ",
   ],
   alternates: { canonical: "/" },
@@ -26,14 +28,14 @@ export const metadata: Metadata = withSocialMetadata({
     locale: "ja_JP",
     url: "/",
     siteName: "サクプラ",
-    title: "サクプラ｜登録不要で使える無料Webツール集",
+    title: "サクプラ｜仕事の進め方がわかる実践ガイド・無料Webツール",
     description:
-      "仕事・販売・SNS運用の面倒をすぐに片づける、登録不要の無料Webツール集。",
+      "仕事の進め方を具体的な手順で学び、必要な計算や確認には登録不要の無料Webツールを使えます。",
   },
   twitter: {
     card: "summary_large_image",
-    title: "サクプラ｜登録不要で使える無料Webツール集",
-    description: "面倒な作業を、すぐに片づける。無料の実用Webツール集。",
+    title: "サクプラ｜仕事の進め方がわかる実践ガイド・無料Webツール",
+    description: "仕事の手順を学び、必要な作業をその場で進められます。",
   },
   verification: {
     google: googleServices.siteVerification,
