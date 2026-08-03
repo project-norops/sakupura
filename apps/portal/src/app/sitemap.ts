@@ -1,10 +1,17 @@
 import type { MetadataRoute } from "next";
 import apps from "@/data/apps";
 import { categories } from "@/data/categories";
+import { guides } from "@/data/guides";
 import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPages = ["/about", "/privacy", "/disclaimer", "/categories"];
+  const staticPages = [
+    "/about",
+    "/privacy",
+    "/disclaimer",
+    "/categories",
+    "/guides",
+  ];
 
   return [
     {
@@ -38,6 +45,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
           lastModified: new Date(),
           changeFrequency: "weekly",
           priority: 0.7,
+        }) satisfies MetadataRoute.Sitemap[number],
+    ),
+    ...guides.map(
+      (guide) =>
+        ({
+          url: `${siteUrl}/guides/${guide.slug}`,
+          lastModified: new Date(guide.updatedAt),
+          changeFrequency: "monthly",
+          priority: 0.75,
         }) satisfies MetadataRoute.Sitemap[number],
     ),
   ];

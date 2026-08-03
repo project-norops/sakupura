@@ -12,7 +12,7 @@ export const metadata: Metadata = withSocialMetadata({
   alternates: { canonical: "/categories" },
   openGraph: {
     title: "無料Webツールを目的別に探す | サクプラ",
-    description: "20件の無料Webツールを4つのカテゴリーから選べます。",
+    description: `${apps.length}件の無料Webツールを4つのカテゴリーから選べます。`,
     url: "/categories",
   },
 });
@@ -55,6 +55,12 @@ export default function CategoriesPage() {
       <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
         サクプラの無料Webツールを、作業の目的ごとに整理しています。すべて登録不要で、必要なときにブラウザからすぐ利用できます。
       </p>
+      <Link
+        href="/guides"
+        className="mt-7 inline-flex min-h-12 items-center rounded-full bg-slate-950 px-5 py-3 text-sm font-bold text-white hover:bg-blue-700"
+      >
+        仕事の流れから選べる実践ガイドを見る →
+      </Link>
       <div className="mt-10 grid gap-5 md:grid-cols-2">
         {categories.map((category) => {
           const count = apps.filter(

@@ -2,6 +2,7 @@ import Link from "next/link";
 import apps from "@/data/apps";
 import { ToolDirectory } from "@/components/ToolDirectory";
 import { CategoryNavigation } from "@/components/CategoryNavigation";
+import { guides } from "@/data/guides";
 import { siteUrl } from "@/lib/site";
 
 export default function HomePage() {
@@ -78,6 +79,49 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-b border-slate-200 bg-slate-950 text-white">
+        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-18 lg:px-8">
+          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+            <div>
+              <p className="text-xs font-black tracking-[0.2em] text-blue-300">
+                PRACTICAL GUIDES
+              </p>
+              <h2 className="mt-3 max-w-2xl text-3xl font-black tracking-tight sm:text-4xl">
+                何を使うかより、どう進めるかから選ぶ
+              </h2>
+            </div>
+            <Link
+              href="/guides"
+              className="inline-flex min-h-12 items-center self-start rounded-full border border-white/30 px-5 py-3 text-sm font-bold hover:bg-white hover:text-slate-950 md:self-auto"
+            >
+              すべての実践ガイドを見る →
+            </Link>
+          </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {guides.map((guide) => (
+              <Link
+                key={guide.slug}
+                href={`/guides/${guide.slug}`}
+                data-analytics-event="select_content"
+                data-analytics-content-type="guide"
+                data-analytics-item-id={guide.slug}
+                className="group rounded-3xl border border-white/15 bg-white/5 p-5 transition hover:border-blue-300/70 hover:bg-white/10 sm:p-6"
+              >
+                <p className="text-xs font-black tracking-[0.16em] text-blue-300">
+                  {guide.eyebrow}
+                </p>
+                <h3 className="mt-3 text-xl font-black leading-snug group-hover:text-blue-200">
+                  {guide.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-slate-300">
+                  {guide.description}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section
         id="tools"
         className="scroll-mt-24 mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8"
@@ -115,7 +159,7 @@ export default function HomePage() {
               サクプラは、計算、文章作成、業務整理など、日々の「少し面倒」を短時間で終わらせるためのWebツールを集めたサービスです。
             </p>
             <p>
-              多機能さよりも、迷わず使えることを重視しています。新しいツールも順次追加します。よく使うページは上部の「このページを保存」からブックマークしておくと、次回すぐに開けます。
+              多機能さよりも、迷わず使えることを重視しています。実践ガイドでは複数ツールの選び分け、具体例、確認した一次情報、判断できない範囲まで公開し、利用状況と仕様変更に合わせて内容を見直します。
             </p>
           </div>
         </div>

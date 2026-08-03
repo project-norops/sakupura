@@ -6,23 +6,25 @@
 
 ## 共通イベント
 
-| イベント               | 発火条件                             | 主なパラメータ                      |
-| ---------------------- | ------------------------------------ | ----------------------------------- |
-| `select_content`       | トップや関連欄からツール・一覧を選ぶ | `content_type`, `item_id`           |
-| `search`               | トップ・カテゴリー内で検索する       | `content_type`, `result_count`      |
-| `share`                | X共有または共有URLのコピーを試す     | `method`, `content_type`, `item_id` |
-| `bookmark_prompt_open` | 保存案内を開く                       | `method`, `content_type`, `item_id` |
-| `bookmark_url_copy`    | 保存用URLのコピーに成功              | `method`, `content_type`, `item_id` |
-| `sample_load`          | 操作サンプルを読み込む               | `tool_id`                           |
-| `tool_run`             | ツールの主処理を実行する             | `tool_id`, `platform`               |
-| `tool_result_copy`     | ツールの結果をコピーする             | `tool_id`, `result_type`            |
-| `tool_post_open`       | SNS投稿画面を開く                    | `tool_id`, `platform`               |
-| `premium_interest_open` | 開発検討中の有料候補機能の説明を開く | `tool_id`, `feature_id`, `placement` |
-| `premium_interest_confirm` | 有料候補機能への関心を明示する    | `tool_id`, `feature_id`, `placement` |
+| イベント                   | 発火条件                             | 主なパラメータ                       |
+| -------------------------- | ------------------------------------ | ------------------------------------ |
+| `select_content`           | トップや関連欄からツール・一覧を選ぶ | `content_type`, `item_id`            |
+| `search`                   | トップ・カテゴリー内で検索する       | `content_type`, `result_count`       |
+| `share`                    | X共有または共有URLのコピーを試す     | `method`, `content_type`, `item_id`  |
+| `bookmark_prompt_open`     | 保存案内を開く                       | `method`, `content_type`, `item_id`  |
+| `bookmark_url_copy`        | 保存用URLのコピーに成功              | `method`, `content_type`, `item_id`  |
+| `sample_load`              | 操作サンプルを読み込む               | `tool_id`                            |
+| `tool_run`                 | ツールの主処理を実行する             | `tool_id`, `platform`                |
+| `tool_result_copy`         | ツールの結果をコピーする             | `tool_id`, `result_type`             |
+| `tool_post_open`           | SNS投稿画面を開く                    | `tool_id`, `platform`                |
+| `premium_interest_open`    | 開発検討中の有料候補機能の説明を開く | `tool_id`, `feature_id`, `placement` |
+| `premium_interest_confirm` | 有料候補機能への関心を明示する       | `tool_id`, `feature_id`, `placement` |
 
 `share`と`select_content`はGA4の推奨イベントを利用する。それ以外はサクプラ固有イベントとする。
 
 `select_content`の`content_type`は、カテゴリー選択を`category`、ツール詳細からのカテゴリー遷移を`category_from_tool`、同カテゴリーのツール遷移を`related_tool`として区別する。検索イベントでは検索語を送らず、固定値`tool_directory`と結果件数だけを送る。
+
+実践ガイドの選択は`guide`、ガイド内から関連ツールを選ぶ操作は`guide_tool`として区別する。`item_id`には固定のguide slugまたはtool slugだけを送り、閲覧者の入力、検索語、読了位置は送らない。
 
 `premium_interest_open`は説明ダイアログを開いた弱い関心、`premium_interest_confirm`は利用者が「興味があります」を押した強い関心として区別する。`feature_id`と`placement`は実装前に許可リストへ登録した固定値だけを使う。メールアドレスや自由記述をGA4へ送らない。
 

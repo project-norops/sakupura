@@ -8,6 +8,11 @@ describe("Footer", () => {
   it("keeps policy links and exposes the X feedback profile safely", () => {
     render(<Footer />);
 
+    expect(screen.getByRole("link", { name: "実践ガイド" })).toHaveAttribute(
+      "href",
+      "/guides",
+    );
+
     expect(screen.getByRole("link", { name: "運営者情報" })).toHaveAttribute(
       "href",
       "/about",

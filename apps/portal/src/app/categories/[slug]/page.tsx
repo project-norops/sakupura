@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import apps from "@/data/apps";
 import { categories, getCategoryBySlug } from "@/data/categories";
+import { getGuidesByCategory } from "@/data/guides";
 import { ToolDirectory } from "@/components/ToolDirectory";
 import { withSocialMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/site";
@@ -42,6 +43,7 @@ export default async function CategoryPage({ params }: PageProps) {
   const category = getCategoryBySlug(slug);
   if (!category) notFound();
   const categoryTools = apps.filter((tool) => tool.categoryId === category.id);
+  const categoryGuides = getGuidesByCategory(category.id);
   if (categoryTools.length < 3) notFound();
 
   const structuredData = {
@@ -145,6 +147,35 @@ export default async function CategoryPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+      {categoryGuides.length > 0 ? (
+        <section className="border-b border-slate-200 bg-slate-950 text-white">
+          <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+            <p className="text-xs font-black tracking-[0.2em] text-blue-300">
+              RELATED GUIDES
+            </p>
+            <h2 className="mt-3 text-2xl font-black">
+              このカテゴリーの仕事を、流れから確認する
+            </h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              {categoryGuides.map((guide) => (
+                <Link
+                  key={guide.slug}
+                  href={`/guides/${guide.slug}`}
+                  className="rounded-2xl border border-white/15 bg-white/5 p-5 hover:border-blue-300/70 hover:bg-white/10"
+                >
+                  <h3 className="font-black leading-snug">{guide.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-300">
+                    {guide.decision}
+                  </p>
+                  <span className="mt-4 inline-flex text-sm font-bold text-blue-200">
+                    ガイドを読む →
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
       <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
         <ToolDirectory apps={categoryTools} />
       </section>
