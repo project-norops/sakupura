@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getToolBySlug } from "@/data/apps";
-import { getGuideBySlug, guides, type GuideSection } from "@/data/guides";
+import {
+  getGuideBySlug,
+  guides,
+  type GuideSection,
+  type GuideVisual as GuideVisualDefinition,
+} from "@/data/guides";
 import { withSocialMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/lib/site";
 
@@ -57,6 +62,153 @@ function ToolLinks({ slugs }: { slugs: string[] }) {
         })}
       </div>
     </div>
+  );
+}
+
+function GuideVisual({ visual }: { visual: GuideVisualDefinition }) {
+  if (visual.kind === "timeline") {
+    return (
+      <figure className="mt-10 rounded-[2rem] bg-slate-950 p-6 text-white sm:p-8">
+        <figcaption>
+          <h2 className="text-2xl font-black">{visual.title}</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
+            {visual.description}
+          </p>
+        </figcaption>
+        <ol className="mt-7 grid gap-3 sm:grid-cols-4">
+          {visual.items.map((item, index) => (
+            <li
+              key={item.label}
+              className="relative rounded-2xl border border-white/15 bg-white/5 p-4"
+            >
+              <span className="text-xs font-black text-blue-300">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3 className="mt-2 font-black">{item.label}</h3>
+              <p className="mt-2 text-xs leading-6 text-slate-300">
+                {item.detail}
+              </p>
+              {index < visual.items.length - 1 && (
+                <span
+                  aria-hidden="true"
+                  className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 text-blue-300 sm:block"
+                >
+                  →
+                </span>
+              )}
+            </li>
+          ))}
+        </ol>
+      </figure>
+    );
+  }
+
+  if (visual.kind === "risk-map") {
+    return (
+      <figure className="mt-10 rounded-[2rem] border border-amber-200 bg-amber-50 p-6 sm:p-8">
+        <figcaption>
+          <h2 className="text-2xl font-black text-slate-950">{visual.title}</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-700">
+            {visual.description}
+          </p>
+        </figcaption>
+        <div className="mt-7 grid gap-4 sm:grid-cols-2">
+          {visual.items.map((item) => (
+            <section
+              key={item.label}
+              className="rounded-2xl border border-amber-200 bg-white p-5"
+            >
+              <h3 className="inline-flex rounded-full bg-amber-100 px-3 py-1 text-sm font-black text-amber-900">
+                {item.label}
+              </h3>
+              <p className="mt-4 font-bold leading-7 text-slate-950">
+                {item.question}
+              </p>
+              <p className="mt-3 border-l-4 border-amber-400 pl-3 text-sm leading-6 text-slate-600">
+                {item.action}
+              </p>
+            </section>
+          ))}
+        </div>
+      </figure>
+    );
+  }
+
+  if (visual.kind === "pipeline") {
+    return (
+      <figure className="mt-10 rounded-[2rem] border border-sky-200 bg-sky-50 p-6 sm:p-8">
+        <figcaption>
+          <h2 className="text-2xl font-black text-slate-950">{visual.title}</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-700">
+            {visual.description}
+          </p>
+        </figcaption>
+        <ol className="mt-7 space-y-3">
+          {visual.items.map((item, index) => (
+            <li key={item.label} className="flex gap-4">
+              <div className="flex w-8 shrink-0 flex-col items-center">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-sky-700 text-xs font-black text-white">
+                  {index + 1}
+                </span>
+                {index < visual.items.length - 1 && (
+                  <span aria-hidden="true" className="h-full w-px bg-sky-300" />
+                )}
+              </div>
+              <div className="mb-2 flex-1 rounded-2xl bg-white p-4 shadow-sm sm:flex sm:items-center sm:justify-between sm:gap-5">
+                <div>
+                  <h3 className="font-black text-slate-950">{item.label}</h3>
+                  <p className="mt-1 text-sm leading-6 text-slate-600">
+                    {item.detail}
+                  </p>
+                </div>
+                <p className="mt-3 shrink-0 rounded-full bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-800 sm:mt-0">
+                  次へ：{item.gate}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </figure>
+    );
+  }
+
+  return (
+    <figure className="mt-10 rounded-[2rem] border border-violet-200 bg-violet-50 p-6 sm:p-8">
+      <figcaption>
+        <h2 className="text-2xl font-black text-slate-950">{visual.title}</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-700">
+          {visual.description}
+        </p>
+      </figcaption>
+      <div className="mt-7 grid gap-4 sm:grid-cols-2">
+        {visual.items.map((item, index) => (
+          <section
+            key={item.label}
+            className="rounded-2xl border border-violet-200 bg-white p-5"
+          >
+            <p className="text-xs font-black text-violet-700">
+              GATE {index + 1}
+            </p>
+            <h3 className="mt-2 text-lg font-black text-slate-950">
+              {item.label}
+            </h3>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              {item.detail}
+            </p>
+            <ul className="mt-4 space-y-2 text-sm text-slate-700">
+              {item.checks.map((check) => (
+                <li key={check} className="flex gap-2">
+                  <span aria-hidden="true" className="font-black text-violet-600">
+                    ✓
+                  </span>
+                  <span>{check}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+    </figure>
   );
 }
 
@@ -287,6 +439,8 @@ export default async function GuidePage({ params }: PageProps) {
             最終更新 {guide.updatedAt} ・ 読了目安 約{guide.readingMinutes}分
           </p>
         </header>
+
+        <GuideVisual visual={guide.visual} />
 
         <div className="mt-12 space-y-12">
           {guide.sections.map((section) => (

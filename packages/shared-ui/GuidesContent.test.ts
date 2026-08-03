@@ -19,8 +19,16 @@ describe("practical guides", () => {
       guide.sections.map((section) => section.kind).join("/"),
     );
     expect(new Set(sectionOrders).size).toBe(guides.length);
+    expect(new Set(guides.map((guide) => guide.visual.kind)).size).toBe(
+      guides.length,
+    );
 
     for (const guide of guides) {
+      expect(guide.title.length).toBeLessThanOrEqual(40);
+      expect(guide.title).toContain("ため");
+      expect(guide.title).not.toMatch(/一本につなぐ|設計する|発見性|小規模EC/);
+      expect(guide.visual.items.length).toBeGreaterThanOrEqual(4);
+      expect(guide.visual.description.length).toBeGreaterThanOrEqual(30);
       expect(JSON.stringify(guide.sections).length).toBeGreaterThan(1800);
       expect(guide.sections).toHaveLength(6);
       expect(guide.sources.length).toBeGreaterThanOrEqual(2);

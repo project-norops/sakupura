@@ -40,6 +40,32 @@ export type GuideSection =
       paragraphs: string[];
     };
 
+export type GuideVisual =
+  | {
+      kind: "timeline";
+      title: string;
+      description: string;
+      items: { label: string; detail: string }[];
+    }
+  | {
+      kind: "risk-map";
+      title: string;
+      description: string;
+      items: { label: string; question: string; action: string }[];
+    }
+  | {
+      kind: "pipeline";
+      title: string;
+      description: string;
+      items: { label: string; detail: string; gate: string }[];
+    }
+  | {
+      kind: "gates";
+      title: string;
+      description: string;
+      items: { label: string; detail: string; checks: string[] }[];
+    };
+
 export type GuideDefinition = {
   slug: string;
   eyebrow: string;
@@ -51,6 +77,7 @@ export type GuideDefinition = {
   readingMinutes: number;
   categoryIds: string[];
   toolSlugs: string[];
+  visual: GuideVisual;
   sections: GuideSection[];
   sources: { title: string; publisher: string; url: string; note: string }[];
 };
@@ -59,7 +86,7 @@ export const guides: GuideDefinition[] = [
   {
     slug: "creator-commission-workflow",
     eyebrow: "CREATOR BUSINESS",
-    title: "個人クリエイターの料金決定・受注・納品を一本につなぐ",
+    title: "個人クリエイターのための、依頼受付から納品・入金までの進め方",
     description:
       "コミッションや制作案件で、料金表を作る前から納品後までに何を決め、どの記録を残すかを具体例で整理します。単発の計算ではなく、条件の聞き漏らしと採算崩れを同時に減らすための実務ガイドです。",
     audience:
@@ -75,6 +102,18 @@ export const guides: GuideDefinition[] = [
       "freelance-capacity-planner",
       "invoice-pdf-generator",
     ],
+    visual: {
+      kind: "timeline",
+      title: "依頼を仕事として完了するまでの全体像",
+      description:
+        "制作だけでなく、相談前後の確認と納品後の入金までを一つの流れとして管理します。",
+      items: [
+        { label: "相談", detail: "用途・期限・納品物・利用範囲を聞く" },
+        { label: "合意", detail: "金額・修正・支払条件を文章でそろえる" },
+        { label: "制作", detail: "途中確認と変更内容を一か所に残す" },
+        { label: "完了", detail: "受領・請求・入金・記録保管まで確認する" },
+      ],
+    },
     sections: [
       {
         kind: "context",
@@ -232,7 +271,7 @@ export const guides: GuideDefinition[] = [
   {
     slug: "small-commerce-profit-check",
     eyebrow: "SMALL COMMERCE",
-    title: "小規模ECの利益・送料・在庫・返品を発売前に点検する",
+    title: "小さなネットショップのための、赤字・在庫切れ・返品を防ぐ確認手順",
     description:
       "売価だけでは見えない送料、決済費、返品、在庫切れの影響を、ひとつの発売判断へまとめるガイドです。数字を精密に見せることより、仮定と未確認事項を分けることを重視します。",
     audience:
@@ -248,6 +287,34 @@ export const guides: GuideDefinition[] = [
       "reorder-point-calculator",
       "merchant-feed-checker",
     ],
+    visual: {
+      kind: "risk-map",
+      title: "発売前に見る4つのリスク",
+      description:
+        "一つでも答えられない項目があれば、販売数量を増やす前に条件を確認します。",
+      items: [
+        {
+          label: "利益",
+          question: "送料や手数料を引いて、1注文でいくら残るか",
+          action: "通常・送料無料・値引きの条件を分けて計算する",
+        },
+        {
+          label: "表示",
+          question: "支払総額、配送時期、返品条件が購入前に見えるか",
+          action: "購入者が迷う情報を先に掲載する",
+        },
+        {
+          label: "在庫",
+          question: "欠品と売れ残りの両方へ対応できる数量か",
+          action: "初回は小さく始め、追加発注の基準を決める",
+        },
+        {
+          label: "運用",
+          question: "注文、発送、問い合わせを無理なく処理できるか",
+          action: "テスト注文を行い、対応記録の場所を決める",
+        },
+      ],
+    },
     sections: [
       {
         kind: "context",
@@ -408,7 +475,7 @@ export const guides: GuideDefinition[] = [
   {
     slug: "csv-handoff-quality",
     eyebrow: "DATA HANDOFF",
-    title: "CSV受け渡し前の品質確認を、直す順番から設計する",
+    title: "CSVを安全に受け渡すための、確認・修正・引き渡し手順",
     description:
       "文字化け、列ずれ、重複、欠損、結合ミスを一度に直そうとせず、元データを残したまま安全な順序で確認するガイドです。CSVの一般形式と業務固有ルールを混同しない方法を示します。",
     audience:
@@ -425,6 +492,39 @@ export const guides: GuideDefinition[] = [
       "csv-duplicate-cleaner",
       "csv-joiner",
     ],
+    visual: {
+      kind: "pipeline",
+      title: "安全なCSV受け渡しの順番",
+      description:
+        "後から元へ戻れる状態を保ち、形式を直してからデータの意味を確認します。",
+      items: [
+        {
+          label: "仕様確認",
+          detail: "取込先の列・形式・締切を入手",
+          gate: "相手と前提が一致",
+        },
+        {
+          label: "原本保全",
+          detail: "受領ファイルを上書きせず保管",
+          gate: "いつでも復元可能",
+        },
+        {
+          label: "形式修正",
+          detail: "文字化け・列名・列順を整える",
+          gate: "複数行を目視確認",
+        },
+        {
+          label: "品質確認",
+          detail: "必須値・重複・件数差を確認",
+          gate: "保留理由を記録",
+        },
+        {
+          label: "少量取込",
+          detail: "テスト後に完成版と履歴を渡す",
+          gate: "受領確認を取得",
+        },
+      ],
+    },
     sections: [
       {
         kind: "example",
@@ -588,7 +688,7 @@ export const guides: GuideDefinition[] = [
   {
     slug: "web-publish-preflight",
     eyebrow: "WEB PUBLISHING",
-    title: "SNS・Web公開前の制作チェックを、見た目と発見性に分ける",
+    title: "Webページを安心して公開するための、公開前・公開後チェック",
     description:
       "LPや告知ページを公開するときに、画像、配色、OGP、robots、sitemapを混ぜずに確認する順序を示します。公開できることと、検索・共有で正しく伝わることを別々に検証します。",
     audience:
@@ -605,6 +705,34 @@ export const guides: GuideDefinition[] = [
       "ogp-card-preview",
       "robots-sitemap-checker",
     ],
+    visual: {
+      kind: "gates",
+      title: "公開判断を4つの確認ゲートに分ける",
+      description:
+        "見た目が整っていても、内容や公開設定に問題があれば次のゲートへ進みません。",
+      items: [
+        {
+          label: "内容",
+          detail: "事実・権利・連絡先を確認",
+          checks: ["元資料と一致", "掲載許可あり"],
+        },
+        {
+          label: "操作",
+          detail: "PC・スマホ・キーボードで確認",
+          checks: ["読める", "最後まで操作できる"],
+        },
+        {
+          label: "共有・検索",
+          detail: "OGP・canonical・robotsを確認",
+          checks: ["URLが正しい", "公開方針と一致"],
+        },
+        {
+          label: "公開後",
+          detail: "本番再確認と監視担当を決定",
+          checks: ["戻し方がある", "次回確認日あり"],
+        },
+      ],
+    },
     sections: [
       {
         kind: "context",
