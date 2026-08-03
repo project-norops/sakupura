@@ -2165,7 +2165,7 @@
       ]
     },
     "releasePost": "納品前のファイル不足や形式違いをチェック。無料の「制作物納品チェック・ファイル構成確認」で、拡張子・画像寸法・命名・必要ファイルを端末内だけで照合し、指摘一覧をコピー・CSV保存できます。登録不要、ファイルは外部へ送信しません。",
-    "status": "scheduled",
+    "status": "published",
     "publishAt": "2026-08-03T15:00:00+09:00",
     "announceOnX": false,
     "announcedAt": null
