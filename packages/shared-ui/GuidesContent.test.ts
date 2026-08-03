@@ -29,6 +29,28 @@ describe("practical guides", () => {
       ).toBe(true);
       expect(guide.toolSlugs.length).toBeGreaterThanOrEqual(4);
       expect(guide.toolSlugs.every((slug) => toolSlugs.has(slug))).toBe(true);
+
+      const workflow = guide.sections.find(
+        (section) => section.kind === "workflow",
+      );
+      expect(workflow?.kind).toBe("workflow");
+      if (workflow?.kind === "workflow") {
+        expect(workflow.steps.length).toBeGreaterThanOrEqual(7);
+        expect(
+          workflow.steps.every(
+            (step) =>
+              step.detail.length >= 45 && step.doneWhen.length >= 30,
+          ),
+        ).toBe(true);
+        expect(
+          workflow.steps.filter((step) => step.toolSlugs.length === 0).length,
+        ).toBeGreaterThanOrEqual(2);
+        expect(
+          workflow.steps
+            .flatMap((step) => step.toolSlugs)
+            .every((slug) => toolSlugs.has(slug)),
+        ).toBe(true);
+      }
     }
   });
 });

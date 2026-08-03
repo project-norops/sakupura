@@ -35,22 +35,27 @@ export async function generateMetadata({
 function ToolLinks({ slugs }: { slugs: string[] }) {
   if (slugs.length === 0) return null;
   return (
-    <div className="mt-4 flex flex-wrap gap-2">
-      {slugs.map((slug) => {
-        const tool = getToolBySlug(slug);
-        return (
-          <Link
-            key={slug}
-            href={tool.href}
-            data-analytics-event="select_content"
-            data-analytics-content-type="guide_tool"
-            data-analytics-item-id={slug}
-            className="inline-flex min-h-11 items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-bold text-blue-800 hover:border-blue-300 hover:bg-blue-100"
-          >
-            {tool.title} →
-          </Link>
-        );
-      })}
+    <div className="mt-4">
+      <p className="text-xs font-bold text-slate-500">
+        この工程で使える補助ツール
+      </p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {slugs.map((slug) => {
+          const tool = getToolBySlug(slug);
+          return (
+            <Link
+              key={slug}
+              href={tool.href}
+              data-analytics-event="select_content"
+              data-analytics-content-type="guide_tool"
+              data-analytics-item-id={slug}
+              className="inline-flex min-h-11 items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-bold text-blue-800 hover:border-blue-300 hover:bg-blue-100"
+            >
+              {tool.title} →
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -97,6 +102,10 @@ function GuideContent({ section }: { section: GuideSection }) {
               </h3>
               <p className="mt-3 text-sm leading-7 text-slate-600">
                 {step.detail}
+              </p>
+              <p className="mt-4 rounded-2xl bg-slate-100 px-4 py-3 text-sm leading-6 text-slate-700">
+                <span className="font-black text-slate-950">完了の目安：</span>
+                {step.doneWhen}
               </p>
               <ToolLinks slugs={step.toolSlugs} />
             </li>

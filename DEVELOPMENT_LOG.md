@@ -1180,3 +1180,4 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - commit `b4c94d5`を専用ブランチへpushし、Draft PR #67を作成した。初回Vercel Preview deployment `dpl_GJa9FQpQbQ69qPyMN6r8NCWQ5WWC`はReady、GitHub Actionsの`validate`、Vercel、Vercel Preview Commentsはすべて合格した。
 - 認証済みクライアントでの初回Preview実測は全対象経路のHTTP 200とcanonicalを確認したが、認証リダイレクト後だけを見ていたため`X-Robots-Tag`不在と誤認した。未認証の生ヘッダーを再確認すると、Vercel SSOへHTTP 302で認証保護され、`X-Robots-Tag: noindex`も付与済みだった。アプリ側で試した環境変数・host条件の重複防御は認証後レスポンスへ反映されず、Productionへの不要な影響を避けるため除去した。本番`https://www.norops.jp/guides`は現行mainのためHTTP 404で、`X-Robots-Tag`不在を確認した。検証中に実行した全品質検査はいずれも構成802件、コンテンツ42ツール、Jest 82 suites・410 tests、release 8 tests、Lint、portal・dynamic-pricing buildに合格した。
 - WisherのPreviewレビューを反映し、ガイド詳細の関連ツール見出しを、運営側の「この流れで使う無料ツール」から利用者の目的に沿う「この業務のおすすめツール」へ変更した。
+- 追加レビューを受け、ツール利用順を中心にした工程説明を業務全体のガイドへ改めた。4ガイドすべてのworkflowを7段階以上とし、相談・合意・連絡・承認・納品・受領・記録・公開判断・公開後確認など、リンクするツールがない工程にも実施内容と「完了の目安」を追加した。ツール導線は「この工程で使える補助ツール」と明示し、各ガイドにツールなし工程が2件以上あること、全工程の説明と完了条件が一定の情報量を持つことを自動検査へ追加した。
