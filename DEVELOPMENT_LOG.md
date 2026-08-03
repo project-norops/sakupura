@@ -1178,4 +1178,4 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - このセッションでは接続可能な実画面ブラウザーがなかったため、PC・375pxの目視、横はみ出し、外部リンク操作はレビュー残件とした。比較表はページ全体ではなく表コンテナ内だけを横スクロールさせ、主要リンクは44px以上の操作高を持たせている。
 - Wisherが専用ブランチへのcommit・pushとVercel Preview反映を承認した。main統合、Production公開、AdSenseの「問題を修正しました」確認・再審査リクエスト、広告設定、認証、外部API、秘密情報、X投稿は承認対象外として行わない。
 - commit `b4c94d5`を専用ブランチへpushし、Draft PR #67を作成した。初回Vercel Preview deployment `dpl_GJa9FQpQbQ69qPyMN6r8NCWQ5WWC`はReady、GitHub Actionsの`validate`、Vercel、Vercel Preview Commentsはすべて合格した。
-- 初回Preview実測で全対象経路のHTTP 200とcanonicalを確認した一方、`X-Robots-Tag`不在を検出した。承認済みのnoindex付きPreview条件へ合わせ、`VERCEL_ENV=preview`のときだけ全経路へ`X-Robots-Tag: noindex, nofollow`を付ける修正を追加した。Production環境には適用しない。修正後の全品質検査は構成802件、コンテンツ42ツール、Jest 82 suites・410 tests、release 8 tests、Lint、portal・dynamic-pricing buildに合格した。
+- 初回Preview実測で全対象経路のHTTP 200とcanonicalを確認した一方、`X-Robots-Tag`不在を検出した。最初の`VERCEL_ENV=preview`条件はVercel buildで環境変数が公開されず適用されなかったため、環境変数依存を廃止した。正規本番host `norops.jp`／`www.norops.jp`以外へ`X-Robots-Tag: noindex, nofollow`を付ける構成に変更し、Previewとローカルを検索除外しつつProduction hostを除外する。修正後の全品質検査は構成802件、コンテンツ42ツール、Jest 82 suites・410 tests、release 8 tests、Lint、portal・dynamic-pricing buildに合格した。

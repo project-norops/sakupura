@@ -8,13 +8,15 @@ const nextConfig: NextConfig = {
     "twitter-text",
   ],
   async headers() {
-    if (process.env.VERCEL_ENV !== "preview") {
-      return [];
-    }
-
     return [
       {
         source: "/:path*",
+        missing: [
+          {
+            type: "host",
+            value: "^(www\\.)?norops\\.jp$",
+          },
+        ],
         headers: [
           {
             key: "X-Robots-Tag",
