@@ -1179,3 +1179,4 @@ Text: "👨‍💼👩‍💻" (ZWJ combining emoji)
 - Wisherが専用ブランチへのcommit・pushとVercel Preview反映を承認した。main統合、Production公開、AdSenseの「問題を修正しました」確認・再審査リクエスト、広告設定、認証、外部API、秘密情報、X投稿は承認対象外として行わない。
 - commit `b4c94d5`を専用ブランチへpushし、Draft PR #67を作成した。初回Vercel Preview deployment `dpl_GJa9FQpQbQ69qPyMN6r8NCWQ5WWC`はReady、GitHub Actionsの`validate`、Vercel、Vercel Preview Commentsはすべて合格した。
 - 認証済みクライアントでの初回Preview実測は全対象経路のHTTP 200とcanonicalを確認したが、認証リダイレクト後だけを見ていたため`X-Robots-Tag`不在と誤認した。未認証の生ヘッダーを再確認すると、Vercel SSOへHTTP 302で認証保護され、`X-Robots-Tag: noindex`も付与済みだった。アプリ側で試した環境変数・host条件の重複防御は認証後レスポンスへ反映されず、Productionへの不要な影響を避けるため除去した。本番`https://www.norops.jp/guides`は現行mainのためHTTP 404で、`X-Robots-Tag`不在を確認した。検証中に実行した全品質検査はいずれも構成802件、コンテンツ42ツール、Jest 82 suites・410 tests、release 8 tests、Lint、portal・dynamic-pricing buildに合格した。
+- WisherのPreviewレビューを反映し、ガイド詳細の関連ツール見出しを、運営側の「この流れで使う無料ツール」から利用者の目的に沿う「この業務のおすすめツール」へ変更した。

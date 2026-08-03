@@ -290,7 +290,7 @@ export default async function GuidePage({ params }: PageProps) {
 
         <section className="mt-12 border-t border-slate-200 pt-10">
           <h2 className="text-2xl font-black text-slate-950">
-            この流れで使う無料ツール
+            この業務のおすすめツール
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {tools.map((tool) => (
