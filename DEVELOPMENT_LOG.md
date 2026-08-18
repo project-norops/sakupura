@@ -1,5 +1,11 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-08-19（検索意図改善3ページ・本番反映完了）
+
+- WisherのPreviewレビュー後の本番反映承認に基づき、PR #68をmerge commit `559b57f929df7532733f9a66690cfecccd0ee764`でmainへ統合した。main向けGitHub Actions `validate`は成功し、Vercel Production deployment `9fA2KExtL3gr6RV3VccMo5sfeEx5`はReadyとなった。
+- 本番`https://www.norops.jp`の対象3ページをPC 1280pxと375×812pxで確認した。新しいtitle、description、canonical、H1、例カード、関連3リンクが表示され、375pxでは3ページとも`innerWidth: 375`、`scrollWidth: 360`で横方向のページはみ出しはなかった。既知のAdSense警告以外のコンソールエラーはなかった。
+- Search Console・AdSenseの設定変更や再審査操作、X告知、新規ツール開発・公開は行っていない。3ページ合算の基準値31表示・1クリックに対し、14日中間、28日確定で60表示・3クリックを目標に観測する。
+
 ## 2026-08-19（検索意図改善3ページ・Draft PR／Preview確認）
 
 - WisherのPreview作成承認に基づき、専用ブランチ`codex/search-intent-experiment`の8ファイルをcommit `74d0f9e`としてpushし、Draft PR #68を作成した。Vercel Preview deployment `38GNXRuioSxa6foadzLWrjPNUeRE`はReady、GitHub Actions `validate`、Vercel、Vercel Preview Commentsはすべて合格した。
