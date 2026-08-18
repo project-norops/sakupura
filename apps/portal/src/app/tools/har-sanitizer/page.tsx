@@ -10,21 +10,21 @@ import { siteUrl } from "@/lib/site";
 const tool = getToolBySlug("har-sanitizer");
 
 export const metadata: Metadata = withSocialMetadata({
-  title: "HAR機密情報チェック・匿名化",
+  title: "HARファイル匿名化ツール｜Cookie・トークンを共有前チェック",
   description:
-    "HARファイル内のCookie、認証ヘッダー、トークンや個人情報の候補を確認し、匿名化したHARをブラウザ内で作成します。",
+    "HARファイルを共有する前にCookie、Authorization、トークンなどの機密候補を検出し、ブラウザ内で匿名化したHARを無料作成します。",
   alternates: { canonical: "/tools/har-sanitizer" },
   openGraph: {
-    title: "HAR機密情報チェック・匿名化",
+    title: "HARファイル匿名化ツール",
     description:
-      "HARファイル内のCookie、認証ヘッダー、トークンや個人情報の候補を確認し、匿名化したHARをブラウザ内で作成します。",
+      "問い合わせ先へ共有する前に、HAR内のCookieやトークンを検出・匿名化します。",
     url: "/tools/har-sanitizer",
   },
   twitter: {
     card: "summary_large_image",
-    title: "HAR機密情報チェック・匿名化",
+    title: "HARファイル匿名化ツール",
     description:
-      "HARファイル内のCookie、認証ヘッダー、トークンや個人情報の候補を確認し、匿名化したHARをブラウザ内で作成します。",
+      "HAR共有前にCookieやトークンを検出し、ブラウザ内で匿名化します。",
   },
 });
 

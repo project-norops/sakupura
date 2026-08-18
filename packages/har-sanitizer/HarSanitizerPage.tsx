@@ -163,11 +163,17 @@ export function HarSanitizerPage() {
           Web制作・改善
         </p>
         <h1 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-          HAR機密情報チェック・匿名化
+          HARファイル匿名化ツール
         </h1>
         <p className="mt-4 leading-7 text-slate-600">
-          問い合わせや外部ベンダーへHARを渡す前に、Cookie、認証ヘッダー、トークン、本文キーなどの機密候補を見つけ、選んだ値を匿名化したHARを作れます。ファイルは外部へ送らず、このブラウザ内だけで処理します。
+          問い合わせや外部ベンダーへHARファイルを共有する前に、Cookie、Authorization、トークン、本文キーなどの機密候補を見つけ、選んだ値を匿名化できます。ファイルは外部へ送らず、このブラウザ内だけで処理します。
         </p>
+        <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700">
+          <p className="font-black text-slate-950">匿名化前 → 匿名化後</p>
+          <p className="mt-1">
+            Authorization、Cookie、access_tokenなどを場所別に検出し、選択した値を[REDACTED]へ置換します。変更監査表と残存候補を確認してからHARを保存できます。
+          </p>
+        </div>
 
         <section
           aria-labelledby="quick-steps"

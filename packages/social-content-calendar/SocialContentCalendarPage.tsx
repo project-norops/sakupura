@@ -147,11 +147,17 @@ export function SocialContentCalendarPage() {
           SNS運用の計画
         </p>
         <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-          SNSコンテンツカレンダー
+          SNS投稿カレンダー作成ツール
         </h1>
         <p className="mt-4 max-w-4xl leading-7 text-slate-600">
-          1週間や1か月の投稿予定を、投稿日・媒体・テーマ・目的・素材状態・CTAで整理します。投稿漏れ、素材の準備遅れ、特定媒体への偏りを見つけ、CSVまたはカレンダー用ICSで保存できます。SNSへの自動投稿や外部送信は行いません。
+          XやInstagramなどの1週間・1か月の投稿予定を、投稿日・テーマ・目的・素材状態・CTAで整理します。無料の計画表として使い、CSVまたはカレンダー用ICSで保存できます。SNSへの自動投稿や外部送信は行いません。
         </p>
+        <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700">
+          <p className="font-black text-slate-950">入力例 → 出力例</p>
+          <p className="mt-1">
+            「8月3日・X・夏限定ドリンク・来店促進・店頭で注文」を登録すると、未準備の投稿件数と媒体別件数を確認でき、同じ予定をCSV・ICSへ保存できます。
+          </p>
+        </div>
         <section
           aria-label="かんたん操作手順"
           className="mt-6 grid gap-3 rounded-2xl border border-blue-100 bg-blue-50 p-4 sm:grid-cols-3 sm:p-5"
