@@ -1,5 +1,11 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-08-19（検索意図改善3ページ・Draft PR／Preview確認）
+
+- WisherのPreview作成承認に基づき、専用ブランチ`codex/search-intent-experiment`の8ファイルをcommit `74d0f9e`としてpushし、Draft PR #68を作成した。Vercel Preview deployment `38GNXRuioSxa6foadzLWrjPNUeRE`はReady、GitHub Actions `validate`、Vercel、Vercel Preview Commentsはすべて合格した。
+- Preview `https://100apps-portal-git-codex-search-intent-experiment-norops.vercel.app`で対象3ページをPC 1280pxと375×812pxで確認した。新しいtitle、canonical、H1、例カード、関連3リンクが表示され、375pxでは各ページとも`innerWidth: 375`、`scrollWidth: 360`で横方向のページはみ出しはなかった。既知のAdSense警告以外のコンソールエラーはなかった。
+- PR・Preview作成までを承認範囲とし、main統合、Production公開、Search Console操作、AdSense操作、X告知は行っていない。本番反映はPreviewのユーザーレビューと別の明示承認後に判断する。
+
 ## 2026-08-18（検索意図改善3ページ・ローカル実装）
 
 - Search Consoleの直近28日観測で、`lp-structure-builder`は11表示・0クリック・平均22.4位、`social-content-calendar`は14表示・0クリック・平均54.6位、`har-sanitizer`は6表示・1クリック・平均20.2位だったため、既存3ページの検索意図と訴求を一度改善する実験を開始した。3ページ合算の基準値は31表示・1クリック、次の28日目標は60表示・3クリック、14日を中間確認とする。
