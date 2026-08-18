@@ -43,11 +43,17 @@ export function LpStructureBuilderPage() {
           Web制作
         </p>
         <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-          LP構成案作成ツール
+          Notionで使えるLP構成案作成ツール
         </h1>
         <p className="mt-4 max-w-3xl leading-7 text-slate-600">
-          LPで「何を・どの順番で伝えるか」を整理するツールです。サービス、商品、イベントに合う構成を選び、Notionや企画書へ貼り付けられる構成メモを作れます。
+          サービス、商品、イベントのLPで「何を・どの順番で伝えるか」を整理し、Notionや企画書へ貼り付けられるMarkdownを無料で作れます。
         </p>
+        <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700">
+          <p className="font-black text-slate-950">入力例 → 出力例</p>
+          <p className="mt-1">
+            「オンライン英会話」「忙しい会社員」を入力すると、ファーストビュー、悩み、特徴、FAQ、申込み導線の順番と、Notion用の本文・素材チェック項目を生成します。
+          </p>
+        </div>
         <div className="mt-5 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm leading-6 text-blue-950">
           <strong>AI・外部送信なし。</strong>{" "}
           テンプレートをブラウザ内で組み立てます。成果を保証するものではないため、商材と読者に合わせて内容を調整してください。

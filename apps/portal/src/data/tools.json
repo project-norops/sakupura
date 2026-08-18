@@ -242,16 +242,21 @@
   {
     "id": "005-lp-structure-builder",
     "slug": "lp-structure-builder",
-    "title": "LP構成案作成ツール",
-    "description": "LPで伝える内容と順番を整理し、企画書用MarkdownやNotion向け制作チェックリストを作成します。",
+    "title": "Notionで使えるLP構成案作成ツール",
+    "description": "サービス・商品・イベント用のLP構成を整理し、Notionに貼れるMarkdownと制作チェックリストを無料で作成します。",
     "href": "/tools/lp-structure-builder",
     "badge": "Web制作",
     "categoryId": "web-design",
     "categoryName": "Web制作・改善",
     "packageName": "@sakupla/lp-structure-builder",
     "componentName": "LpStructureBuilderPage",
+    "relatedSlugs": [
+      "utm-link-builder",
+      "ogp-card-preview",
+      "contrast-color-fixer"
+    ],
     "content": {
-      "summary": "LP構成案作成ツールは、ランディングページで何をどの順番で伝えるかを整理する無料ツールです。サービス・SaaS、商品販売・EC、イベント・セミナーに合う基本構成を呼び出し、セクションの順番、見出し、役割を編集できます。完成した構成は企画書用Markdown、または見出し・本文・素材の作業を確認できるNotion向けチェックリストとしてコピーできます。ライターやデザイナーへの制作依頼にも利用できます。",
+      "summary": "Notionで使えるLP構成案作成ツールは、ランディングページで何をどの順番で伝えるかを整理する無料テンプレートです。サービス・SaaS、商品販売・EC、イベント・セミナーに合う基本構成を呼び出し、セクションの順番、見出し、役割を編集できます。完成した構成は企画書用Markdown、または見出し・本文・素材の作業を確認できるNotion向けチェックリストとしてコピーできます。Notion APIへの自動連携ではなく、ライターやデザイナーへの制作依頼にも使えるテキストを生成します。",
       "audience": "LPの企画を短時間でまとめたい個人事業主、マーケター、Web制作者、ライター、デザイナーに向いています。Figmaやコーディングへ進む前に、ページ全体の説得順序と不足情報を確認したい場合に便利です。",
       "features": [
         {
@@ -288,6 +293,10 @@
         {
           "question": "生成した構成を商用案件で使えますか？",
           "answer": "はい。生成した構成案は自由に編集して商用案件にも利用できます。ただし、本文、画像、実績、価格、法的表示は案件ごとに正確なものを用意し、関係する広告規制や権利を公開前に確認してください。"
+        },
+        {
+          "question": "NotionでLPを作る前の構成整理に使えますか？",
+          "answer": "使えます。商品・サービス名と対象者を入力し、必要なセクションを並べ替えた後、Notion向け制作チェックリストをコピーしてください。見出しごとに本文と素材を確認できますが、Notion APIへ自動連携する機能ではありません。"
         }
       ]
     },
@@ -1584,16 +1593,21 @@
   {
     "id": "028-har-sanitizer",
     "slug": "har-sanitizer",
-    "title": "HAR機密情報チェック・匿名化",
-    "description": "HARファイル内のCookie、認証ヘッダー、トークンや個人情報の候補を確認し、匿名化したHARをブラウザ内で作成します。",
+    "title": "HARファイル匿名化ツール",
+    "description": "HAR共有前にCookie、Authorization、トークンなどの機密候補を検出し、匿名化したHARをブラウザ内で無料作成します。",
     "href": "/tools/har-sanitizer",
     "badge": "Web制作・改善",
     "categoryId": "web-design",
     "categoryName": "Web制作・改善",
     "packageName": "@sakupla/har-sanitizer",
     "componentName": "HarSanitizerPage",
+    "relatedSlugs": [
+      "robots-sitemap-checker",
+      "redirect-map-checker",
+      "pwa-manifest-checker"
+    ],
     "content": {
-      "summary": "HAR機密情報チェック・匿名化は、Webサービスの調査用HARを問い合わせ窓口や外部ベンダーへ渡す前に、Cookie、認証ヘッダー、トークン、機密性の高いクエリ名・本文キーを確認する無料ツールです。利用者が選んだ値をブラウザ内で匿名化し、変更箇所と残存候補を確認してから匿名化HARを保存できます。",
+      "summary": "HARファイル匿名化ツールは、Webサービスの調査用HARを問い合わせ窓口や外部ベンダーへ共有する前に、Cookie、Authorization、トークン、機密性の高いクエリ名・本文キーを確認する無料ツールです。利用者が選んだ値をブラウザ内で[REDACTED]へ置換し、変更監査表と残存候補を確認してから匿名化HARを保存できます。",
       "audience": "Webサービスの問い合わせ担当、社内ヘルプデスク、Web制作者、開発者、外部ベンダーへ通信ログを共有する担当者に向いています。HARをテキストエディターで開いてCookieやトークンを手作業で探す負担を減らし、どこを変更したか監査表で確認したい場面で利用できます。",
       "features": [
         {
@@ -1630,6 +1644,10 @@
         {
           "question": "候補が0件なら安全に共有できますか？",
           "answer": "安全とは断定できません。独自の項目名、自由文、エンコード済み・暗号化済みの内容、画像やバイナリなどは判定できません。候補0件でも元HARを目視し、必要に応じて共有先へ収集範囲を確認してください。"
+        },
+        {
+          "question": "HARファイルを共有する前に何を削除・匿名化すればよいですか？",
+          "answer": "Cookie、Set-Cookie、Authorization、アクセストークン、URLクエリ、フォーム項目、JSON本文の認証情報や個人情報を確認します。このツールで候補を置換した後も、レスポンス本文や独自項目を目視し、共有先と社内ルールに沿って最終判断してください。"
         }
       ]
     },
@@ -1874,16 +1892,21 @@
   {
     "id": "035-social-content-calendar",
     "slug": "social-content-calendar",
-    "title": "SNSコンテンツカレンダー",
-    "description": "投稿日、媒体、テーマ、目的、素材、CTAを整理し、投稿漏れと内容の偏りを確認できるカレンダーを作ります。",
+    "title": "SNS投稿カレンダー作成ツール",
+    "description": "X・Instagramなどの投稿予定、テーマ、素材、CTAを整理し、無料のSNS投稿カレンダーをCSV・ICSで保存します。",
     "href": "/tools/social-content-calendar",
     "badge": "発信・集客",
     "categoryId": "content-marketing",
     "categoryName": "発信・集客",
     "packageName": "@sakupla/social-content-calendar",
     "componentName": "SocialContentCalendarPage",
+    "relatedSlugs": [
+      "social-text-formatter",
+      "utm-link-builder",
+      "digital-product-launch-planner"
+    ],
     "content": {
-      "summary": "1週間または1か月のSNS投稿予定を、投稿日、媒体、テーマ、目的、素材状態、CTA、投稿メモで整理できます。投稿の複製や上下ボタンでの並べ替え、未入力・素材準備中の件数、媒体別の投稿数を確認し、CSVまたはカレンダー用ICSとして端末へ保存できます。外部SNSと接続せず、投稿漏れや内容の偏りを見直すための計画ツールです。",
+      "summary": "無料のSNS投稿カレンダー作成ツールです。1週間または1か月のX・Instagramなどの投稿予定を、投稿日、媒体、テーマ、目的、素材状態、CTA、投稿メモで整理できます。投稿の複製や上下ボタンでの並べ替え、未入力・素材準備中の件数、媒体別の投稿数を確認し、CSVまたはGoogleカレンダー等へ読み込めるICSとして端末へ保存できます。外部SNSと接続せず、投稿漏れや内容の偏りを見直せます。",
       "audience": "XやInstagramなどを一人または少人数で運用する店舗、フリーランス、小規模事業者のうち、週初め・月初めに投稿テーマと素材準備をまとめ、当日の投稿漏れを減らしたい人に向いています。自動投稿よりも、まず簡単な予定表で運用を整えたい場面に適しています。",
       "features": [
         {
@@ -1920,6 +1943,10 @@
         {
           "question": "入力した投稿予定は自動で保存されますか？",
           "answer": "自動保存されません。この画面を閉じたり再読み込みしたりすると入力内容は消えます。編集を続ける計画はCSVへ保存し、カレンダーで通知を確認したい計画はICSも保存して、利用するサービスへ手動で読み込んでください。"
+        },
+        {
+          "question": "SNS投稿カレンダーには何を入れればよいですか？",
+          "answer": "投稿日、媒体、投稿テーマ、目的、画像・動画の準備状態、CTA、投稿メモを入れます。まず1週間分を登録し、未準備件数と媒体別件数を見てから1か月へ広げると、無料テンプレートとして無理なく使えます。"
         }
       ]
     },

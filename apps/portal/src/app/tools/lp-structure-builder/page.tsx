@@ -10,21 +10,21 @@ import { siteUrl } from "@/lib/site";
 const tool = getToolBySlug("lp-structure-builder");
 
 export const metadata: Metadata = withSocialMetadata({
-  title: "LP構成案作成ツール｜セクション設計・Notion出力",
+  title: "Notionで使えるLP構成案作成ツール｜無料テンプレート",
   description:
-    "LPで伝える内容と順番を整理し、企画書用MarkdownやNotion向け制作チェックリストを無料で作成できます。",
+    "サービス・商品・イベント用のLP構成を無料で作成。見出しの順番を整え、Notionに貼れるMarkdownと制作チェックリストを出力できます。",
   alternates: { canonical: "/tools/lp-structure-builder" },
   openGraph: {
-    title: "LP構成案作成ツール",
+    title: "Notionで使えるLP構成案作成ツール",
     description:
-      "LPのセクションを設計し、Notionや企画書へ貼り付けられる構成メモを作成します。",
+      "用途別のLP構成を選び、Notionや企画書へ貼り付けられるMarkdownを無料で作成します。",
     url: "/tools/lp-structure-builder",
   },
   twitter: {
     card: "summary_large_image",
-    title: "LP構成案作成ツール",
+    title: "Notionで使えるLP構成案作成ツール",
     description:
-      "LPの伝える順番を整理し、Notionや企画書用の構成メモを作成します。",
+      "用途別のLP構成を整理し、Notionに貼れるMarkdownを無料で作成します。",
   },
 });
 

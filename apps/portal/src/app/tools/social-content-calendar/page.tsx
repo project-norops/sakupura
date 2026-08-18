@@ -10,21 +10,21 @@ import { siteUrl } from "@/lib/site";
 const tool = getToolBySlug("social-content-calendar");
 
 export const metadata: Metadata = withSocialMetadata({
-  title: "SNSコンテンツカレンダー",
+  title: "SNS投稿カレンダー作成ツール｜無料・CSV/ICS保存",
   description:
-    "投稿日、媒体、テーマ、目的、素材、CTAを整理し、投稿漏れと内容の偏りを確認できるカレンダーを作ります。",
+    "X・Instagramなどの投稿予定、テーマ、素材、CTAを無料で整理。1週間・1か月のSNS投稿カレンダーをCSVまたはICSで保存できます。",
   alternates: { canonical: "/tools/social-content-calendar" },
   openGraph: {
-    title: "SNSコンテンツカレンダー",
+    title: "無料のSNS投稿カレンダー作成ツール",
     description:
-      "投稿日、媒体、テーマ、目的、素材、CTAを整理し、投稿漏れと内容の偏りを確認できるカレンダーを作ります。",
+      "1週間・1か月のSNS投稿予定と素材準備を整理し、CSV・ICSで保存できます。",
     url: "/tools/social-content-calendar",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SNSコンテンツカレンダー",
+    title: "無料のSNS投稿カレンダー作成ツール",
     description:
-      "投稿日、媒体、テーマ、目的、素材、CTAを整理し、投稿漏れと内容の偏りを確認できるカレンダーを作ります。",
+      "SNS投稿予定と素材準備を整理し、CSV・ICSで保存できます。",
   },
 });
 

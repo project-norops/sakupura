@@ -1,5 +1,20 @@
 # 開発ガイドライン & ガードレール規約
 
+## 2026-08-19（検索意図改善3ページ・Draft PR／Preview確認）
+
+- WisherのPreview作成承認に基づき、専用ブランチ`codex/search-intent-experiment`の8ファイルをcommit `74d0f9e`としてpushし、Draft PR #68を作成した。Vercel Preview deployment `38GNXRuioSxa6foadzLWrjPNUeRE`はReady、GitHub Actions `validate`、Vercel、Vercel Preview Commentsはすべて合格した。
+- Preview `https://100apps-portal-git-codex-search-intent-experiment-norops.vercel.app`で対象3ページをPC 1280pxと375×812pxで確認した。新しいtitle、canonical、H1、例カード、関連3リンクが表示され、375pxでは各ページとも`innerWidth: 375`、`scrollWidth: 360`で横方向のページはみ出しはなかった。既知のAdSense警告以外のコンソールエラーはなかった。
+- PR・Preview作成までを承認範囲とし、main統合、Production公開、Search Console操作、AdSense操作、X告知は行っていない。本番反映はPreviewのユーザーレビューと別の明示承認後に判断する。
+
+## 2026-08-18（検索意図改善3ページ・ローカル実装）
+
+- Search Consoleの直近28日観測で、`lp-structure-builder`は11表示・0クリック・平均22.4位、`social-content-calendar`は14表示・0クリック・平均54.6位、`har-sanitizer`は6表示・1クリック・平均20.2位だったため、既存3ページの検索意図と訴求を一度改善する実験を開始した。3ページ合算の基準値は31表示・1クリック、次の28日目標は60表示・3クリック、14日を中間確認とする。
+- LPは「notion lp」の観測語に合わせ、title、description、H1、冒頭文をNotionへ貼れるMarkdownと制作チェックリストへ寄せた。SNSは無料の投稿カレンダー、CSV・ICS保存を明確化し、HARは共有前のCookie・Authorization・トークン匿名化を明確化した。各ページへ入力例と出力例、検索意図に沿うFAQ、文脈の合う関連ツール3件を追加した。Notion API連携やHAR共有の安全保証など、未提供・保証不能な表現は追加していない。
+- PR・マーケティング、事業戦略・ポートフォリオ、開発・QAの担当レビューは、公開42ツール、直近28日の全体65表示・2クリック、直近7日GA4 1 session、収益ゲート達成候補なしを根拠に、新規ツールは現時点で開発せず、公開もしない結論で一致した。候補調査は継続できるが、75点以上、既存統合より独立が優位、需要根拠、計測可能なMVP、明示承認を再開条件とする。
+- `npm run check`は構成802件、コンテンツ42ツール、Jest 83 suites・411 tests、release 8 tests、全Lint、portal・dynamic-pricing buildに合格した。途中の対象テスト指定では引数がrelease用Nodeテストへも渡り3件失敗扱いになったが、同一実行内のJest 411件は全合格し、正式な引数なし全品質ゲートでrelease 8件を含め再合格した。
+- ローカル本番相当画面をPC 1280pxと375×812pxで確認し、3ページとも新しいtitle、description、canonical、H1、例カード、関連3リンクが表示された。375pxでは`innerWidth: 375`、`scrollWidth: 360`でページ全体の横はみ出しはない。既知のAdSense警告以外のコンソールエラーはなかった。
+- 専用ブランチ`codex/search-intent-experiment`のローカル差分までとし、commit、push、Draft PR、Vercel Preview、main統合、Production公開、Search Console操作、AdSense操作、X告知は行っていない。Previewと本番反映は別の明示承認後に判断する。
+
 ## 2026-07-30（共通保存モーダル iPhone表示修正）
 
 - Wisher提供のiPhone実機画像から、ヘッダーの「☆ 保存」で開く共通モーダルが、Safariの縮小した実表示高に対して中央配置され、上端が画面外へ切れる問題を確認した。
