@@ -1,4 +1,20 @@
-import { calculateInvoice, formatYen, nextDocumentNumber } from "./utils";
+import {
+  calculateInvoice,
+  calculateWithholding,
+  formatYen,
+  nextDocumentNumber,
+} from "./utils";
+
+test.each([
+  [0, 0],
+  [100000, 10210],
+  [999999, 102099],
+  [1000000, 102100],
+  [1000001, 102100],
+  [1500000, 204200],
+])("withholding %i yen", (base, expected) => {
+  expect(calculateWithholding(base)).toBe(expected);
+});
 
 describe("invoice utilities", () => {
   test("calculates mixed tax rates", () => {

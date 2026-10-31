@@ -6,6 +6,14 @@ export type InvoiceLine = {
   taxRate: 10 | 8 | 0;
 };
 
+export function calculateWithholding(amount: number) {
+  if (!Number.isFinite(amount) || amount < 0) return 0;
+  return Math.floor(
+    (Math.min(amount, 1000000) * 1021 + Math.max(0, amount - 1000000) * 2042) /
+      10000,
+  );
+}
+
 export function calculateInvoice(lines: InvoiceLine[]) {
   const taxableByRate = { 10: 0, 8: 0, 0: 0 } as Record<10 | 8 | 0, number>;
   for (const line of lines)

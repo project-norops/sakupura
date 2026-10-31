@@ -4,6 +4,39 @@ import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { InvoicePdfGeneratorPage } from "./InvoicePdfGeneratorPage";
 
+test("toggles withholding, supports over one million, and excludes estimates", () => {
+  const { container } = render(<InvoicePdfGeneratorPage />);
+  fireEvent.click(screen.getByRole("button", { name: "請求書" }));
+  expect(
+    screen.queryByLabelText("源泉徴収の対象報酬額（税抜・円）"),
+  ).not.toBeInTheDocument();
+  fireEvent.click(
+    screen.getByRole("checkbox", {
+      name: "個人の報酬から源泉所得税を差し引く",
+    }),
+  );
+  fireEvent.change(screen.getByLabelText("明細1の単価"), {
+    target: { value: "1500000" },
+  });
+  expect(container.querySelector("#invoice-print-area")).toHaveTextContent(
+    "204,200",
+  );
+  expect(container.querySelector("#invoice-print-area")).toHaveTextContent(
+    "1,445,800",
+  );
+  fireEvent.change(screen.getByLabelText("源泉徴収の対象報酬額（税抜・円）"), {
+    target: { value: "1600000" },
+  });
+  expect(screen.getByRole("alert")).toBeInTheDocument();
+  expect(
+    screen.getByRole("button", { name: "印刷画面を開いてPDF保存" }),
+  ).toBeDisabled();
+  fireEvent.click(screen.getByRole("button", { name: "見積書" }));
+  expect(container.querySelector("#invoice-print-area")).not.toHaveTextContent(
+    "源泉所得税等",
+  );
+});
+
 test("marks only the document as printable and defines multi-page table rules", () => {
   const { container } = render(<InvoicePdfGeneratorPage />);
   const printArea = container.querySelector("#invoice-print-area");
