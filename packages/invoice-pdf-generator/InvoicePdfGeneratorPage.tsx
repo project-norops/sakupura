@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import {
   calculateInvoice,
+  calculateWithholding,
   formatYen,
   nextDocumentNumber,
   type InvoiceLine,
@@ -35,6 +36,19 @@ export function InvoicePdfGeneratorPage() {
     },
   ]);
   const totals = useMemo(() => calculateInvoice(lines), [lines]);
+  const [withholdingEnabled, setWithholdingEnabled] = useState(false);
+  const [withholdingBase, setWithholdingBase] = useState<string | null>(null);
+  const applyWithholding = kind === "invoice" && withholdingEnabled;
+  const base =
+    withholdingBase === null ? totals.subtotal : Number(withholdingBase);
+  const baseValid =
+    withholdingBase !== "" &&
+    Number.isFinite(base) &&
+    base >= 0 &&
+    base <= totals.subtotal;
+  const withheld =
+    applyWithholding && baseValid ? calculateWithholding(base) : 0;
+  const payable = totals.total - withheld;
   const invoiceChecks = useMemo(
     () => [
       { label: "発行者の名称", valid: Boolean(issuer.trim()) },
@@ -221,6 +235,63 @@ export function InvoicePdfGeneratorPage() {
                 className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 font-normal"
               />
             </label>
+            {kind === "invoice" && (
+              <div className="rounded-2xl border border-slate-200 p-4">
+                <label className="flex items-center gap-3 font-bold">
+                  <input
+                    type="checkbox"
+                    checked={withholdingEnabled}
+                    onChange={(e) => setWithholdingEnabled(e.target.checked)}
+                  />
+                  個人の報酬から源泉所得税を差し引く
+                </label>
+                {withholdingEnabled && (
+                  <div className="mt-3 space-y-3 text-sm">
+                    <p>
+                      国内居住者の原稿料・デザイン料など、源泉徴収対象の報酬用です。士業・給与・非居住者・特殊な控除には対応していません。対象になるかは支払先と確認してください。
+                    </p>
+                    <label className="block font-bold">
+                      源泉徴収の対象報酬額（税抜・円）
+                      <input
+                        type="number"
+                        min="0"
+                        max={totals.subtotal}
+                        value={withholdingBase ?? totals.subtotal}
+                        onChange={(e) => setWithholdingBase(e.target.value)}
+                        className="mt-1 w-full rounded-xl border px-3 py-2"
+                      />
+                    </label>
+                    <p>
+                      初期値は税抜小計です。対象外の明細を含む場合は対象報酬だけの額に変更してください。消費税は区分表示し、計算対象から除きます。1回の支払いとして計算します。
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setWithholdingBase(null)}
+                      className="font-bold text-blue-700 underline"
+                    >
+                      対象報酬額を小計に戻す
+                    </button>
+                    {!baseValid && (
+                      <p role="alert" className="text-rose-700">
+                        対象報酬額は0円から税抜小計までで入力してください。
+                      </p>
+                    )}
+                    <p>
+                      100万円まで10.21%、100万円を超える部分20.42%。税額の1円未満は切り捨てます。
+                    </p>
+                    <a
+                      href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/gensen/2795.htm"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-700 underline"
+                    >
+                      国税庁「原稿料や講演料等を支払ったとき」
+                    </a>
+                    <p>税率確認日：2026年10月31日</p>
+                  </div>
+                )}
+              </div>
+            )}
           </section>
           <section>
             <div className="print:hidden">
@@ -264,7 +335,8 @@ export function InvoicePdfGeneratorPage() {
                 </p>
                 <p className="mt-2 text-sm">取引年月日：{transactionDate}</p>
                 <p className="mt-5 border-b-2 border-slate-900 pb-2 text-2xl font-black">
-                  合計 {formatYen(totals.total)}
+                  {applyWithholding ? "差引ご請求額" : "合計"}{" "}
+                  {formatYen(payable)}
                 </p>
               </div>
               <table className="invoice-lines mt-8 w-full border-collapse text-sm">
@@ -345,6 +417,15 @@ export function InvoicePdfGeneratorPage() {
                 </p>
               </div>
               <div className="invoice-terms">
+                {applyWithholding && baseValid && (
+                  <div className="invoice-keep-together mt-4 text-right text-sm">
+                    <p>源泉徴収対象報酬（税抜）：{formatYen(base)}</p>
+                    <p>源泉所得税等：−{formatYen(withheld)}</p>
+                    <p className="font-bold">
+                      差引ご請求額：{formatYen(payable)}
+                    </p>
+                  </div>
+                )}
                 {totals.taxableByRate[8] > 0 && (
                   <p className="mt-5 text-xs text-slate-600">
                     ※は軽減税率対象品目です。
@@ -389,7 +470,10 @@ export function InvoicePdfGeneratorPage() {
             <button
               type="button"
               onClick={() => window.print()}
-              disabled={kind === "invoice" && !invoiceReady}
+              disabled={
+                kind === "invoice" &&
+                (!invoiceReady || (applyWithholding && !baseValid))
+              }
               data-analytics-event="tool_run"
               data-analytics-tool-id="invoice-pdf-generator"
               className="mt-4 w-full rounded-full bg-blue-600 px-5 py-4 font-black text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40 print:hidden"
